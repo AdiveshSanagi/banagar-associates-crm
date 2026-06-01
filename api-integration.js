@@ -3,7 +3,8 @@
 // Place this file at the root of your project: /api-integration.js
 // =========================================================================
 
-const BASE_URL = "banagar-associates-crm-production.up.railway.app";
+// Make sure it has /api at the end, but NO trailing slash (/)
+const BASE_URL = "https://banagar-associates-crm-production.up.railway.app/api";
 
 const ApiService = {
     /**
