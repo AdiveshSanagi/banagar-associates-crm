@@ -42,7 +42,7 @@ function renderHomeGalleryCards(items) {
     }
 
     items.forEach(item => {
-        const fileUrl = `http://localhost:8000${item.media_url}`;
+        const fileUrl = `https://banagar-associates-crm-production.up.railway.app${item.media_url}`;
         
         // Dynamically build content based on file properties
         const mediaTag = item.media_type === "image"
