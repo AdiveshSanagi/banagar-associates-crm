@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Banagar Associates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css">
+
+    <link rel="stylesheet" href="admin.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+    
+    .contact-nav-pill {
+    border: 1px solid #448eea;
+    border-radius: 20px;
+    color: #ffffff !important;
+}
+
+/* Left Column Info Chips Layout Box */
+    .contact-info-chip {
+    background-color: #1b2333; /* Rich deep navy box envelope wrapper */
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background-color 0.2s ease;
+}
+
+.contact-info-chip:hover {
+    background-color: #1e293a !important;
+}
+
+.chip-icon-box {
+    width: 42px;
+    height: 42px;
+    background-color:rgb(142, 142, 244);
+    border: 1px solid rgba(68, 142, 234, 0.15);
+    font-size: 1.1rem;
+    border-radius: 30%;
+}
+
+/* Main column Left Map Display dimensions */
+.contact-page-map {
+    width: 100%;
+    height: 250px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.contact-page-map iframe {
+    filter: grayscale(1) invert(0.92) contrast(1.1) brightness(0.95);
+}
+
+/* Right Column Contact Form Wrap Background Box */
+.contact-form-container {
+    background-color: #1b2333 !important; /* Solid matte finish contrast container */
+    border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Custom Minimalist Flat Line Input Field Engine */
+.input-field-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label-custom {
+    font-size: 0.68rem !important;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: #fcfcfc; /* Hard low contrast grey text matching image layout */
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.form-input-minimal {
+    width: 100%;
+    background-color: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgb(51, 51, 105) !important;
+    padding: 8px 0px !important;
+    font-size: 0.88rem !important;
+    font-weight: 300;
+    outline: none !important;
+    border-radius: 0 !important;
+    transition: border-color 0.25s ease;
+}
+
+/* Active Highlight Interaction line state */
+.form-input-minimal:focus {
+    border-color: #448eea !important;
+}
+
+/* Forces browser native dark-mode calendar dropdown support mapping */
+.color-scheme-dark {
+    color-scheme: dark;
+}
+
+/* Textarea line adjustment controls */
+textarea.form-input-minimal {
+    resize: none;
+}
+
+/* mobile responsive view */
+
+/* 1. TABLETS & SMALL DESKTOPS (Max-width: 991.98px) */
+@media (max-width: 991.98px) {
+    /* Resets the navbar pill behavior on responsive collapse menus */
+    .contact-nav-pill {
+        border: none !important;
+        border-left: 2px solid var(--primary-blue) !important;
+        border-radius: 0 !important;
+        padding-left: 15px !important;
+    }
+
+    /* Strips oversized padding to let content breathe on medium viewports */
+    .contact-form-container {
+        padding: 30px !important;
+    }
+}
+
+/* 2. SMARTPHONES / PORTRAIT MOBILE VIEWS (Max-width: 767.98px) */
+@media (max-width: 767.98px) {
+    
+    /* Compresses informational chips to fit cleanly in narrow layouts */
+    .contact-info-chip {
+        padding: 12px 15px !important;
+        gap: 12px !important;
+    }
+
+    .chip-icon-box {
+        width: 36px !important; /* Scales icons down slightly */
+        height: 36px !important;
+        font-size: 0.95rem !important;
+        flex-shrink: 0; /* Prevents icons from squishing if text wraps long */
+    }
+
+    /* Adjusts detail typography sizing for compact touchscreens */
+    .contact-info-chip h6 {
+        font-size: 0.8rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Enhances the Map element interactive space */
+    .contact-page-map {
+        height: 200px !important; /* Reduces vertical footprint while remaining usable */
+        margin-top: 10px !important;
+    }
+
+    /* Adjusts Form Wrap Padding spacing rules */
+    .contact-form-container {
+        padding: 24px 20px !important;
+        margin-top: 15px; /* Ensures space when columns stack vertically */
+    }
+
+    /* Form Fields spacing configuration overrides */
+    .input-field-group {
+        margin-bottom: 25px !important; /* Keeps an uniform separation when viewing single-file fields */
+    }
+
+    .form-label-custom {
+        font-size: 0.65rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    .form-input-minimal {
+        padding: 6px 0px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* 3. EXTRA SMALL DEVICES (Max-width: 375px) */
+@media (max-width: 375px) {
+    /* Prevents long emails or addresses from wrapping into layout chaos */
+    .contact-info-chip h6 {
+        font-size: 0.75rem !important;
+    }
+    
+    .contact-form-container {
+        padding: 20px 15px !important;
+    }
+}
+    </style>
+
+</head>
+<body class="bg-dark-deep text-white">
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo"></div>
+                <div class="brand-text">   
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
+                    <li class="nav-item"><a class="nav-link active" href="../index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#venues">VENUES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#gallery">GALLERY</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#trust">WHY TRUST US</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">CONTACT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../frontend/about.html">ABOUT US</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="tel:+911234567890" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
+                    <a href="./booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="contact-wrapper-main pt-5 mt-5">
+        <div class="container py-5">
+            
+            <div class="text-center max-w-xl mx-auto mb-5">
+                <span class="text-gold tracking-widest text-uppercase small d-block mb-2">GET IN TOUCH</span>
+                <h1 class="display-4 text-white font-serif fw-light mb-3">Contact Us</h1>
+                <p class="text-light-muted fs-7 fw-light">Have questions? We are here to help you plan your perfect event.</p>
+            </div>
+
+            <div class="row g-5 pt-3">
+                
+                <div class="col-lg-5 d-flex flex-column gap-3">
+                    
+                    <div class="contact-info-chip p-3 d-flex align-items-center gap-3">
+                        <div class="chip-icon-box d-flex align-items-center justify-content-center text-primary-blue">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <div>
+                            <span class="fs-8 tracking-wider text-uppercase text-light-muted d-block mb-1">VISIT US</span>
+                            <h6 class="fs-7 text-white mb-0 fw-normal">Banagar Properties, Main Road, City Center, Hubli</h6>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-chip p-3 d-flex align-items-center gap-3">
+                        <div class="chip-icon-box d-flex align-items-center justify-content-center text-primary-blue">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+                        <div>
+                            <span class="fs-8 tracking-wider text-uppercase text-light-muted d-block mb-1">CALL US</span>
+                            <h6 class="fs-7 text-white mb-0 fw-normal">+9148020911</h6>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-chip p-3 d-flex align-items-center gap-3">
+                        <div class="chip-icon-box d-flex align-items-center justify-content-center text-primary-blue">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div>
+                            <span class="fs-8 tracking-wider text-uppercase text-light-muted d-block mb-1">EMAIL US</span>
+                            <h6 class="fs-7 text-white mb-0 fw-normal">info@banagar.com</h6>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-chip p-3 d-flex align-items-center gap-3">
+                        <div class="chip-icon-box d-flex align-items-center justify-content-center text-primary-blue">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div>
+                            <span class="fs-8 tracking-wider text-uppercase text-light-muted d-block mb-1">WORKING HOURS</span>
+                            <h6 class="fs-7 text-white mb-0 fw-normal">Monday - Sunday: 9:00 AM - 9:00 PM</h6>
+                        </div>
+                    </div>
+
+                    <div class="contact-page-map position-relative overflow-hidden rounded-0 mt-2 shadow">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.670807!2d73.8474!3d18.5204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjQiTiA3M8KwNTAnNTAuNiJF!5e0!3m2!1sen!2sin!4v1716300000000!5m2!1sen!2sin" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-7 ps-lg-5">
+                    <div class="contact-form-container p-4 p-xl-5 bg-dark-card">
+                        
+                        <h2 class="h4 text-white font-serif fw-normal mb-2">Send an Inquiry</h2>
+                        <p class="text-muted fs-7 mb-5">Fill in the form and we will get back to you.</p>
+
+                        <form id="inquiry-form" autocomplete="off">
+                            
+                            <div class="input-field-group mb-4">
+                                <label for="user_name" class="form-label-custom">YOUR NAME *</label>
+                                <input type="text" id="user_name" class="form-input-minimal text-white" required>
+                            </div>
+
+                            <div class="input-field-group mb-4">
+                                <label for="user_phone" class="form-label-custom">PHONE *</label>
+                                <input type="tel" id="user_phone" class="form-input-minimal text-white" required>
+                            </div>
+
+                            <div class="input-field-group mb-4">
+                                <label for="user_email" class="form-label-custom">EMAIL</label>
+                                <input type="email" id="user_email" class="form-input-minimal text-white">
+                            </div>
+
+                            <div class="input-field-group mb-4">
+                                <label for="event_date" class="form-label-custom">PREFERRED EVENT DATE</label>
+                                <input type="date" id="event_date" class="form-input-minimal text-white color-scheme-dark">
+                            </div>
+
+                            <div class="input-field-group mb-5">
+                                <label for="user_message" class="form-label-custom">MESSAGE *</label>
+                                <textarea id="user_message" rows="2" class="form-input-minimal text-white" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold tracking-wide rounded-0 d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-send-fill fs-7"></i>
+                                <span>SEND INQUIRY</span>
+                            </button>
+
+                        </form>
+                        <div id="toast-container"></div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- footer section -->
+ <footer class="footer-section pt-5 pb-3">
+        <div class="container pt-4">
+            <div class="row g-4 mb-5">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-brand mb-4">
+                        <div class="brand-logo-frame">
+                            <img src="../assets/images/logo-01.png" alt="Banagar Associates Logo" class="footer-logo">
+                        </div>
+                    </div>
+                    <p class="text-light-muted fs-7 lh-lg pe-xl-4 footer-desc">
+                        Premier venue for weddings and celebrations. Creating unforgettable moments since 2010.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-lg-2 offset-lg-1">
+                    <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Quick Links</h4>
+                    <ul class="list-unstyled footer-links d-grid gap-3 fs-7">
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="index.html#venues">Banagar Lawns</a></li>
+                        <li><a href="index.html#venue-catalog">Marriage Hall</a></li>
+                        <li><a href="index.html#gallery">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Contact Info</h4>
+                    <ul class="list-unstyled footer-contact-list d-grid gap-3 fs-7 text-light-muted">
+                        <li class="d-flex align-items-start gap-3"><i class="bi bi-geo-alt text-primary mt-1"></i><span>Banagar Properties, Main Road,<br>City Center</span></li>
+                        <li class="d-flex align-items-center gap-3"><i class="bi bi-telephone text-primary"></i><span>+91 98765 43210</span></li>
+                        <li class="d-flex align-items-center gap-3"><i class="bi bi-envelope text-primary"></i><span>info@banagar.com</span></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Find Us</h4>
+                    <div class="footer-map-container position-relative overflow-hidden shadow">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.670807!2d73.8474!3d18.5204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjQiTiA3M8KwNTAnNTAuNiJF!5e0!3m2!1sen!2sin!4v1716300000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary border-opacity-10 my-4">
+            <div class="row align-items-center fs-7 text-white g-3">
+                <div class="col-md-6 text-center text-md-start"><p class="mb-0">© 2026 Banagar Associates. All rights reserved.</p></div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3 sub-footer-links">
+                        <a href="../frontend/adminlogin.html" class="text-white text-decoration-none">Admin</a>
+                        <a href="#" class="text-white text-decoration-none">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../api-integration.js"></script>
+    <script src="contact.js"></script>  </body>
+</body>
+</html>

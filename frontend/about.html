@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Banagar Associates</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css">
+    <style>
+        :root {
+            --bg-deep-base: #0a0c10;
+            --bg-dark-midnight: #0b0e14;
+            --bg-card-surface: #131a26;
+            --primary-blue: #3b82f6;
+            --accent-gold: #cfa861;
+            --text-slate-muted: #8e99a8;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-deep-base);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Typography & Helper Classes */
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .text-gold { color: var(--accent-gold); }
+        .text-light-muted { color: var(--text-slate-muted); }
+        .tracking-widest { letter-spacing: 0.2em; }
+        .tracking-wide { letter-spacing: 0.08em; }
+        .accent-line { width: 60px; height: 2px; background-color: var(--accent-gold); }
+        .fs-7 { font-size: 0.82rem !important; }
+        .fs-8 { font-size: 0.72rem !important; }
+        .max-w-xl { max-width: 600px; }
+        .max-w-md { max-width: 780px; }
+        .filter-cool { filter: brightness(0.9) contrast(1.05); }
+
+        /* Navigation Bar Structural Adjustments */
+        .navbar {
+            background-color: #1d2536 !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .brand-logo-frame { height: 42px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .brand-logo-frame img { 
+            height: 100%; 
+            width: auto; 
+            object-fit: contain; 
+        }
+        .nav-link {
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.7) !important;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover, .nav-link.active { color: var(--primary-blue) !important; }
+        
+        /* Active Navbar Route Outline Pill */
+        .contact-nav-pill {
+            border: 1px solid var(--primary-blue);
+            border-radius: 20px;
+            color: #ffffff !important;
+        }
+
+        /* Section 1: Editorial Hero Layout Adjustments */
+        .border-gold-frame {
+            border: 1px solid rgba(228, 217, 197, 0.3) !important;
+            transform: translate(12px, 12px);
+            z-index: 1;
+        }
+
+        /* Section 2: Blue-Navy Premium Metrics Panel */
+        .bg-midnight-premium { background-color: #293d5f !important; }
+
+        .bg-slate-surface {
+            background-color: #1e2a42 !important; /* Matches the solid card tone of the venue cards */
+            }
+
+        .simple-metric-card {
+            border-radius: 4px;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            }
+
+/* Subtle response on user hover without breaking layout simplicity */
+        .simple-metric-card:hover {
+            background-color: #131a26 !important;
+            transform: translateY(-3px);
+            }
+
+        /* Section 3: Interactive Chronological Timeline Design */
+        .timeline-container { position: relative; 
+            padding-left: 30px; 
+        }
+        .timeline-center-spine {
+            position: absolute; 
+            top: 0; 
+            bottom: 0; 
+            left: 6px; 
+            width: 2px;
+            background: linear-gradient(to bottom,yellow 0%,  50%, #ffffff 100%);
+            opacity: 0.15;
+        }
+
+        .timeline-dot {
+            position: absolute; 
+            left: -29px; 
+            top: 24px; 
+            width: 12px; 
+            height: 12px;
+            border-radius: 50%; 
+            border: 2px solid #ffffff; 
+            z-index: 1;
+        }
+        .timeline-card {
+            border: 1px solid rgba(223, 211, 211, 0.04);
+            border-radius: 4px;
+            background-color: #323e55;
+            transition: background-color 0.25s ease;
+        }
+        .timeline-card:hover { background-color: #1e2a42 !important; }
+
+        /* Layout Footer Framework */
+        .footer-section { background-color: #0d1930 !important; 
+            border-top: 1px solid rgba(255, 255, 255, 0.03); 
+        }
+        .footer-logo { height: 40px; 
+            width: auto; 
+            object-fit: contain; 
+        }
+        .footer-links li a { color: #b9c1cb !important; 
+            text-decoration: none; 
+            transition: color 0.2s ease; 
+        }
+        .footer-links li a:hover { color: var(--primary-blue) !important; }
+        .footer-map-container { width: 100%; 
+            height: 140px; 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+        .footer-map-container iframe { filter: grayscale(1) invert(0.92) contrast(1.1) brightness(0.95); }
+        .sub-footer-links a { color: #a5abb0; 
+            text-decoration: none; 
+            transition: color 0.2s ease; 
+        }
+        .sub-footer-links a:hover { color: #ffffff !important; }
+
+        @media (max-width: 991.98px) {
+    /* Resets the active link border pill to an elegant side-border on mobile menus */
+    .contact-nav-pill {
+        border: none !important;
+        border-left: 2px solid var(--primary-blue) !important;
+        border-radius: 0 !important;
+        padding-left: 15px !important;
+    }
+
+    /* Prevents the decorative gold frame layout from causing horizontal overflow */
+    .border-gold-frame {
+        transform: translate(0, 0) !important;
+        position: relative !important;
+    }
+    
+    .layout-frame-wrapper {
+        padding: 0 !important;
+    }
+}
+
+/* 2. SMARTPHONES / PORTRAIT MOBILE VIEWS (Max-width: 767.98px) */
+@media (max-width: 767.98px) {
+    /* Editorial Hero Section Adjustments */
+    .display-4 {
+        font-size: 2.15rem !important;
+        line-height: 1.3 !important;
+        text-align: center;
+    }
+
+    /* Centers headers and scales paragraphs nicely */
+    .py-5 .text-center-sm-fallback {
+        text-align: center !important;
+    }
+
+    /* Metrics Section: Forces a clean 2x2 grid box presentation */
+    .bg-midnight-premium .col-6 {
+        padding: 6px !important;
+    }
+
+    .simple-metric-card {
+        padding: 20px 10px !important;
+    }
+
+    .simple-metric-card .display-5 {
+        font-size: 1.85rem !important;
+    }
+
+    .simple-metric-card .fs-8 {
+        font-size: 0.68rem !important;
+    }
+
+    /* Chronological Timeline Layout Adjustments */
+    .timeline-container {
+        padding-left: 20px !important;
+    }
+
+    .timeline-center-spine {
+        left: 4px !important;
+    }
+
+    .timeline-dot {
+        left: -21px !important;
+        top: 20px !important;
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    .timeline-card {
+        padding: 20px !important;
+    }
+
+    .timeline-card .h4 {
+        font-size: 1.25rem !important;
+    }
+
+    .timeline-card h4.h6 {
+        font-size: 0.8rem !important;
+        letter-spacing: 0.05em !important;
+    }
+}
+
+/* 3. EXTRA SMALL DEVICES (Max-width: 375px) */
+@media (max-width: 375px) {
+    .display-4 {
+        font-size: 1.85rem !important;
+    }
+
+    .simple-metric-card .display-5 {
+        font-size: 1.6rem !important;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo"></div>
+                <div class="brand-text">   
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
+                   <li class="nav-item"><a class="nav-link active" href="../index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#venues">VENUES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#gallery">GALLERY</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#trust">WHY TRUST US</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../frontend/contact.html">CONTACT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../frontend/about.html">ABOUT US</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="tel:+911234567890" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
+                    <a href="../frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-5 mt-5 position-relative">
+        <div class="container py-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6" data-animate="fadeInLeft">
+                    <span class="text-gold tracking-widest text-uppercase small d-block mb-2">THE BANAGAR LEGACY</span>
+                    <h1 class="display-4 text-white main-heading font-serif fw-light mb-4">Perfecting Celebrations, Preserving Legacies.</h1>
+                    <p class="text-light-muted fs-7 fw-light lh-lg mb-4">
+                        Founded with a vision to redefine luxury event management, Banagar Associates bridges corporate architectural precision with timeless traditional values. We do not just lease premium event squares; we construct safe frameworks for your family’s most emotional milestones.
+                    </p>
+                    <p class="text-muted fs-7 fw-light lh-lg mb-5">
+                        Our locations are engineered to execute custom operations effortlessly under pressure—delivering premium back-up systems, culinary flexibility, and clear pricing design templates.
+                    </p>
+                    <a href="./venues.html" class="btn btn-primary px-4 py-3 fw-semibold rounded-0 tracking-wide fs-7">EXPLORE OUR VENUES</a>
+                </div>
+                <div class="col-lg-6" data-animate="fadeInRight">
+                    <div class="position-relative p-3 layout-frame-wrapper">
+                        <div class="border-gold-frame position-absolute inset-0 m-1"></div>
+                        <img src="../assets/images/abt.png" alt="Banagar Luxury Legacy Presentation" class="img-fluid position-relative z-2 rounded-0 shadow-lg filter-grayscale">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-midnight-premium border-top border-bottom border-secondary border-bottom-0 border-opacity-10">
+        <div class="container py-2">
+            <div class="row g-3 text-center">
+                
+                <div class="col-6 col-lg-3" data-animate="fadeInUp">
+                    <div class="p-4 bg-slate-surface h-100 simple-metric-card border border-light border-opacity-5">
+                        <div class="display-5 font-serif text-gold mb-2 fw-light">15+</div>
+                        <span class="fs-9 text-uppercase tracking-wider text-white fw-light d-block">Years of Excellence</span>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-lg-3" data-animate="fadeInUp">
+                    <div class="p-4 bg-slate-surface h-100 simple-metric-card border border-light border-opacity-5">
+                        <div class="display-5 font-serif text-gold mb-2 fw-light">2,500+</div>
+                        <span class="fs-9 text-uppercase tracking-wider text-white fw-light d-block">Events Executed</span>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-lg-3" data-animate="fadeInUp">
+                    <div class="p-4 bg-slate-surface h-100 simple-metric-card border border-light border-opacity-5">
+                        <div class="display-5 font-serif text-gold mb-2 fw-light">15K</div>
+                        <span class="fs-9 text-uppercase tracking-wider text-white fw-light d-block">Sq. Ft. Canvas Space</span>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-lg-3" data-animate="fadeInUp">
+                    <div class="p-4 bg-slate-surface h-100 simple-metric-card border border-light border-opacity-5">
+                        <div class="display-5 font-serif text-gold mb-2 fw-light">100%</div>
+                        <span class="fs-9 text-uppercase tracking-wider text-white fw-light d-block">Contract Integrity</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-dark-deep">
+        <div class="container py-5">
+            
+            <div class="text-center max-w-xl mx-auto mb-5" data-animate="fadeInDown">
+                <h6 class="text-gold tracking-widest text-uppercase small mb-2">HISTORICAL MAP</h6>
+                <h2 class="display-6 text-white font-serif fw-light">Our Historical Journey</h2>
+                <div class="accent-line mx-auto my-3"></div>
+            </div>
+
+            <div class="timeline-container position-relative mx-auto mt-5 pt-3 max-w-md">
+                <div class="timeline-center-spine"></div>
+
+                <div class="timeline-row mb-5 position-relative" data-animate="fadeInUp">
+                    <div class="timeline-dot bg-gold"></div>
+                    <div class="timeline-card p-4">
+                        <span class="font-serif text-gold h4 d-block mb-1 fw-light">2010</span>
+                        <h4 class="h6 text-white text-uppercase tracking-wide mb-2">The Architectural Foundation</h4>
+                        <p class="text-light-muted fs-7 mb-0 lh-base fw-light">Banagar Associates launches its structural blueprint with a clear operational promise: introducing flawless, transparent management standards into traditional open-air lawn environments.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-row mb-5 position-relative" data-animate="fadeInUp">
+                    <div class="timeline-dot bg-primary"></div>
+                    <div class="timeline-card p-4">
+                        <span class="font-serif text-primary h4 d-block mb-1 fw-light">2018</span>
+                        <h4 class="h6 text-white text-uppercase tracking-wide mb-2">The Grand Heritage Unveiling</h4>
+                        <p class="text-light-muted fs-7 mb-0 lh-base fw-light">To accommodate weather variations, we expanded into climate-controlled indoor designs by engineering the air-conditioned Grand Heritage Banquet Hall with specialized staging architecture.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-row mb-2 position-relative" data-animate="fadeInUp">
+                    <div class="timeline-dot bg-success"></div>
+                    <div class="timeline-card p-4">
+                        <span class="font-serif text-success h4 d-block mb-1 fw-light">2026</span>
+                        <h4 class="h6 text-white text-uppercase tracking-wide mb-2">The Smart Digital Integration</h4>
+                        <p class="text-light-muted fs-7 mb-0 lh-base fw-light">Migrated operations into unified front-end systems, unlocking real-time transparency calendars, simplified query funnels, and data-protected portal layouts for clients globally.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer-section pt-5 pb-3">
+        <div class="container pt-4">
+            <div class="row g-4 mb-5">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="footer-brand mb-4">
+                        <div class="brand-logo-frame">
+                            <img src="../assets/images/logo-01.png" alt="Banagar Associates Logo" class="footer-logo">
+                        </div>
+                    </div>
+                    <p class="text-light-muted fs-7 lh-lg pe-xl-4 footer-desc">
+                        Premier venue for weddings and celebrations. Creating unforgettable moments since 2010.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-lg-2 offset-lg-1">
+                    <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Quick Links</h4>
+                    <ul class="list-unstyled footer-links d-grid gap-3 fs-7">
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="index.html#venues">Banagar Lawns</a></li>
+                        <li><a href="index.html#venue-catalog">Marriage Hall</a></li>
+                        <li><a href="index.html#gallery">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Contact Info</h4>
+                    <ul class="list-unstyled footer-contact-list d-grid gap-3 fs-7 text-light-muted">
+                        <li class="d-flex align-items-start gap-3"><i class="bi bi-geo-alt text-primary mt-1"></i><span>Banagar Properties, Main Road,<br>City Center</span></li>
+                        <li class="d-flex align-items-center gap-3"><i class="bi bi-telephone text-primary"></i><span>+91 98765 43210</span></li>
+                        <li class="d-flex align-items-center gap-3"><i class="bi bi-envelope text-primary"></i><span>info@banagar.com</span></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Find Us</h4>
+                    <div class="footer-map-container position-relative overflow-hidden shadow">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3821.670807!2d73.8474!3d18.5204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjQiTiA3M8KwNTAnNTAuNiJF!5e0!3m2!1sen!2sin!4v1716300000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary border-opacity-10 my-4">
+            <div class="row align-items-center fs-7 text-white g-3">
+                <div class="col-md-6 text-center text-md-start"><p class="mb-0">© 2026 Banagar Associates. All rights reserved.</p></div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3 sub-footer-links">
+                        <a href="../frontend/adminlogin.html" class="text-white text-decoration-none">Admin</a>
+                        <a href="#" class="text-white text-decoration-none">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const lazyObserver = new IntersectionObserver((elements) => {
+                elements.forEach(node => {
+                    if(node.isIntersecting) {
+                        node.target.classList.add('animate__animated', node.target.dataset.animate);
+                        lazyObserver.unobserve(node.target);
+                    }
+                });
+            }, { threshold: 0.05 });
+            document.querySelectorAll('[data-animate]').forEach(el => lazyObserver.observe(el));
+        });
+    </script>
+    <script src="../api-integration.js"></script>
+</body>
+</html>

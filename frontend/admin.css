@@ -1,0 +1,661 @@
+:root {
+            --bg-deep-base: #0f172a;       /* Slate 900 - Main Background */
+            --bg-sidebar: #020617;         /* Slate 950 - Darker Sidebar */
+            --bg-card-surface: #1e293b;    /* Slate 800 - Lighter Cards for Visibility */
+            --bg-card-hover: #334155;      /* Slate 700 - Hover State */
+            --primary-blue: #3b82f6;
+            --accent-gold: #cfa861;
+            --text-main: #f8fafc;          /* High contrast white */
+            --text-muted: #94a3b8;         /* Slate 400 - Readable grey */
+            --border-uniform: rgba(255, 255, 255, 0.1);
+            --danger-red: #ef4444;
+            --success-green: #10b981;
+        }
+        body, .modal-content, .table-dark-custom td {
+            color: var(--text-main) !important;
+        }
+
+/* 2. Override Bootstrap's dark text-muted with our bright slate-grey */
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+/* 3. Force all inputs, selects, and textareas to have white text */
+        .admin-input, .admin-select, input, select {
+            color: #ffffff !important;
+            color-scheme: dark; /* This forces the browser's native Date-Picker calendar to dark mode! */
+        }
+
+/* 4. Fix dropdown options visibility */
+        option {
+            background-color: var(--bg-sidebar);
+            color: #ffffff;
+        }
+
+/* 5. Ensure specific colored text ignores the white override */
+        .text-gold { color: var(--accent-gold) !important; }
+        .text-primary { color: var(--primary-blue) !important; }
+        .text-danger { color: var(--danger-red) !important; }
+        .text-success { color: var(--success-green) !important; }
+
+        body {
+            background-color: var(--bg-deep-base);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .admin-brand { 
+            padding: 20px 24px; 
+            border-bottom: 1px solid var(--border-uniform); 
+        }
+
+        .brand-logo-frame { 
+            height: 48px; /* Adjust this value to make your logo taller or shorter */
+            width: 100%;
+            display: flex; 
+            align-items: center; 
+    /* justify-content: center; /* Uncomment this line if you want the logo centered instead of left-aligned */
+        }
+
+        .admin-logo-img { 
+             height: 100%; 
+             width: auto; 
+            max-width: 100%; /* Ensures wider logos don't break out of the sidebar */
+            object-fit: contain; /* Keeps the aspect ratio perfect */
+        }
+
+        /* Generic Utilities */
+        .fs-7 { font-size: 0.85rem; }
+        .fs-8 { font-size: 0.75rem; }
+        .text-gold { color: var(--accent-gold); }
+
+
+        /* side bar navigation */
+        .admin-sidebar {
+            width: 260px; 
+            height: 100vh; 
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-uniform);
+            display: flex; 
+            flex-direction: column; 
+            z-index: 100;
+        }
+        .admin-brand { padding: 24px; 
+            border-bottom: 1px solid var(--border-uniform); 
+        }
+
+        .nav-menu { flex-grow: 1; 
+            overflow-y: auto; 
+            padding-top: 20px; 
+        }
+        .admin-nav-link {
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            padding: 14px 24px; 
+            color: var(--text-muted);
+            font-size: 0.85rem; 
+            text-decoration: none; 
+            transition: all 0.2s ease; 
+            cursor: pointer;
+        }
+        .admin-nav-link:hover, .admin-nav-link.active-tab {
+            background-color: rgba(59, 130, 246, 0.1); 
+            color: var(--text-main);
+            border-right: 3px solid var(--primary-blue);
+        }
+        .sidebar-footer { padding: 20px 0; 
+            border-top: 1px solid var(--border-uniform); 
+        }
+
+        /* MAIN WORKSPACE & COMPONENTS */
+        .admin-main-content { 
+            margin-left: 260px; 
+            width: calc(100% - 260px); /* Prevents content from hiding under sidebar */
+            padding: 30px; 
+            min-height: 100vh; 
+            box-sizing: border-box;
+        }
+        
+        .view-panel { display: none; 
+            animation: fadeIn 0.3s ease-in-out; 
+        }
+        .view-panel.active-view { 
+            display: block; 
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Uniform Cards */
+        .stat-card {
+            background-color: var(--bg-card-surface);
+            border: 1px solid var(--border-uniform);
+            border-radius: 6px; 
+            padding: 20px;
+        }
+
+        /* Dark Theme Data Tables */
+        .table-responsive { width: 100%; overflow-x: auto; }
+        .table-wrapper {
+            background-color: var(--bg-card-surface);
+            border: 1px solid var(--border-uniform);
+            border-radius: 6px; 
+            overflow: hidden;
+        }
+        .table-dark-custom { width: 100%; 
+            color: var(--text-main); 
+            margin: 0; 
+            min-width: 900px; 
+            border-collapse: collapse; 
+        }
+        .table-dark-custom th {
+            background-color: rgba(0,0,0,0.2); 
+            color: var(--text-muted);
+            font-size: 0.75rem; 
+            font-weight: 500; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase; 
+            padding: 16px 20px; 
+            border-bottom: 1px solid var(--border-uniform);
+        }
+        .table-dark-custom td { 
+            padding: 16px 20px; 
+            font-size: 0.85rem; 
+            vertical-align: middle; 
+            border-bottom: 1px solid var(--border-uniform); 
+        }
+        .table-dark-custom tr:hover td { 
+            background-color: var(--bg-card-hover);
+         }
+
+        /* Status Badges */
+        .status-badge { font-size: 0.7rem; 
+            padding: 5px 12px; 
+            border-radius: 4px; 
+            font-weight: 500; 
+            letter-spacing: 0.05em; 
+        }
+        .bg-pending { background-color: rgba(255, 193, 7, 0.1); 
+            color: #ffc107; 
+            border: 1px solid rgba(255, 193, 7, 0.2); 
+        }
+        .bg-confirmed { background-color: rgba(16, 185, 129, 0.1); 
+            color: var(--success-green); 
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+        }
+        .bg-cancelled { background-color: rgba(239, 68, 68, 0.1); 
+            color: var(--danger-red); 
+            border: 1px solid rgba(239, 68, 68, 0.2); 
+        }
+        .bg-new { background-color: rgba(59, 130, 246, 0.1); 
+            color: var(--primary-blue); 
+            border: 1px solid rgba(59, 130, 246, 0.2); 
+        }
+
+        /* Icon Action Buttons */
+        .action-icon-group { 
+            display: flex; 
+            gap: 8px; 
+            justify-content: flex-end; 
+        }
+        .btn-icon {
+            background: transparent;
+            border: 1px solid var(--border-uniform);
+            color: var(--text-main);
+            width: 32px; height: 32px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border-radius: 4px; 
+            transition: all 0.2s; 
+            cursor: pointer;
+        }
+        .btn-icon:hover { background: var(--bg-card-hover); }
+        .btn-icon.confirm:hover { 
+            background: var(--success-green); 
+            border-color: var(--success-green); 
+            color: #fff;
+        }
+        .btn-icon.cancel:hover { 
+            background: var(--danger-red); 
+            border-color: var(--danger-red); 
+            color: #fff;
+        }
+        .btn-icon.edit:hover { 
+            background: var(--primary-blue); 
+            border-color: var(--primary-blue); 
+            color: #fff;
+        }
+
+        /* REAL-TIME CALENDAR UI */
+        .calendar-grid {
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 8px;
+        }
+        .cal-header { text-align: center; 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+            padding: 10px 0; 
+            text-transform: uppercase; 
+            font-weight: 600;
+        }
+        .cal-day {
+            background-color: var(--bg-card-surface); 
+            border: 1px solid var(--border-uniform);
+            height: 100px; 
+            padding: 10px; 
+            border-radius: 4px; 
+            display: flex; 
+            flex-direction: column;
+            transition: all 0.2s; 
+            cursor: pointer;
+        }
+        .cal-day:not(.empty-day):hover { 
+            background-color: var(--bg-card-hover); 
+            border-color: var(--primary-blue); 
+        }
+        .cal-day.empty-day { 
+            background-color: transparent; 
+            border: none; 
+            cursor: default; 
+        }
+        .cal-date { 
+            font-size: 1rem; 
+            font-weight: 500; 
+            margin-bottom: auto; 
+            color: var(--text-main); 
+        }
+        
+        /* Booked Calendar State */
+        .cal-day.booked-date {
+            background-color: rgba(239, 68, 68, 0.08); 
+            border-color: rgba(239, 68, 68, 0.3); 
+        }
+        .cal-day.booked-date .cal-date { color: var(--danger-red); }
+        .blocked-label { 
+            font-size: 0.65rem; 
+            background: var(--danger-red); 
+            color: #fff; 
+            padding: 2px 6px; 
+            border-radius: 2px; 
+            text-transform: uppercase; 
+            font-weight: 600; 
+            text-align: center; 
+            margin-top: auto;
+        }
+
+        /* Modal Overrides for Dark Theme */
+        .modal-content { 
+            background-color: var(--bg-card-surface); 
+            border: 1px solid var(--border-uniform); 
+            color: var(--text-main); 
+        }
+        .modal-header, .modal-footer { border-color: var(--border-uniform); }
+        .modal-header .btn-close { filter: invert(1); }
+
+        /*GALLERY UI & INPUTS */
+        .admin-input, .admin-select { 
+            background: rgba(0,0,0,0.2); 
+            border: 1px solid var(--border-uniform); 
+            color: var(--text-main); 
+            padding: 10px 15px; 
+            border-radius: 4px; 
+            width: 100%; 
+            font-size: 0.85rem; 
+        }
+        .admin-input:focus, .admin-select:focus { 
+            outline: none; 
+            border-color: var(--primary-blue); 
+        }
+        .admin-select option { 
+            background-color: var(--bg-card-surface); 
+            color: var(--text-main); 
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-uniform); 
+            border-radius: 6px; 
+            padding: 40px;
+            text-align: center; 
+            background-color: rgba(255,255,255,0.02); 
+            transition: all 0.3s; 
+            cursor: pointer;
+        }
+        .upload-zone:hover { border-color: var(--primary-blue); 
+            background-color: rgba(59, 130, 246, 0.05); 
+        }
+        .gallery-admin-card img { height: 160px; 
+            width: 100%; 
+            object-fit: cover; 
+            border-radius: 4px 4px 0 0; 
+        }
+        
+        .gallery-filters { display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+        }
+        .filter-btn { 
+            background: transparent; 
+            border: 1px solid var(--border-uniform); 
+            color: var(--text-muted); 
+            font-size: 0.8rem; 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            transition: all 0.2s; 
+        }
+        .filter-btn.active, .filter-btn:hover { 
+            background: var(--primary-blue); 
+            color: #fff; 
+            border-color: var(--primary-blue); 
+        }
+
+
+         /* PROFILE AVATAR UPLOAD STYLING */
+.avatar-upload-container {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.avatar-upload-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 2px solid var(--primary-blue);
+}
+
+.avatar-hover-overlay {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+}
+
+/* Show the dark camera overlay only when hovering */
+.avatar-upload-container:hover .avatar-hover-overlay {
+    opacity: 1;
+} 
+
+
+        @media (max-width: 991.98px) {
+    /* Shrink sidebar to an icon-only mini navigation */
+    .admin-sidebar {
+        width: 80px;
+    }
+
+    /* Hide the brand text and section headers */
+    .admin-brand span,
+    .nav-menu .px-4.text-muted,
+    .sidebar-footer .px-4.text-muted {
+        display: none !important; 
+    }
+    
+    .admin-brand {
+        padding: 20px 0;
+        justify-content: center;
+    }
+
+    /* Re-center the nav icons */
+    .admin-nav-link {
+        padding: 15px 0;
+        justify-content: center;
+        position: relative;
+    }
+
+    .admin-nav-link i {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    /* Hide the text inside nav links, keep only icons */
+    .admin-nav-link.active-tab {
+        border-right: none;
+        border-left: 3px solid var(--primary-blue); /* Move active border to left for mini-sidebar */
+    }
+
+    /* Hide text nodes inside links */
+    .admin-nav-link { font-size: 0; }
+    
+    /* Adjust notification badges for icon-only layout */
+    .admin-nav-link .badge {
+        position: absolute;
+        top: 8px;
+        right: 15px;
+        padding: 3px 5px;
+        font-size: 0.6rem;
+    }
+
+    /* Expand Main Content to fill the new space */
+    .admin-main-content {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+        padding: 25px;
+    }
+}
+
+
+/* ==========================================================================
+   COMPLETE ADMIN DASHBOARD RESPONSIVE MEDIA QUERIES (COMBINED & UPDATED)
+   ========================================================================== */
+
+/* 0. GLOBAL TABLE FIX (Forces horizontal scrolling, stops squishing) */
+.table-responsive, .table-wrapper {
+    width: 100%;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+.table-dark-custom {
+    min-width: 900px !important; 
+}
+.table-dark-custom th, .table-dark-custom td {
+    white-space: nowrap !important; /* Magic fix: Stops text from wrapping */
+}
+
+/* 1. TABLETS & SMALL DESKTOPS (Max-width: 991.98px) */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        width: 80px;
+        height: 100dvh; 
+    }
+
+    /* Hide text labels, keep only icons */
+    .admin-brand span, 
+    .nav-menu .px-4.text-muted, 
+    .sidebar-footer .px-4.text-muted {
+        display: none !important;
+    }
+
+    .admin-brand { padding: 20px 0; justify-content: center; }
+    
+    .admin-nav-link {
+        padding: 15px 0;
+        justify-content: center;
+        font-size: 0; 
+    }
+    
+    .admin-nav-link i { font-size: 1.3rem; margin: 0; }
+
+    .admin-nav-link.active-tab {
+        border-right: none;
+        border-left: 3px solid var(--primary-blue);
+    }
+
+    .admin-main-content {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+        padding: 25px;
+    }
+}
+
+/* 2. SMARTPHONES / PORTRAIT MOBILE VIEWS (Max-width: 767.98px) */
+@media (max-width: 767.98px) {
+    /* Transform Sidebar into a Swipeable Bottom Navigation Bar */
+    .admin-sidebar {
+        width: 100%;
+        height: 75px;
+        top: auto;
+        bottom: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start; /* Changed from space-around so it can scroll */
+        background-color: rgba(2, 6, 23, 0.98);
+        border-top: 1px solid var(--border-uniform);
+        border-right: none;
+        z-index: 1050;
+        overflow-x: auto; /* Allows swiping left/right to see Profile/Logout */
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* Hide logo branding and TEXT in the menu, but KEEP the icons/buttons */
+    .admin-brand, .nav-menu span, .sidebar-footer span { 
+        display: none !important; 
+    }
+
+    /* Reset menu containers so they sit side-by-side in the scrollable bar */
+    .nav-menu, .sidebar-footer {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 0 !important; 
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .nav-menu { padding-right: 0; }
+
+    /* Stack icon and text vertically for bottom nav */
+    .admin-nav-link {
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 15px;
+        min-width: 75px; /* Ensures buttons don't shrink too small */
+        border: none !important;
+        font-size: 0.65rem;
+        text-align: center;
+    }
+
+    .admin-nav-link.active-tab {
+        background-color: transparent;
+        border-bottom: 3px solid var(--primary-blue);
+    }
+
+    .admin-nav-link i { font-size: 1.2rem; margin: 0; }
+
+    .admin-nav-link .badge {
+        top: 2px;
+        right: calc(50% - 22px); 
+    }
+
+    /* Full Width Main Content */
+    .admin-main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px 15px;
+        padding-bottom: 95px; /* Crucial: Prevents content from hiding behind the bottom nav */
+    }
+
+    /* Reposition Top Header elements */
+    .d-flex.justify-content-between.align-items-center {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px;
+    }
+
+    /* Pulls online status up next to header on mobile */
+    #view-overview .d-flex.justify-content-between.align-items-center {
+        flex-direction: row;
+        align-items: center !important;
+    }
+
+    /* Stat Cards adjustments */
+    .stat-card { padding: 15px; }
+    .stat-card h3 { font-size: 1.5rem !important; }
+
+    /* Calendar Grid Compression for small screens */
+    .cal-header { font-size: 0.65rem; 
+        padding: 5px 0; 
+    }
+    .cal-day { height: 75px; 
+        padding: 4px; 
+    }
+    .cal-date { font-size: 0.85rem; }
+    .blocked-label { font-size: 0.5rem; 
+        padding: 2px 4px; 
+        letter-spacing: 0; 
+    }
+    .cal-day.booked-date .fs-8 { display: none; } /* Hides client name to keep boxes clean */
+    
+    /* Gallery Upload & Filters adjustments */
+    .upload-zone { padding: 25px 15px; }
+    
+    .gallery-filters {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch; 
+    }
+    
+    .filter-btn { white-space: nowrap; }
+    
+    /* Profile Modal Adjustments */
+    .modal-dialog { margin: 10px; }
+    
+    .avatar-upload-container { width: 80px; 
+        height: 80px; 
+    }
+}
+
+/* 3. EXTRA SMALL DEVICES (Max-width: 375px) */
+@media (max-width: 375px) {
+    .admin-nav-link {
+        font-size: 0.55rem; 
+    }
+    
+    .cal-day {
+        height: 60px;
+    }
+}
+
+/* --- MODERN NOTIFICATION TOAST SYSTEM --- */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast-card {
+    background: rgba(20, 25, 35, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast-success { border-left: 4px solid #28a745; }
+.toast-error { border-left: 4px solid #dc3545; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}

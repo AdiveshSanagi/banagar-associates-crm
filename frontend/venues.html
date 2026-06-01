@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banagar Associates | Premium Wedding & Event Venue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css"
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo"></div>
+                <div class="brand-text">   
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
+                    <li class="nav-item"><a class="nav-link active" href="../index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#venues">VENUES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#gallery">GALLERY</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#trust">WHY TRUST US</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./contact.html">CONTACT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./about.html">ABOUT US</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="tel:+911234567890" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
+                    <a href="../frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+     <section id="venues" class="py-5 bg-dark-deep">
+    <div class="container py-5">
+        
+        <div class="text-center max-w-xl mx-auto mb-4" data-animate="fadeInDown">
+            <h6 class="text-gold tracking-widest text-uppercase mb-2">Our Spaces</h6>
+            <h2 class="display-5 text-white font-serif fw-light">Choose Your Perfect Venue</h2>
+            <div class="accent-line mx-auto my-3"></div>
+        </div>
+
+        <div class="row justify-content-center mb-5" data-animate="fadeInUp">
+            <div class="col-12 text-center">
+                <div class="d-flex flex-wrap justify-content-center gap-2" id="venue-filter-controls">
+                    <button class="btn btn-filter active-filter px-4 py-2" data-filter="all">ALL SPACES</button>
+                    <button class="btn btn-filter px-4 py-2" data-filter="outdoor">LAWNS (OUTDOOR)</button>
+                    <button class="btn btn-filter px-4 py-2" data-filter="indoor">MARRIAGE HALL (INDOOR)</button>
+                    <button class="btn btn-filter px-4 py-2" data-filter="combo">COMBO PACKS</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4 pt-2" id="filterable-venue-grid">
+            
+            <div class="col-md-6 col-lg-4 venue-portfolio-item" data-category="outdoor">
+                <div class="card venue-card h-100 bg-dark-card border-0 rounded-0 overflow-hidden">
+                    <div class="position-relative overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=600&q=80" class="card-img-top rounded-0 venue-img" alt="Banagar Lawns">
+                        <span class="badge bg-gold position-absolute top-0 end-0 m-3 rounded-0 tracking-wide px-3 py-2">OUTDOOR</span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h3 class="h4 text-white font-serif mb-2">Banagar Lawns</h3>
+                        <p class="text-muted fs-7 mb-3"><i class="bi bi-geo-alt-fill text-primary me-1"></i> 15,000 sq. ft. Open Space</p>
+                        <p class="text-light-muted flex-grow-1">A massive, beautifully manicured open-air lawn perfect for grand receptions, starry evening galas, and events hosting up to 500 guests.</p>
+                        <div class="d-flex flex-wrap align-items-center gap-4 mb-4 meta-metrics-row fs-7">
+                    <div class="d-flex align-items-center text-white gap-2">
+                        <i class="bi bi-people text-primary-blue fs-6"></i>
+                        <span>Up to 500 guests</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white gap-2">
+                        <i class="bi bi-star text-gold-accent fs-6"></i>
+                        <span>From ₹150K</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-4 facility-tag-tray">
+                    <span class="badge badge-capsule">Parking</span>
+                    <span class="badge badge-capsule">Lighting</span>
+                    <span class="badge badge-capsule">Stage Area</span>
+                    <span class="badge badge-capsule">Catering Space</span>
+                </div>
+                        <hr class="border-secondary my-3">
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="text-gold fw-bold fs-5">From ₹1.5L</span>
+                            <a href="../frontend/venue-detail.html?space=hall" class="btn btn-sm btn-outline-primary rounded-0 px-3">Explore Space</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 venue-portfolio-item" data-category="indoor">
+                <div class="card venue-card h-100 bg-dark-card border-0 rounded-0 overflow-hidden">
+                    <div class="position-relative overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80" class="card-img-top rounded-0 venue-img" alt="Banagar Marriage Hall">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3 rounded-0 tracking-wide px-3 py-2">INDOOR</span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h3 class="h4 text-white font-serif mb-2">Banagar Marriage Hall</h3>
+                        <p class="text-muted fs-7 mb-3"><i class="bi bi-geo-alt-fill text-primary me-1"></i> Premium AC Banquet</p>
+                        <p class="text-light-muted flex-grow-1">An air-conditioned hall with striking modern chandeliers and premium architecture designed perfectly for intimate traditional weddings and elite corporate meets.</p>
+                        <div class="d-flex flex-wrap align-items-center gap-4 mb-4 meta-metrics-row fs-7">
+                    <div class="d-flex align-items-center text-white gap-2">
+                        <i class="bi bi-people text-primary-blue fs-6"></i>
+                        <span>Up to 500 guests</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white gap-2">
+                        <i class="bi bi-star text-gold-accent fs-6"></i>
+                        <span>From ₹150K</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-4 facility-tag-tray">
+                    <span class="badge badge-capsule">Parking</span>
+                    <span class="badge badge-capsule">Lighting</span>
+                    <span class="badge badge-capsule">Stage Area</span>
+                    <span class="badge badge-capsule">Catering Space</span>
+                </div>
+                        <hr class="border-secondary my-3">
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="text-gold fw-bold fs-5">From ₹2.0L</span>
+                            <a href="../frontend/venue-detail.html?space=hall" class="btn btn-sm btn-outline-primary rounded-0 px-3">Explore Space</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-12 col-lg-4 venue-portfolio-item" data-category="combo">
+                <div class="card venue-card h-100 bg-dark-card border-0 rounded-0 overflow-hidden">
+                    <div class="position-relative overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=600&q=80" class="card-img-top rounded-0 venue-img" alt="Hall + Lawn Combo">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3 rounded-0 tracking-wide px-3 py-2">BEST VALUE</span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h3 class="h4 text-white font-serif mb-2">Hall + Lawn Combo</h3>
+                        <p class="text-muted fs-7 mb-3"><i class="bi bi-geo-alt-fill text-primary me-1"></i> Full Estate Access</p>
+                        <p class="text-light-muted flex-grow-1">Get complete access to both the premium indoor venue and expansive lawns. Perfect for separating the main ritual events from heavy catering zones.</p>
+                        <div class="d-flex flex-wrap align-items-center gap-4 mb-4 meta-metrics-row fs-7">
+                    <div class="d-flex align-items-center text-white gap-2">
+                        <i class="bi bi-people text-primary-blue fs-6"></i>
+                        <span>Up to 500 guests</span>
+                    </div>
+                    <div class="d-flex align-items-center text-white gap-2">
+                        <i class="bi bi-star text-gold-accent fs-6"></i>
+                        <span>From ₹150K</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-4 facility-tag-tray">
+                    <span class="badge badge-capsule">Parking</span>
+                    <span class="badge badge-capsule">Lighting</span>
+                    <span class="badge badge-capsule">Stage Area</span>
+                    <span class="badge badge-capsule">Catering Space</span>
+                </div>
+                        <hr class="border-secondary my-3">
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="text-gold fw-bold fs-5">From ₹3.0L</span>
+                            <a href="../frontend/venue-detail.html?space=combo" class="btn btn-sm btn-primary rounded-0 px-3">Book Combo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../api-integration.js"></script>
+<script src="../index.js"></script>
+</body>
+</html>

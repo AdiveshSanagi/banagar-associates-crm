@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve Your Date | Banagar Associates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css">
+    <style>
+        :root {
+            --bg-deep-base: #0a0c10;
+            --bg-card-dark: #0d121c;
+            --bg-surface-hover: #121926;
+            --primary-blue: #3b82f6;
+            --accent-gold: #cfa861;
+            --text-slate-muted: #8e99a8;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-deep-base);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .text-gold { color: var(--accent-gold); }
+        .fs-7 { font-size: 0.82rem !important; }
+        .fs-8 { font-size: 0.72rem !important; }
+
+        /* Navbar active pill overrides */
+        .navbar { background-color: #0b0e14 !important; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .brand-logo-frame { height: 42px; display: flex; align-items: center; }
+        .brand-logo-frame img { height: 100%; width: auto; }
+        .nav-link { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em; color: rgba(255,255,255,0.7) !important; }
+
+        /* 5-Stage Stepper Track UI */
+        .stepper-track-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .step-node {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease;
+        }
+        .step-bubble {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #4a5568;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .step-line {
+            width: 40px;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Active state classes for stepper */
+        .step-node.active-step { color: #ffffff; }
+
+        .step-node.active-step .step-bubble {
+            border-color: var(--primary-blue);
+            background-color: transparent;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+            color: #ffffff;
+        }
+        .step-node.completed-step { color: var(--accent-gold); }
+
+        .step-node.completed-step .step-bubble {
+            border-color: var(--accent-gold);
+            background-color: rgba(207, 168, 97, 0.1);
+            color: var(--accent-gold);
+        }
+
+        /* Interactive Booking Cards System (Step 1) */
+        .booking-venue-card {
+            background-color: var(--bg-card-dark) !important;
+            border: 1px solid rgba(255, 255, 255, 0.04) !important;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .booking-venue-card .img-frame { height: 160px; 
+            overflow: hidden; 
+        }
+
+        .booking-venue-card .img-frame img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+
+        .booking-venue-card:hover {
+            background-color: var(--bg-surface-hover) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-4px);
+        }
+        /* Selection Highlight state matching blueprint screenshot */
+        .booking-venue-card.selected-venue {
+            border-color: var(--primary-blue) !important;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+            background-color: #0e1624 !important;
+        }
+
+        /* Minimal form entries */
+        .form-input-line {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding: 10px 0;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .form-input-line:focus { border-color: var(--primary-blue); }
+        .form-label-caps { font-size: 0.68rem; 
+            letter-spacing: 0.1em; 
+            color: #4a5568; 
+            text-transform: uppercase; 
+        }
+        .color-dark-cal { color-scheme: dark; }
+
+        /* Receipt Box Styles */
+        .receipt-card {
+            background-color: #0d121c;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        /* Print Media Engine Rules */
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            .navbar, .footer-section, .btn, .stepper-track-wrapper, .floating-actions, .no-print { display: none !important; }
+            .receipt-card { border: 1px solid #000; padding: 20px !important; background: #fff !important; color: #000 !important; }
+            .receipt-card * { color: #000 !important; }
+        }
+
+        @media (max-width: 991.98px) {
+    /* Adjusts the 5-Stage track layout scale down slightly */
+    .stepper-track-wrapper {
+        gap: 8px !important;
+    }
+
+    .step-node {
+        font-size: 0.72rem !important;
+        gap: 6px !important;
+    }
+
+    .step-bubble {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .step-line {
+        width: 25px !important; /* Shortens lines to fit tablets horizontally */
+    }
+}
+
+/* 2. SMARTPHONES / PORTRAIT MOBILE VIEWS (Max-width: 767.98px) */
+@media (max-width: 767.98px) {
+    /* Compresses the tracking header to keep it entirely on one line if possible */
+    .stepper-track-wrapper {
+        gap: 4px !important;
+        padding: 10px 0 !important;
+    }
+
+    /* Hides the text labels on small phones to keep the UI perfectly clean, showing just numbers */
+    .step-node span {
+        display: none !important;
+    }
+
+    .step-line {
+        width: 30px !important;
+        margin: 0 2px !important;
+    }
+
+    /* Adjusts venue cards grid spacing for single-file stacking */
+    .booking-venue-card {
+        max-width: 340px;
+        margin: 0 auto;
+        padding: 12px !important;
+    }
+
+    .booking-venue-card .img-frame {
+        height: 140px; /* Slims image footprint */
+    }
+
+    /* Centers headers across stage panels */
+    .booking-stage-panel h3 {
+        font-size: 1.15rem !important;
+        margin-bottom: 30px !important;
+    }
+
+    /* Form Layout adjustments */
+    .booking-stage-panel .p-4.p-xl-5 {
+        padding: 24px 20px !important;
+    }
+
+    /* Final Printable Confirmation Receipt Component */
+    .receipt-card {
+        padding: 20px 15px !important;
+    }
+
+    .receipt-card h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .receipt-card .row.g-4 {
+        row-gap: 15px !important;
+    }
+
+    /* Persistent Bottom Navigation Button Tray spacing fixes */
+    #booking-navigation-tray .col-md-7 {
+        display: flex;
+        width: 100%;
+        padding: 0 15px;
+        gap: 15px;
+    }
+
+    #booking-navigation-tray .btn {
+        flex: 1; /* Makes buttons equal width for easy thumb-tapping */
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.05em !important;
+    }
+}
+
+/* 3. EXTRA SMALL SMARTPHONES (Max-width: 360px) */
+@media (max-width: 360px) {
+    /* Shortens lines even further so the 5 bubbles remain perfectly aligned without wrapping */
+    .step-line {
+        width: 18px !important;
+    }
+    
+    .step-bubble {
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 0.65rem !important;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html#home">
+                <div class="brand-logo-frame me-2">
+                    <img src="../assets/images/logo-01.png" alt="Banagar Associates Logo">
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../frontend/about.html">ABOUT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">LAWNS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">MARRIAGE HALL</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#gallery">GALLERY</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../frontend/contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-5 mt-5 min-vh-100">
+        <div class="container py-5">
+            
+            <div class="text-center max-w-xl mx-auto mb-4 no-print">
+                <span class="text-gold tracking-widest text-uppercase small d-block mb-2">BOOK YOUR EVENT</span>
+                <h1 class="display-5 text-white font-serif fw-light mb-0">Reserve Your Date</h1>
+            </div>
+
+            <div class="stepper-track-wrapper mb-5 py-3 no-print">
+                <div class="step-node active-step" id="step-node-1"><div class="step-bubble">1</div><span>Venue</span></div>
+                <div class="step-line"></div>
+                <div class="step-node" id="step-node-2"><div class="step-bubble">2</div><span>Date</span></div>
+                <div class="step-line"></div>
+                <div class="step-node" id="step-node-3"><div class="step-bubble">3</div><span>Details</span></div>
+                <div class="step-line"></div>
+                <div class="step-node" id="step-node-4"><div class="step-bubble">4</div><span>Book & review</span></div>
+                <div class="step-line"></div>
+                <div class="step-node" id="step-node-5"><div class="step-bubble">5</div><span>Confirmed</span></div>
+            </div>
+
+            <form id="master-booking-form" onsubmit="event.preventDefault();">
+                
+                <div class="booking-stage-panel" id="panel-stage-1">
+                    <h3 class="h5 text-white text-center font-serif fw-normal mb-5">Select Your Venue</h3>
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Banagar Lawns', '150K')">
+                                <div class="img-frame"><img src="../assets/images/lawn thumb.jpeg" alt="Lawns"></div>
+                                <div class="card-body px-0 pt-3 pb-1">
+                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Banagar Lawns</h4>
+                                    <p class="text-light-muted fs-8 mb-2">For Outdoor Parties and Functions</p>
+                                    <span class="text-gold fw-normal fs-7">₹150K</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Banagar Marriage Hall', '200K')">
+                                <div class="img-frame"><img src="../assets/images/royal mandap.jpeg" alt="Hall"></div>
+                                <div class="card-body px-0 pt-3 pb-1">
+                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Banagar Marriage Hall</h4>
+                                    <p class="text-light-muted fs-8 mb-2">For Indoor Parties, Weddings and Celebrations</p>
+                                    <span class="text-gold fw-normal fs-7">₹200K</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Combo', '300K')">
+                                <div class="img-frame"><img src="../assets/images/lawn&mrg.png" alt="Combo"></div>
+                                <div class="card-body px-0 pt-3 pb-1">
+                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Hall + Lawn Combo</h4>
+                                    <p class="text-light-muted fs-8 mb-2">For Combined Indoor and Outdoor Events</p>
+                                    <span class="text-gold fw-normal fs-7">₹300K</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="booking-stage-panel d-none" id="panel-stage-2">
+                    <h3 class="h5 text-white text-center font-serif fw-normal mb-5">Select Your Date</h3>
+                    <div class="row justify-content-center">
+                        <div class="col-md-5 bg-dark-card p-4 p-xl-5 border border-secondary border-opacity-10">
+                            <div class="input-field-group mb-3">
+                                <label class="form-label-caps">CHOOSE EVENT DATE *</label>
+                                <input type="date" id="input-event-date" class="form-input-line text-white color-dark-cal" required onchange="validateDateStep()">
+                            </div>
+                            <div id="date-availability-notice" class="fs-8 text-success d-none mt-2">
+                                <i class="bi bi-check-circle-fill me-1"></i> This date is currently available for reservation.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-stage-panel d-none" id="panel-stage-3">
+                    <h3 class="h5 text-white text-center font-serif fw-normal mb-5">Fill Contact & Event Details</h3>
+                    <div class="row justify-content-center">
+                        <div class="col-md-7 bg-dark-card p-4 p-xl-5 border border-secondary border-opacity-10">
+                            <div class="row g-4">
+                                <div class="col-sm-6"><label class="form-label-caps">FULL NAME *</label><input type="text" id="input-name" class="form-input-line" required></div>
+                                <div class="col-sm-6"><label class="form-label-caps">PHONE NUMBER *</label><input type="tel" id="input-phone" class="form-input-line" required></div>
+                                <div class="col-12"><label class="form-label-caps">EMAIL ADDRESS</label><input type="email" id="input-email" class="form-input-line"></div>
+                                <div class="col-12"><label class="form-label-caps">EVENT TYPE</label><input type="text" id="event-type" class="form-input-line"></div>
+                                <div class="col-12"><label class="form-label-caps">ESTIMATED GUEST COUNT *</label><input type="number" id="input-guests" class="form-input-line" required></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-stage-panel d-none" id="panel-stage-4">
+                    <h3 class="h5 text-white text-center font-serif fw-normal mb-5">Review & Request Booking</h3>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 bg-dark-card p-4 p-xl-5 border border-secondary border-opacity-10 text-center">
+                            <i class="bi bi-file-earmark-check display-4 text-primary mb-3 d-block"></i>
+                            <h4 class="h6 text-white uppercase tracking-wide mb-3">Manual Booking Confirmation</h4>
+                            <p class="text-light-muted fs-7 mb-4">To lock your chosen date in our schedule, an advance fee of <strong>₹25,000</strong> is required. Click confirm below, and our manager will contact you for cash or UPI payment.</p>
+                            <div class="p-3 bg-deep-base text-start border border-secondary border-opacity-10 mb-4">
+                                <div class="d-flex justify-content-between fs-7 text-light-muted mb-2"><span>Selected Venue:</span><span id="pay-venue-title">-</span></div>
+                                <div class="d-flex justify-content-between fs-7 text-light-muted mb-2"><span>Target Date:</span><span id="pay-venue-date">-</span></div>
+                                <hr class="border-secondary my-2">
+                                <div class="d-flex justify-content-between fs-6 fw-bold text-white"><span>Advance Required:</span><span class="text-warning">₹25,000</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-stage-panel d-none" id="panel-stage-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 text-center mb-4 no-print">
+                            <div class="text-success fs-1 mb-2"><i class="bi bi-check-circle-fill"></i></div>
+                            <h2 class="h3 font-serif text-white">Reservation Request Logged!</h2>
+                            <p class="text-light-muted fs-7">Your request has been sent to our desk. Our manager will call you shortly to process the advance payment.</p>
+                        </div>
+                        <div class="col-md-8 receipt-card p-4 p-xl-5 text-start">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-20">
+                                <div><h3 class="h5 font-serif text-white uppercase tracking-wide mb-1">Banagar Associates</h3><span class="fs-8 text-light-muted">Booking Reference: BA-Pending</span></div>
+                                <div class="text-end"><span class="badge bg-warning text-dark rounded-0 px-3 py-1 fs-8">AWAITING PAYMENT</span></div>
+                            </div>
+                            <div class="row g-4 fs-7 mb-4">
+                                <div class="col-sm-6"><span class="text-white d-block fs-8">CLIENT NAME:</span><strong id="rec-name" class="text-white">-</strong></div>
+                                <div class="col-sm-6"><span class="text-light d-block fs-8">CONTACT PHONE:</span><strong id="rec-phone" class="text-white">-</strong></div>
+                                <div class="col-sm-6"><span class="text-light d-block fs-8">RESERVED VENUE:</span><strong id="rec-venue" class="text-white">-</strong></div>
+                                <div class="col-sm-6"><span class="text-light d-block fs-8">RESERVED DATE:</span><strong id="rec-date" class="text-white">-</strong></div>
+                            </div>
+                            <div class="p-3 bg-deep-base border border-secondary border-opacity-10">
+                                <div class="d-flex justify-content-between fs-8 text-light-muted mb-1"><span>Base Venue Package Quote:</span><span id="rec-price" class="text-white">-</span></div>
+                                <div class="d-flex justify-content-between fs-8 text-light-muted mb-2"><span>Advance Payment Status:</span><span class="text-warning">₹25,000 (Pending Manual Payment)</span></div>
+                                <hr class="border-secondary my-1">
+                                <div class="d-flex justify-content-between fs-7 text-white fw-bold"><span>Total Package Cost:</span><span class="text-gold" id="rec-balance">-</span></div>
+                            </div>
+                            <div class="mt-5 pt-4 border-top border-secondary border-opacity-10 d-none d-print-block">
+                                <div class="d-flex justify-content-between fs-8 text-muted"><span id="receipt-date-issued">Issued Date: Pending</span><span>Authorized Desk Signature: _______________________</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 text-center mt-4 no-print">
+                            <button type="button" class="btn btn-outline-light rounded-0 px-4 py-2 fs-7 me-2" onclick="window.print()"><i class="bi bi-printer me-2"></i>PRINT REQUEST</button>
+                            <a href="../index.html" class="btn btn-primary rounded-0 px-4 py-2 fs-7">RETURN TO HOME</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-5 no-print" id="booking-navigation-tray">
+                    <div class="col-md-7 d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-light rounded-0 px-4 py-2 fs-7 visibility-hidden" id="btn-booking-back" onclick="navigateStep(-1)">BACK</button>
+                        <button type="button" class="btn btn-primary rounded-0 px-4 py-2 fs-7 disabled" id="btn-booking-next" onclick="navigateStep(1)">CONTINUE</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </main>
+
+    <!-- footer section -->
+ <!-- footer section -->
+ <footer class="footer-section pt-5 pb-3">
+    <div class="container pt-4">
+        <div class="row g-4 mb-5">
+            
+            <div class="col-sm-6 col-lg-3">
+                <div class="footer-brand mb-4">
+                    <img src="../assets/images/logo-01.png" alt="Banagar Associates Logo" class="footer-logo mb-2" onerror="this.style.display='none'; document.getElementById('fallback-logo').classList.remove('d-none');">
+                    <div id="fallback-logo" class="d-flex align-items-center d-none">
+                        <div class="brand-logo me-2">B</div>
+                        <span class="fw-bold tracking-wide text-white fs-5">BANAGAR</span>
+                    </div>
+                </div>
+                <p class="text-light-muted fs-7 lh-lg pe-xl-4 footer-desc">
+                    Premier venue for weddings and celebrations. Creating unforgettable moments since 2010.
+                </p>
+            </div>
+
+            <div class="col-sm-6 col-lg-2 offset-lg-1">
+                <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Quick Links</h4>
+                <ul class="list-unstyled footer-links d-grid gap-3 fs-7">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#venues">Banagar Lawns</a></li>
+                    <li><a href="#venue-catalog">Marriage Hall</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#venues">Book Now</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Contact Info</h4>
+                <ul class="list-unstyled footer-contact-list d-grid gap-3 fs-7 text-light-muted">
+                    <li class="d-flex align-items-start gap-3">
+                        <i class="bi bi-geo-alt text-primary mt-1"></i>
+                        <span>Banagar Properties, Main Road,<br>City Center</span>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <i class="bi bi-telephone text-primary"></i>
+                        <a href="tel:+919876543210" class="text-decoration-none text-light-muted">+91 98765 43210</a>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <i class="bi bi-envelope text-primary"></i>
+                        <a href="mailto:info@banagar.com" class="text-decoration-none text-light-muted">info@banagar.com</a>
+                    </li>
+                    <li class="d-flex align-items-center gap-3">
+                        <i class="bi bi-clock text-primary"></i>
+                        <span>Mon - Sun: 9:00 AM - 9:00 PM</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <h4 class="h5 text-white font-serif mb-4 fw-normal tracking-wide">Find Us</h4>
+                <div class="footer-map-container position-relative overflow-hidden shadow">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3847.4819717141505!2d75.1213!3d15.3647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDIxJzUyLjkiTiA3NcKwMDcnMTYuNyJF!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="border-secondary border-opacity-10 my-4">
+
+        <div class="row align-items-center fs-7 text-white g-3">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0">&copy; 2026 Banagar Associates. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <div class="d-flex justify-content-center justify-content-md-end gap-3 sub-footer-links">
+                    <a href="adminlogin.html" class="text-white text-decoration-none">Admin</a>
+                    <a href="#" class="text-white text-decoration-none">Privacy Policy</a>
+                    <a href="#" class="text-white text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // =========================================================================
+        // BANAGAR ASSOCIATES - MASTER BOOKING ENGINE (UI + API INTEGRATION)
+        // =========================================================================
+        
+        let currentStep = 1;
+        let selectedVenueName = "";
+        let selectedVenueCostStr = "";
+        let unavailableDates = []; // Holds the live database array of blocked dates
+
+        // 1. FETCH BLOCKED DATES ON PAGE LOAD
+        document.addEventListener("DOMContentLoaded", async () => {
+            const dateInput = document.getElementById('input-event-date');
+            if (dateInput) {
+                // Prevent past dates
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+            }
+
+            try {
+                const response = await fetch("http://localhost:8000/api/public/booked-dates");
+                if (response.ok) {
+                    unavailableDates = await response.json();
+                }
+            } catch (err) {
+                console.error("Live calendar sync offline:", err);
+            }
+        });
+
+        function selectVenue(element, venueName, costStr) {
+            document.querySelectorAll('.booking-venue-card').forEach(card => card.classList.remove('selected-venue'));
+            element.classList.add('selected-venue');
+            
+            selectedVenueName = venueName;
+            selectedVenueCostStr = costStr;
+            document.getElementById('btn-booking-next').classList.remove('disabled');
+        }
+
+        // 2. REAL-TIME DATABASE DATE VALIDATION
+        function validateDateStep() {
+            const dateVal = document.getElementById('input-event-date').value;
+            const notice = document.getElementById('date-availability-notice');
+            const nextBtn = document.getElementById('btn-booking-next');
+            
+            if (!dateVal) {
+                notice.classList.add('d-none');
+                nextBtn.classList.add('disabled');
+                return;
+            }
+
+            // Check if the chosen date exists in the blocked MySQL array
+            if (unavailableDates.includes(dateVal)) {
+                notice.classList.remove('d-none', 'text-success');
+                notice.classList.add('text-danger');
+                notice.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i> This date is already booked. Please choose another.`;
+                nextBtn.classList.add('disabled');
+            } else {
+                notice.classList.remove('d-none', 'text-danger');
+                notice.classList.add('text-success');
+                notice.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> This date is available for reservation!`;
+                nextBtn.classList.remove('disabled');
+            }
+        }
+
+        // 3. INTERCEPT STEP 4 FOR FINAL API SUBMISSION
+        async function navigateStep(direction) {
+            const nextBtn = document.getElementById('btn-booking-next');
+
+            // Form Validation Check on Step 3
+            if (direction === 1 && currentStep === 3) {
+                const formNode = document.getElementById('master-booking-form');
+                if (!formNode.checkValidity()) {
+                    formNode.reportValidity();
+                    return;
+                }
+            }
+
+            // --- THE FINAL API SUBMISSION LAYER (Moving from Step 4 to 5) ---
+            if (direction === 1 && currentStep === 4) {
+                const originalText = nextBtn.textContent;
+                nextBtn.textContent = "PROCESSING...";
+                nextBtn.classList.add('disabled');
+
+                // FIXED PAYLOAD: Now includes event_type and guest_count!
+                const payload = {
+                    client_name: document.getElementById('input-name').value.trim(),
+                    phone: document.getElementById('input-phone').value.trim(),
+                    email: document.getElementById('input-email').value.trim() || "Not Provided",
+                    venue_package: selectedVenueName,
+                    event_type: document.getElementById('event-type').value.trim() || "Not Specified",
+                    event_date: document.getElementById('input-event-date').value,
+                    guest_count: parseInt(document.getElementById('input-guests').value) || 0,
+                    status: "Pending" 
+                };
+
+                try {
+                    const response = await fetch("http://localhost:8000/api/public/bookings", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error("Booking failed at gateway.");
+                    
+                    // IF SUCCESSFUL, Let the script continue to Step 5 (The Receipt)
+                } catch (err) {
+                    alert("System error: Unable to secure the reservation block right now.");
+                    console.error(err);
+                    nextBtn.textContent = originalText;
+                    nextBtn.classList.remove('disabled');
+                    return; // Stop the UI from moving to the receipt page if the database failed
+                }
+            }
+
+            // Standard UI Panel Transitions
+            document.getElementById(`panel-stage-${currentStep}`).classList.add('d-none');
+            document.getElementById(`step-node-${currentStep}`).classList.remove('active-step');
+            if(direction === 1) document.getElementById(`step-node-${currentStep}`).classList.add('completed-step');
+
+            currentStep += direction;
+
+            document.getElementById(`panel-stage-${currentStep}`).classList.remove('d-none');
+            document.getElementById(`step-node-${currentStep}`).classList.add('active-step');
+
+            // Context Mapping Data
+            if (currentStep === 4) {
+                document.getElementById('pay-venue-title').textContent = selectedVenueName;
+                document.getElementById('pay-venue-date').textContent = document.getElementById('input-event-date').value;
+            }
+
+            if (currentStep === 5) {
+                document.getElementById('rec-name').textContent = document.getElementById('input-name').value;
+                document.getElementById('rec-phone').textContent = document.getElementById('input-phone').value;
+                document.getElementById('rec-venue').textContent = selectedVenueName;
+                document.getElementById('rec-date').textContent = document.getElementById('input-event-date').value;
+                document.getElementById('rec-price').textContent = 'From ₹' + selectedVenueCostStr;
+                
+                let balanceText = "Contact Desk for Itemized Split";
+                if(selectedVenueCostStr.includes('150')) balanceText = "₹1,25,000";
+                if(selectedVenueCostStr.includes('200')) balanceText = "₹1,75,000";
+                if(selectedVenueCostStr.includes('300')) balanceText = "₹2,75,000";
+                document.getElementById('rec-balance').textContent = balanceText;
+
+                document.getElementById('booking-navigation-tray').classList.add('d-none');
+            }
+
+            // Navigation Button Visibility Rules
+            const backBtn = document.getElementById('btn-booking-back');
+            if(currentStep > 1) { backBtn.style.visibility = "visible"; } else { backBtn.style.visibility = "hidden"; }
+            
+            if(currentStep === 1 && !selectedVenueName) { nextBtn.classList.add('disabled'); } else { nextBtn.classList.remove('disabled'); }
+            if(currentStep === 2 && !document.getElementById('input-event-date').value) nextBtn.classList.add('disabled');
+            if(currentStep === 4) nextBtn.textContent = "CONFIRM & REQUEST BOOKING"; else nextBtn.textContent = "CONTINUE";
+        }
+    </script>
+    <script src="../api-integration.js"></script>
+</body>
+</html>
