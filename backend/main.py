@@ -254,12 +254,6 @@ def get_all_bookings(db: Session = Depends(get_db), current_admin: str = Depends
 # PROTECTED ADMINISTRATIVE ENDPOINTS (Admin Dashboard)
 # =========================================================
 
-@app.get("/api/admin/bookings", response_model=List[schemas.BookingResponse])
-def get_all_bookings(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    """Fetches every booking entry for your master tables"""
-    return db.query(models.Booking).order_by(models.Booking.created_at.desc()).all()
-
-# 👇 We put the security lock back on!
 @app.get("/api/admin/bookings/completed", response_model=List[schemas.BookingResponse])
 def get_completed_bookings(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
     completed = db.query(models.Booking)\
@@ -271,25 +265,6 @@ def get_completed_bookings(db: Session = Depends(get_db), current_admin: str = D
 
 
 # month wise calculation of revenue for the dashboard analytics page
-
-@app.get("/api/admin/dashboard/stats", response_model=schemas.DashboardStats)
-def get_dashboard_statistics(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    now = datetime.now()
-    
-    # ... your other stat queries ...
-
-    # Calculate Revenue ONLY for the current month
-    completed_this_month = db.query(func.sum(models.Booking.total_amount)).filter(
-        models.Booking.booking_status == models.BookingStatus.completed,
-        extract('month', models.Booking.event_date) == now.month,
-        extract('year', models.Booking.event_date) == now.year
-    ).scalar() or 0.00
-    
-    # You can return this inside your stats dictionary
-    return {
-        # ... other stats ...
-        "total_revenue_collected": completed_this_month
-    }
 
 @app.get("/api/admin/dashboard/monthly-revenue")
 def get_monthly_revenue(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
@@ -335,41 +310,6 @@ def update_booking_runtime(booking_id: str, payload: schemas.BookingUpdate, back
     for key, val in payload.model_dump(exclude_unset=True).items():
         setattr(item, key, val)
         
-    if item.booking_status == models.BookingStatus.completed:
-        item.advance_paid = item.total_amount
-        item.balance_left = 0.00
-    elif item.booking_status in [models.BookingStatus.confirmed, models.BookingStatus.pending]:
-        item.advance_paid = 25000.00
-        item.balance_left = float(item.total_amount) - 25000.00
-    elif item.booking_status == models.BookingStatus.cancelled:
-        item.advance_paid = 0.00
-        item.balance_left = 0.00
-        
-    db.commit()
-    db.refresh(item)
-    
-    if old_status != item.booking_status:
-        if item.booking_status == models.BookingStatus.confirmed:
-            background_tasks.add_task(notification.process_booking_notifications, "CONFIRMED", item)
-        elif item.booking_status == models.BookingStatus.completed:
-            background_tasks.add_task(notification.process_booking_notifications, "COMPLETED", item)
-        elif item.booking_status == models.BookingStatus.cancelled:
-            background_tasks.add_task(notification.process_booking_notifications, "CANCELLED", item)
-            
-    return item
-
-@app.put("/api/admin/bookings/{booking_id}", response_model=schemas.BookingResponse)
-def update_booking_runtime(booking_id: str, payload: schemas.BookingUpdate, background_tasks: BackgroundTasks, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    """Allows administrators to edit, confirm, complete, or cancel bookings"""
-    item = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
-    if not item:
-        raise HTTPException(status_code=404, detail="Target booking record structural instance missing")
-    
-    old_status = item.booking_status
-
-    for key, val in payload.model_dump(exclude_unset=True).items():
-        setattr(item, key, val)
-        
     # 🔥 THE NEW DATABASE MATH FIX
     if item.booking_status == models.BookingStatus.completed:
         # If fully paid, move all money to advance_paid and zero out the balance
@@ -397,6 +337,7 @@ def update_booking_runtime(booking_id: str, payload: schemas.BookingUpdate, back
             background_tasks.add_task(notification.process_booking_notifications, "CANCELLED", item)
             
     return item
+
 @app.get("/api/admin/bookings/date/{event_date_str}", response_model=schemas.BookingResponse)
 def get_booking_by_date(event_date_str: str, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
     """Fetches who booked a date when clicking on a blocked calendar segment"""
@@ -509,7 +450,4 @@ def change_admin_password_runtime(payload: PasswordUpdatePayload, current_admin:
                     file.write(line)
                     
     return {"status": "success", "detail": "Administrative security credentials synchronized successfully."}
-
-app.mount("/", StaticFiles(directory="..", html=True), name="frontend")
-
 
