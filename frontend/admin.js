@@ -663,17 +663,35 @@ async function loadCompletedBookingsTable() {
     if (!tableBody) return;
 
     try {
-        const bookings = await ApiService.getCompletedBookings();
+        // Grab your explicit security token context from storage
+        const myToken = localStorage.getItem('admin_token'); 
+        
+        // 1. Direct call explicitly pointing to your live Render server pipeline
+        const response = await fetch("https://banagar-associates-crm.onrender.com/api/admin/bookings", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${myToken}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Unauthorized security context execution.");
+        const allBookings = await response.json();
+
+        // 2. Filter data array down to only 'Completed' records
+        const completedBookings = allBookings.filter(b => b.booking_status === "Completed");
+
         tableBody.innerHTML = ""; 
 
-        if (bookings.length === 0) {
+        if (completedBookings.length === 0) {
             tableBody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-5"><i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>No completed bookings on record yet.</td></tr>`;
             return;
         }
 
-        bookings.forEach(b => {
-            const eventDate = new Date(b.event_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-            const createdDate = new Date(b.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        // 3. Render loop using filtered array structure context maps
+        completedBookings.forEach(b => {
+            const eventDate = b.event_date ? new Date(b.event_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+            const createdDate = b.created_at ? new Date(b.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
             const requests = b.special_requests ? b.special_requests : '<span class="text-muted fst-italic">None</span>';
 
             const rowHtml = `
@@ -686,16 +704,16 @@ async function loadCompletedBookingsTable() {
                     </td>
                     <td>
                         <span class="text-white d-block">${b.venue_type}</span>
-                        <span class="text-muted fs-8">${b.event_type}</span>
+                        <span class="text-muted fs-8">${b.event_type || 'N/A'}</span>
                     </td>
                     <td class="text-white">${eventDate}</td>
                     <td class="text-white">${b.guest_count || '0'}</td>
                     <td class="text-light fs-8" style="max-width: 150px; white-space: normal;">${requests}</td>
                     <td>
                         <div class="fs-8">
-                            <span class="text-muted">Total:</span> <strong class="text-white">₹${b.total_amount?.toLocaleString() || '0'}</strong><br>
-                            <span class="text-muted">Adv:</span> <span class="text-warning">₹${b.advance_paid?.toLocaleString() || '0'}</span><br>
-                            <span class="text-muted">Bal:</span> <span class="text-danger">₹${b.balance_left?.toLocaleString() || '0'}</span>
+                            <span class="text-muted">Total:</span> <strong class="text-white">₹${b.total_amount?.toLocaleString('en-IN') || '0'}</strong><br>
+                            <span class="text-muted">Adv:</span> <span class="text-warning">₹${b.advance_paid?.toLocaleString('en-IN') || '0'}</span><br>
+                            <span class="text-muted">Bal:</span> <span class="text-danger">₹${b.balance_left?.toLocaleString('en-IN') || '0'}</span>
                         </div>
                     </td>
                     <td>
@@ -714,7 +732,7 @@ async function loadCompletedBookingsTable() {
         });
     } catch (err) {
         console.error("Error loading completed bookings:", err);
-        tableBody.innerHTML = `<tr><td colspan="10" class="text-center text-danger py-5"><i class="bi bi-exclamation-triangle me-2"></i>Database connection failed. Please ensure you are logged in.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="10" class="text-center text-danger py-5"><i class="bi bi-exclamation-triangle me-2"></i>Database connection failed. Please ensure you are logged in securely.</td></tr>`;
     }
 }
 
