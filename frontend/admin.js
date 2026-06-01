@@ -430,7 +430,7 @@ async function loadAdminGalleryManager() {
         }
 
         assets.forEach(item => {
-            const fileUrl = `http://localhost:8000${item.media_url}`;
+            const fileUrl = `https://banagar-associates-crm-production.up.railway.app${item.media_url}`;
             const mediaTemplate = item.media_type === "image" 
                 ? `<img src="${fileUrl}" alt="Gallery Asset" class="img-fluid" style="object-fit: cover; height: 100%; width: 100%;">` 
                 : `<video src="${fileUrl}" muted class="w-100" style="object-fit: cover; height: 100%;"></video>`;
