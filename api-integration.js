@@ -3,7 +3,7 @@
 // Place this file at the root of your project: /api-integration.js
 // =========================================================================
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "banagar-associates-crm-production.up.railway.app";
 
 const ApiService = {
     /**
