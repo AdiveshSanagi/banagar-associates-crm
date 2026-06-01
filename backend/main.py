@@ -36,7 +36,7 @@ app.add_middleware(
 # Setup dedicated uploads folder for your gallery files
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 
 def generate_booking_id(db: Session) -> str:
     """Generates sequential custom IDs formatted like BA_000001 safely"""
