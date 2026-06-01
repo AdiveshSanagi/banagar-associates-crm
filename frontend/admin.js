@@ -747,7 +747,9 @@ async function exportMonthlyBookingsToCSV() {
 
     try {
         const myToken = localStorage.getItem('admin_token'); 
-        const response = await fetch(`/api/admin/bookings`, {
+        
+        //  FIXED: Pointing to absolute Render backend route
+        const response = await fetch(`https://banagar-associates-crm.onrender.com/api/admin/bookings`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -760,7 +762,7 @@ async function exportMonthlyBookingsToCSV() {
 
         const filteredBookings = allBookings.filter(b => {
             if (!b.event_date) return false;
-           return b.event_date.startsWith(monthInput) && b.booking_status === "Completed";
+            return b.event_date.startsWith(monthInput) && b.booking_status === "Completed";
         });
 
         if (filteredBookings.length === 0) {
@@ -822,7 +824,9 @@ async function calculateSelectedMonthRevenue() {
 
     try {
         const myToken = localStorage.getItem('admin_token'); 
-        const response = await fetch(`/api/admin/bookings`, {
+        
+        //  FIXED: Pointing to absolute Render backend route
+        const response = await fetch(`https://banagar-associates-crm.onrender.com/api/admin/bookings`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -855,4 +859,3 @@ async function calculateSelectedMonthRevenue() {
         badge.classList.remove("d-none");
     }
 }
-
