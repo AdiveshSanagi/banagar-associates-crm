@@ -42,7 +42,7 @@ function renderHomeGalleryCards(items) {
     }
 
     items.forEach(item => {
-        const fullMediaUrl = `https://banagar-associates-crm.onrender.com${item.media_url}`;;
+        const fileUrl = `https://banagar-associates-crm.onrender.com${item.media_url}`;
         
         // Dynamically build content based on file properties
         const mediaTag = item.media_type === "image"
