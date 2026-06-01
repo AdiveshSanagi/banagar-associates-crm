@@ -13,7 +13,7 @@ async function initHomepageGallery() {
     if (!grid) return;
 
     try {
-        const response = await fetch("http://localhost:8000/api/public/gallery");
+       const response = await fetch("https://banagar-associates-crm.onrender.com/api/public/gallery");
         if (!response.ok) throw new Error("Database file stream failed.");
         
         const data = await response.json();
