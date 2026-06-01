@@ -4,7 +4,7 @@
 // =========================================================================
 
 // Make sure it has /api at the end, but NO trailing slash (/)
-const BASE_URL = "https://banagar-associates-crm.onrender.com/api";
+const BASE_URL = "https://banagar-associates-crm.onrender.com/api";;
 
 const ApiService = {
     /**
