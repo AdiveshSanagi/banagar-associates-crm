@@ -126,7 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             assets.forEach(item => {
                 // THE FIX: Prepend the backend localhost URL to the database path
-               const fullMediaUrl = `https://banagar-associates-crm.onrender.com${item.media_url}`;
+               const fullMediaUrl = item.media_url.startsWith("http") 
+                    ? item.media_url 
+                    : `https://banagar-associates-crm.onrender.com${item.media_url}`;
                 
                 // Map backend media_type to frontend filter categories
                 const filterCategory = item.media_type === "image" ? "photos" : "videos";
