@@ -449,7 +449,7 @@ def purge_gallery_media(item_id: int, db: Session = Depends(get_db), current_adm
 
 @app.get("/api/public/gallery")
 def get_public_gallery(db: Session = Depends(get_db)):
-    """Retrieves all gallery assets with hot-linkable secure cloud URLs natively"""
+    """Retrieves all gallery assets ordered by newest first using SQLAlchemy models"""
     items = db.query(models.GalleryItem).order_by(desc(models.GalleryItem.id)).all()
     return items
 
