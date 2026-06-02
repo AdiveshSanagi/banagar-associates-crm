@@ -603,7 +603,7 @@
         clearTimeout(autoAdvanceTimeout);
         autoAdvanceTimeout = setTimeout(() => {
             if (currentStep === 3) navigateStep(1);
-        }, 850); // 850ms pause lets them finish typing without getting cut off
+        }, 1000); // 1000ms pause lets them finish typing without getting cut off
     }
 }
 
