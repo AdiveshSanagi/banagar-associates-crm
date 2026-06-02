@@ -859,3 +859,38 @@ async function calculateSelectedMonthRevenue() {
         badge.classList.remove("d-none");
     }
 }
+
+
+function filterMasterBookingsTable() {
+    // 1. Get the typed search term and trim it clean
+    const searchKeyword = document.getElementById("table-search-input").value.toLowerCase().trim();
+    
+    // 2. Select all dataset rows sitting inside the table body
+    const tableRows = document.querySelectorAll("#admin-bookings-rows tr");
+    
+    if (!tableRows || tableRows.length === 0) return;
+
+    tableRows.forEach(row => {
+        // Skip placeholder information entries safely
+        if (row.cells.length < 6) return;
+
+        // 3. Extract targets and sanitize strings cleanly
+        // Using replace(/[^0-9]/g, '') converts '#42' into just '42' for flawless ID parsing
+        const bookingId   = row.cells[0].textContent.toLowerCase().replace(/[^0-9]/g, ''); 
+        const clientName  = row.cells[1].textContent.toLowerCase().trim(); 
+        const phoneNumber = row.cells[5].textContent.toLowerCase().trim(); 
+
+        // Also clean up your keyword if looking for numeric ID matches
+        const cleanKeyword = searchKeyword.replace('#', '');
+
+        // 4. Matrix conditions matching evaluation loop
+        if (bookingId.includes(cleanKeyword) || 
+            clientName.includes(searchKeyword) || 
+            phoneNumber.includes(searchKeyword)) {
+            
+            row.style.display = ""; // Keep matching row visible
+        } else {
+            row.style.display = "none"; // Hide non-matching rows smoothly
+        }
+    });
+}
