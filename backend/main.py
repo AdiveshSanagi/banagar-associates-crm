@@ -19,10 +19,21 @@ import schemas
 import auth
 from database import engine, get_db
 
+import os
+import cloudinary
+import cloudinary.uploader
+
 # Automatically verify/generate tables on startup
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Banagar Associates Backend Gateway", version="1.0.0")
+
+# ⚡ INITIALIZE CLOUDINARY ENVIRONMENT CONFIGURATION
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
 
 # Global CORS Policy mapping to allow your local frontend files to communicate
 app.add_middleware(
@@ -166,25 +177,25 @@ def create_query(payload: schemas.QueryCreate, db: Session = Depends(get_db)):
     db.refresh(query_db)
     return query_db
 
-@app.get("/api/public/gallery", response_model=List[schemas.GalleryResponse])
-def get_gallery(
-    venue_category: Optional[models.VenueCategory] = None,
-    media_type: Optional[models.MediaType] = None,
-    limit: Optional[int] = None,
-    db: Session = Depends(get_db)
-):
-    """Fetches pictures and videos. Supports limit=8 for your home index page."""
-    q = db.query(models.GalleryItem)
-    if venue_category:
-        q = q.filter(models.GalleryItem.venue_category == venue_category)
-    if media_type:
-        q = q.filter(models.GalleryItem.media_type == media_type)
+# @app.get("/api/public/gallery", response_model=List[schemas.GalleryResponse])
+# def get_gallery(
+#     venue_category: Optional[models.VenueCategory] = None,
+#     media_type: Optional[models.MediaType] = None,
+#     limit: Optional[int] = None,
+#     db: Session = Depends(get_db)
+# ):
+#     """Fetches pictures and videos. Supports limit=8 for your home index page."""
+#     q = db.query(models.GalleryItem)
+#     if venue_category:
+#         q = q.filter(models.GalleryItem.venue_category == venue_category)
+#     if media_type:
+#         q = q.filter(models.GalleryItem.media_type == media_type)
     
-    q = q.order_by(models.GalleryItem.uploaded_at.desc())
-    if limit:
-        q = q.limit(limit)
+#     q = q.order_by(models.GalleryItem.uploaded_at.desc())
+#     if limit:
+#         q = q.limit(limit)
         
-    return q.all()
+#     return q.all()
 
 
 
@@ -381,44 +392,65 @@ def upload_gallery_media(
     db: Session = Depends(get_db),
     current_admin: str = Depends(auth.get_current_admin)
 ):
-    """Handles drag & drop administrative uploads restricting to jpg, png, and mp4 formats"""
+    """Handles administrative uploads directly to Cloudinary bypassing local disk storage"""
     ext = file.filename.split(".")[-1].lower()
     if ext not in ["jpg", "png", "mp4"]:
         raise HTTPException(status_code=400, detail="Secure system restriction: file extension matrix disallowed")
         
-    file_uuid = f"{int(datetime.now().timestamp())}_{file.filename}"
-    target_path = os.path.join(UPLOAD_DIR, file_uuid)
-    
-    with open(target_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    try:
+        # 1. Streams the file directly from memory stream payload directly to Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            file.file,
+            folder="banagar_gallery",
+            resource_type="auto" # Auto-detects if it's an image (jpg/png) or a video (mp4)
+        )
         
-    media_url = f"/uploads/{file_uuid}"
-    
-    item = models.GalleryItem(
-        media_url=media_url,
-        media_type=media_type,
-        venue_category=venue_category,
-        description=description
-    )
-    db.add(item)
-    db.commit()
-    db.refresh(item)
-    return item
+        # 2. Extract the persistent cloud URL returned by Cloudinary
+        media_url = upload_result.get("secure_url")
+        if not media_url:
+            raise HTTPException(status_code=500, detail="Failed to grab secure URL from cloud gateway.")
+            
+        # 3. Store the clean cloud string URL directly into your Railway MySQL table
+        item = models.GalleryItem(
+            media_url=media_url, # Now holds the full cloud link string!
+            media_type=media_type,
+            venue_category=venue_category,
+            description=description
+        )
+        db.add(item)
+        db.commit()
+        db.refresh(item)
+        return item
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cloud upload failed: {str(e)}")
 
 @app.delete("/api/admin/gallery/{item_id}", status_code=200)
 def purge_gallery_media(item_id: int, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    """Deletes media files completely out of the local folder storage and database records"""
+    """Deletes media files completely out of Cloudinary cloud storage and database records"""
     item = db.query(models.GalleryItem).filter(models.GalleryItem.id == item_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Target tracking file object does not exist")
         
-    rel_path = item.media_url.lstrip("/")
-    if os.path.exists(rel_path):
-        os.remove(rel_path)
+    try:
+        # Extract Cloudinary's unique identification name (Public ID) from your saved URL link string
+        # e.g., parses out 'banagar_gallery/filename' to clean it off the cloud servers completely
+        if "res.cloudinary.com" in item.media_url:
+            public_id = "banagar_gallery/" + item.media_url.split("/")[-1].split(".")[0]
+            cloudinary.uploader.destroy(public_id)
+    except Exception as e:
+        print(f"Non-blocking log error: Cloudinary assets purge skipped: {str(e)}")
         
+    # Purge database entry tracking reference
     db.delete(item)
     db.commit()
     return {"message": "System database entry and tracking reference purged clean"}
+
+@app.get("/api/public/gallery")
+def get_public_gallery(db: Session = Depends(get_db)):
+    """Retrieves all gallery assets with hot-linkable secure cloud URLs natively"""
+    items = db.query(models.GalleryItem).order_by(desc(models.GalleryItem.id)).all()
+    return items
 
 # update password by admin
 
