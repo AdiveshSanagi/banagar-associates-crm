@@ -416,6 +416,9 @@ window.changeMonth = function(direction) {
 // =========================================================================
 // 5. PRODUCTION ASSET PIPELINE (DASHBOARD GALLERY MODULE LOGIC)
 // =========================================================================
+// =========================================================================
+// 5. PRODUCTION ASSET PIPELINE (DASHBOARD GALLERY MODULE LOGIC)
+// =========================================================================
 async function loadAdminGalleryManager() {
     const displayGrid = document.getElementById("admin-gallery-display-grid");
     if (!displayGrid) return;
@@ -430,7 +433,11 @@ async function loadAdminGalleryManager() {
         }
 
         assets.forEach(item => {
-           const fileUrl = `https://banagar-associates-crm.onrender.com${item.media_url}`;
+            // ✨ SMART URL RESOLVER: Natively handles both Cloudinary hotlinks and local fallback paths
+            const fileUrl = item.media_url.startsWith("http") 
+                ? item.media_url 
+                : `https://banagar-associates-crm.onrender.com${item.media_url}`;
+
             const mediaTemplate = item.media_type === "image" 
                 ? `<img src="${fileUrl}" alt="Gallery Asset" class="img-fluid" style="object-fit: cover; height: 100%; width: 100%;">` 
                 : `<video src="${fileUrl}" muted class="w-100" style="object-fit: cover; height: 100%;"></video>`;
