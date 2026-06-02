@@ -659,3 +659,74 @@
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
+
+/* =========================================================================
+   PREMIUM HIGH-CONTRAST SEARCH INPUT & ACTION ROW RESPONSIVE GRID
+   ========================================================================= */
+
+/* 1. Global Focus and Placeholder Styles for the Light Input Field */
+.search-focus-glow:focus {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #3b82f6 !important; /* Highlights to your brand blue */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.search-focus-glow::placeholder {
+    color: #8a94a0 !important;
+    font-weight: 400;
+    opacity: 1;
+}
+
+/* 2. Responsive Mobile Layout Adaptations (Smartphones & Small Tablets) */
+@media (max-width: 767.98px) {
+    
+    /* Forces the header layout wrapper to turn into a vertical stack */
+    #view-bookings .d-flex.justify-content-between.align-items-center {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+    }
+
+    /* Container holding both Search + Export CSV button expands to full width */
+    #view-bookings .d-flex.align-items-center.gap-3 {
+        width: 100% !important;
+        flex-direction: column !important; /* Stacks search box on top of button */
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    /* Expands search wrapper container width to match screen edges */
+    #view-bookings .position-relative[style*="width: 240px"] {
+        width: 100% !important;
+        height: 38px !important; /* Marginally increases height on mobile for easier touch targeting */
+    }
+
+    /* Ensures the actual input field takes up 100% width and scales beautifully */
+    #table-search-input {
+        font-size: 0.85rem !important; /* Easier readability on mobile displays */
+        height: 100% !important;
+        border-radius: 6px !important; /* Slightly rounder edges for premium mobile aesthetics */
+    }
+
+    /* Expands the Export CSV dropdown component wrapper to stretch full width */
+    #view-bookings .dropdown,
+    #view-bookings .dropdown .btn {
+        width: 100% !important;
+        height: 38px !important; /* Perfectly matches search input height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px !important;
+    }
+
+    /* Makes the flyout date selection menu fit cleanly on compact touchscreens */
+    #view-bookings .dropdown-menu {
+        width: 100% !important;
+        position: static !important; /* Prevents hidden popovers floating off-screen */
+        transform: none !important;
+        margin-top: 8px !important;
+        box-shadow: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+}
