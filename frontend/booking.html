@@ -358,11 +358,11 @@
                     <div class="row justify-content-center">
                         <div class="col-md-7 bg-dark-card p-4 p-xl-5 border border-secondary border-opacity-10">
                             <div class="row g-4">
-                                <div class="col-sm-6"><label class="form-label-caps">FULL NAME *</label><input type="text" id="input-name" class="form-input-line" required></div>
-                                <div class="col-sm-6"><label class="form-label-caps">PHONE NUMBER *</label><input type="tel" id="input-phone" class="form-input-line" required></div>
-                                <div class="col-12"><label class="form-label-caps">EMAIL ADDRESS</label><input type="email" id="input-email" class="form-input-line"></div>
-                                <div class="col-12"><label class="form-label-caps">EVENT TYPE</label><input type="text" id="event-type" class="form-input-line"></div>
-                                <div class="col-12"><label class="form-label-caps">ESTIMATED GUEST COUNT *</label><input type="number" id="input-guests" class="form-input-line" required></div>
+                                <div class="col-sm-6"><label class="form-label-caps">FULL NAME *</label><input type="text" id="input-name" class="form-input-line" required oninput="checkDetailsAutoAdvance()"></div>
+                                <div class="col-sm-6"><label class="form-label-caps">PHONE NUMBER *</label><input type="tel" id="input-phone" class="form-input-line" required oninput="checkDetailsAutoAdvance()"></div>
+                                <div class="col-12"><label class="form-label-caps">EMAIL ADDRESS</label><input type="email" id="input-email" class="form-input-line" oninput="checkDetailsAutoAdvance()"></div>
+                                <div class="col-12"><label class="form-label-caps">EVENT TYPE</label><input type="text" id="event-type" class="form-input-line" oninput="checkDetailsAutoAdvance()"></div>
+                                <div class="col-12"><label class="form-label-caps">ESTIMATED GUEST COUNT *</label><input type="number" id="input-guests" class="form-input-line" required oninput="checkDetailsAutoAdvance()"></div>
                             </div>
                         </div>
                     </div>
@@ -528,6 +528,7 @@
         let selectedVenueName = "";
         let selectedVenueCostStr = "";
         let unavailableDates = []; // Holds the live database array of blocked dates
+        let autoAdvanceTimeout = null;
 
         // 1. FETCH BLOCKED DATES ON PAGE LOAD
         document.addEventListener("DOMContentLoaded", async () => {
@@ -549,13 +550,19 @@
         });
 
         function selectVenue(element, venueName, costStr) {
-            document.querySelectorAll('.booking-venue-card').forEach(card => card.classList.remove('selected-venue'));
-            element.classList.add('selected-venue');
-            
-            selectedVenueName = venueName;
-            selectedVenueCostStr = costStr;
-            document.getElementById('btn-booking-next').classList.remove('disabled');
-        }
+    document.querySelectorAll('.booking-venue-card').forEach(card => card.classList.remove('selected-venue'));
+    element.classList.add('selected-venue');
+    
+    selectedVenueName = venueName;
+    selectedVenueCostStr = costStr;
+    document.getElementById('btn-booking-next').classList.remove('disabled');
+
+    // ⚡ Auto next after 350ms click animation
+    clearTimeout(autoAdvanceTimeout);
+    autoAdvanceTimeout = setTimeout(() => {
+        if (currentStep === 1) navigateStep(1);
+    }, 350); 
+}
 
         // 2. REAL-TIME DATABASE DATE VALIDATION
         function validateDateStep() {
@@ -568,20 +575,37 @@
                 nextBtn.classList.add('disabled');
                 return;
             }
-
-            // Check if the chosen date exists in the blocked MySQL array
+        
             if (unavailableDates.includes(dateVal)) {
                 notice.classList.remove('d-none', 'text-success');
                 notice.classList.add('text-danger');
-                notice.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i> This date is already booked. Please choose another.`;
+                notice.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i> This date is already booked.`;
                 nextBtn.classList.add('disabled');
             } else {
                 notice.classList.remove('d-none', 'text-danger');
                 notice.classList.add('text-success');
-                notice.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> This date is available for reservation!`;
+                notice.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> This date is available!`;
                 nextBtn.classList.remove('disabled');
+        
+                // ⚡ Auto next after 600ms so they can read the notice
+                clearTimeout(autoAdvanceTimeout);
+                autoAdvanceTimeout = setTimeout(() => {
+                    if (currentStep === 2) navigateStep(1);
+                }, 600);
             }
         }
+
+        function checkDetailsAutoAdvance() {
+    const formNode = document.getElementById('master-booking-form');
+    
+    // ⚡ Auto next if the form becomes completely valid
+    if (formNode.checkValidity() && currentStep === 3) {
+        clearTimeout(autoAdvanceTimeout);
+        autoAdvanceTimeout = setTimeout(() => {
+            if (currentStep === 3) navigateStep(1);
+        }, 850); // 850ms pause lets them finish typing without getting cut off
+    }
+}
 
         // 3. INTERCEPT STEP 4 FOR FINAL API SUBMISSION
         async function navigateStep(direction) {
