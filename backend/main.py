@@ -199,6 +199,7 @@ def create_query(payload: schemas.QueryCreate, db: Session = Depends(get_db)):
 
 
 
+
 # =========================================================
 # PROTECTED ADMINISTRATIVE ENDPOINTS (Admin Dashboard)
 # =========================================================
@@ -451,6 +452,11 @@ def get_public_gallery(db: Session = Depends(get_db)):
     """Retrieves all gallery assets with hot-linkable secure cloud URLs natively"""
     items = db.query(models.GalleryItem).order_by(desc(models.GalleryItem.id)).all()
     return items
+
+@app.get("/")
+def read_root():
+    """System health check fallback greeting"""
+    return {"status": "Online", "gateway": "Banagar Associates API Service Ready"}
 
 # update password by admin
 
