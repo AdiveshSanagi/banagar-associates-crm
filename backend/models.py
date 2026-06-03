@@ -2,7 +2,9 @@ from sqlalchemy import Column, Integer, String, Text, Date, Numeric, DateTime, E
 from database import Base
 import enum
 
+# =========================================================================
 # 1. FIXED ENUMS TO MATCH FRONTEND STRINGS EXACTLY
+# =========================================================================
 class VenueType(str, enum.Enum):
     lawns = "Banagar Lawns"
     hall = "Banagar Marriage Hall"
@@ -31,7 +33,9 @@ class VenueCategory(str, enum.Enum):
     hall = "Marriage Hall"
     combo = "Combo"
 
-# 2. THE MASTER BOOKING TABLE
+# =========================================================================
+# 2. THE MASTER BOOKING ENGINE SCHEMA TABLE
+# =========================================================================
 class Booking(Base):
     __tablename__ = "bookings"
 
@@ -41,10 +45,12 @@ class Booking(Base):
     phone = Column(String(20), nullable=False)
     venue_type = Column(String(100), nullable=False)
     
-    # NEW COLUMN ADDED FOR ADMIN DASHBOARD
+    # New descriptive context parameter column added for dashboard visibility
     event_type = Column(String(100), nullable=True, default="Not Specified") 
     
-    event_date = Column(Date, nullable=False, unique=True)
+    # ⚡ UPGRADED FIX: Changed unique=True to index=True to support multi-venue parallel date bookings!
+    event_date = Column(Date, nullable=False, index=True)
+    
     guest_count = Column(Integer, nullable=False, default=0)
     special_requests = Column(Text, nullable=True)
     advance_paid = Column(Numeric(10, 2), nullable=False, default=25000.00)
@@ -54,7 +60,9 @@ class Booking(Base):
     booking_status = Column(Enum(BookingStatus), nullable=False, default=BookingStatus.pending)
     created_at = Column(DateTime, default=func.now())
 
-# 3. OTHER TABLES (Unchanged)
+# =========================================================================
+# 3. COMPLEMENTARY SYSTEM TABLES
+# =========================================================================
 class Query(Base):
     __tablename__ = "queries"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
