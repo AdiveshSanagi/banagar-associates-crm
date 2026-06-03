@@ -10,16 +10,13 @@ import notification
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from sqlalchemy import func, extract, update
-from fastapi.staticfiles import StaticFiles
-from sqlalchemy import desc
+from sqlalchemy import func, extract, update, desc
 
 import models
 import schemas
 import auth
 from database import engine, get_db
 
-import os
 import cloudinary
 import cloudinary.uploader
 
@@ -28,7 +25,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Banagar Associates Backend Gateway", version="1.0.0")
 
-# ⚡ INITIALIZE CLOUDINARY ENVIRONMENT CONFIGURATION
+# ⚡ INITIALIZE CLOUDINARY ENVIRONMENT CONFIGURATION (LOCKED PRODUCTION KEY SCHEMAS)
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
     api_key=os.getenv("CLOUDINARY_API_KEY"),
@@ -44,7 +41,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Setup dedicated uploads folder for your gallery files
+# Setup dedicated uploads folder fallback directory map rules
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
@@ -102,26 +99,53 @@ def admin_login(payload: schemas.AdminLogin):
     token = auth.create_access_token(data={"sub": payload.email})
     return {"access_token": token, "token_type": "bearer"}
 
-@app.get("/api/public/booked-dates", response_model=List[str])
+
+@app.get("/api/public/booked-dates")
 def get_booked_dates(db: Session = Depends(get_db)):
-    """Returns a simple list of taken dates strings so your calendar blocks them in red"""
-    active_bookings = db.query(models.Booking.event_date).filter(
+    """Returns a structured list of objects tracking active dates paired with their venue types"""
+    active_bookings = db.query(models.Booking).filter(
         models.Booking.booking_status != models.BookingStatus.cancelled
     ).all()
-    return [b.event_date.strftime("%Y-%m-%d") for b in active_bookings]
+    
+    # ⚡ FIXED: Production dictionary serialization output format matches local layout tracking needs
+    return [
+        {
+            "date": b.event_date.strftime("%Y-%m-%d"),
+            "venue_type": b.venue_type
+        } for b in active_bookings if b.event_date
+    ]
+
 
 @app.post("/api/public/bookings", response_model=schemas.BookingResponse)
 def create_booking(payload: schemas.BookingCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    """Handles the Step 4 & 5 User Booking Request"""
+    """Handles the Step 4 & 5 User Booking Request with Parallel Venue Cross-Lock Logic"""
     
-    existing = db.query(models.Booking).filter(
+    # 1. Pull all non-cancelled reservations sitting on that target day
+    active_day_bookings = db.query(models.Booking).filter(
         models.Booking.event_date == payload.event_date,
         models.Booking.booking_status != models.BookingStatus.cancelled
-    ).first()
+    ).all()
     
-    if existing:
-        raise HTTPException(status_code=400, detail="The selected date is already locked by an active booking cycle")
+    # 2. Enforce conditional matrix lock rules to support multi-venue parallel date entries
+    has_conflict = False
+    for booking in active_day_bookings:
+        existing_venue = str(booking.venue_type).strip()
+        requested_venue = str(payload.venue_package).strip()
 
+        if (
+            existing_venue == requested_venue or 
+            requested_venue == "Combo" or 
+            existing_venue == "Combo" or 
+            ("Marriage Hall" in requested_venue and "Marriage Hall" in existing_venue) or 
+            ("Lawns" in requested_venue and "Lawns" in existing_venue)
+        ):
+            has_conflict = True
+            break
+            
+    if has_conflict:
+        raise HTTPException(status_code=400, detail="The selected venue space is already reserved on this date.")
+
+    # 3. Dynamic Price Calculator Matrix Rules
     total_price = 150000.00
     if "Marriage Hall" in payload.venue_package:
         total_price = 200000.00
@@ -160,6 +184,7 @@ def create_booking(payload: schemas.BookingCreate, background_tasks: BackgroundT
         db.rollback()
         print(f"Database Error: {e}")
         raise HTTPException(status_code=500, detail="Internal server transaction error occurred")
+
     
 @app.post("/api/public/queries", response_model=schemas.QueryResponse)
 def create_query(payload: schemas.QueryCreate, db: Session = Depends(get_db)):
@@ -176,28 +201,6 @@ def create_query(payload: schemas.QueryCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(query_db)
     return query_db
-
-# @app.get("/api/public/gallery", response_model=List[schemas.GalleryResponse])
-# def get_gallery(
-#     venue_category: Optional[models.VenueCategory] = None,
-#     media_type: Optional[models.MediaType] = None,
-#     limit: Optional[int] = None,
-#     db: Session = Depends(get_db)
-# ):
-#     """Fetches pictures and videos. Supports limit=8 for your home index page."""
-#     q = db.query(models.GalleryItem)
-#     if venue_category:
-#         q = q.filter(models.GalleryItem.venue_category == venue_category)
-#     if media_type:
-#         q = q.filter(models.GalleryItem.media_type == media_type)
-    
-#     q = q.order_by(models.GalleryItem.uploaded_at.desc())
-#     if limit:
-#         q = q.limit(limit)
-        
-#     return q.all()
-
-
 
 
 # =========================================================
@@ -227,7 +230,6 @@ def get_dashboard_statistics(db: Session = Depends(get_db), current_admin: str =
     ).scalar()
     
     # 3. SMART REVENUE CALCULATION 
-    # Add Advance (25k) for Confirmed + Full Rent for Completed bookings
     confirmed_revenue = db.query(func.sum(models.Booking.advance_paid)).filter(
         models.Booking.booking_status == models.BookingStatus.confirmed
     ).scalar() or 0.00
@@ -247,6 +249,7 @@ def get_dashboard_statistics(db: Session = Depends(get_db), current_admin: str =
         "total_revenue_collected": total_revenue
     }
 
+
 @app.get("/api/admin/bookings/recent", response_model=List[schemas.BookingResponse])
 def get_recent_bookings(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
     """Returns only current month bookings to fill your recent overview panel"""
@@ -256,19 +259,16 @@ def get_recent_bookings(db: Session = Depends(get_db), current_admin: str = Depe
         extract('year', models.Booking.created_at) == now.year
     ).order_by(models.Booking.created_at.desc()).all()
 
+
 @app.get("/api/admin/bookings", response_model=List[schemas.BookingResponse])
 def get_all_bookings(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
     """Fetches every booking entry for your master tables"""
     return db.query(models.Booking).order_by(models.Booking.created_at.desc()).all()
 
-# completed booking
-
-# =========================================================
-# PROTECTED ADMINISTRATIVE ENDPOINTS (Admin Dashboard)
-# =========================================================
 
 @app.get("/api/admin/bookings/completed", response_model=List[schemas.BookingResponse])
 def get_completed_bookings(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
+    """Queries and shifts records targeted strictly as completed bookings"""
     completed = db.query(models.Booking)\
         .filter(models.Booking.booking_status == models.BookingStatus.completed)\
         .order_by(models.Booking.event_date.desc())\
@@ -276,15 +276,9 @@ def get_completed_bookings(db: Session = Depends(get_db), current_admin: str = D
     return completed
 
 
-
-# month wise calculation of revenue for the dashboard analytics page
-
 @app.get("/api/admin/dashboard/monthly-revenue")
 def get_monthly_revenue(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
     """Calculates total revenue grouped by Year and Month"""
-    
-    # We ask the database to group by Year and Month, and sum the total_amount
-    # We only count 'Completed' bookings to keep the accounting accurate
     revenue_data = db.query(
         extract('year', models.Booking.event_date).label('year'),
         extract('month', models.Booking.event_date).label('month'),
@@ -299,10 +293,8 @@ def get_monthly_revenue(db: Session = Depends(get_db), current_admin: str = Depe
         extract('month', models.Booking.event_date).desc()
     ).all()
 
-    # Format it nicely for the frontend (e.g., "2026-05": 150000)
     formatted_results = []
     for row in revenue_data:
-        # Convert month number (5) to padded string ("05")
         month_str = f"{int(row.month):02d}" 
         formatted_results.append({
             "period": f"{int(row.year)}-{month_str}",
@@ -310,6 +302,7 @@ def get_monthly_revenue(db: Session = Depends(get_db), current_admin: str = Depe
         })
 
     return formatted_results
+
 
 @app.put("/api/admin/bookings/{booking_id}", response_model=schemas.BookingResponse)
 def update_booking_runtime(booking_id: str, payload: schemas.BookingUpdate, background_tasks: BackgroundTasks, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
@@ -323,24 +316,20 @@ def update_booking_runtime(booking_id: str, payload: schemas.BookingUpdate, back
     for key, val in payload.model_dump(exclude_unset=True).items():
         setattr(item, key, val)
         
-    # 🔥 THE NEW DATABASE MATH FIX
+    # Programmatic cash ledger settlement math
     if item.booking_status == models.BookingStatus.completed:
-        # If fully paid, move all money to advance_paid and zero out the balance
         item.advance_paid = item.total_amount
         item.balance_left = 0.00
     elif item.booking_status in [models.BookingStatus.confirmed, models.BookingStatus.pending]:
-        # If it's just confirmed or pending, lock it back to the 25k advance state
         item.advance_paid = 25000.00
         item.balance_left = float(item.total_amount) - 25000.00
     elif item.booking_status == models.BookingStatus.cancelled:
-        # Optional: If cancelled, you can zero everything out or leave it as is for records
         item.advance_paid = 0.00
         item.balance_left = 0.00
         
     db.commit()
     db.refresh(item)
     
-    # 🔥 TRIGGER APPROPRIATE ADMIN ACTION NOTIFICATION
     if old_status != item.booking_status:
         if item.booking_status == models.BookingStatus.confirmed:
             background_tasks.add_task(notification.process_booking_notifications, "CONFIRMED", item)
@@ -351,26 +340,28 @@ def update_booking_runtime(booking_id: str, payload: schemas.BookingUpdate, back
             
     return item
 
-@app.get("/api/admin/bookings/date/{event_date_str}", response_model=schemas.BookingResponse)
+
+@app.get("/api/admin/bookings/date/{event_date_str}", response_model=List[schemas.BookingResponse])
 def get_booking_by_date(event_date_str: str, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    """Fetches who booked a date when clicking on a blocked calendar segment"""
+    """⚡ FIXED: Returns a list (.all()) of ALL active allocations to build multi-card calendar modals cleanly"""
     try:
         parsed_date = datetime.strptime(event_date_str, "%Y-%m-%d").date()
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date format structure parameter mapping")
         
-    item = db.query(models.Booking).filter(
+    items = db.query(models.Booking).filter(
         models.Booking.event_date == parsed_date,
         models.Booking.booking_status != models.BookingStatus.cancelled
-    ).first()
-    if not item:
-        raise HTTPException(status_code=404, detail="No active runtime structural allocations discovered on this date context")
-    return item
+    ).all()
+    
+    return items
+
 
 @app.get("/api/admin/queries", response_model=List[schemas.QueryResponse])
 def get_all_queries(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
     """Lists incoming user queries for the Admin tracking matrix"""
     return db.query(models.Query).order_by(models.Query.received_time.desc()).all()
+
 
 @app.patch("/api/admin/queries/{query_id}/status", response_model=schemas.QueryResponse)
 def toggle_query_status(query_id: int, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
@@ -384,6 +375,7 @@ def toggle_query_status(query_id: int, db: Session = Depends(get_db), current_ad
     db.refresh(item)
     return item
 
+
 @app.post("/api/admin/gallery", response_model=schemas.GalleryResponse)
 def upload_gallery_media(
     file: UploadFile = File(...),
@@ -393,27 +385,24 @@ def upload_gallery_media(
     db: Session = Depends(get_db),
     current_admin: str = Depends(auth.get_current_admin)
 ):
-    """Handles administrative uploads directly to Cloudinary bypassing local disk storage"""
+    """⚡ PRESERVED: Handles image streams directly to cloud buckets safely with zero local disk leakage"""
     ext = file.filename.split(".")[-1].lower()
     if ext not in ["jpg", "png", "mp4"]:
         raise HTTPException(status_code=400, detail="Secure system restriction: file extension matrix disallowed")
         
     try:
-        # 1. Streams the file directly from memory stream payload directly to Cloudinary
         upload_result = cloudinary.uploader.upload(
             file.file,
             folder="banagar_gallery",
-            resource_type="auto" # Auto-detects if it's an image (jpg/png) or a video (mp4)
+            resource_type="auto"
         )
         
-        # 2. Extract the persistent cloud URL returned by Cloudinary
         media_url = upload_result.get("secure_url")
         if not media_url:
             raise HTTPException(status_code=500, detail="Failed to grab secure URL from cloud gateway.")
             
-        # 3. Store the clean cloud string URL directly into your Railway MySQL table
         item = models.GalleryItem(
-            media_url=media_url, # Now holds the full cloud link string!
+            media_url=media_url,
             media_type=media_type,
             venue_category=venue_category,
             description=description
@@ -426,26 +415,25 @@ def upload_gallery_media(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Cloud upload failed: {str(e)}")
 
+
 @app.delete("/api/admin/gallery/{item_id}", status_code=200)
 def purge_gallery_media(item_id: int, db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    """Deletes media files completely out of Cloudinary cloud storage and database records"""
+    """⚡ PRESERVED: Purges targets simultaneously from Cloudinary endpoints and internal relational database indices"""
     item = db.query(models.GalleryItem).filter(models.GalleryItem.id == item_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Target tracking file object does not exist")
         
     try:
-        # Extract Cloudinary's unique identification name (Public ID) from your saved URL link string
-        # e.g., parses out 'banagar_gallery/filename' to clean it off the cloud servers completely
         if "res.cloudinary.com" in item.media_url:
             public_id = "banagar_gallery/" + item.media_url.split("/")[-1].split(".")[0]
             cloudinary.uploader.destroy(public_id)
     except Exception as e:
         print(f"Non-blocking log error: Cloudinary assets purge skipped: {str(e)}")
         
-    # Purge database entry tracking reference
     db.delete(item)
     db.commit()
     return {"message": "System database entry and tracking reference purged clean"}
+
 
 @app.get("/api/public/gallery")
 def get_public_gallery(db: Session = Depends(get_db)):
@@ -453,12 +441,11 @@ def get_public_gallery(db: Session = Depends(get_db)):
     items = db.query(models.GalleryItem).order_by(desc(models.GalleryItem.id)).all()
     return items
 
+
 @app.get("/")
 def read_root():
     """System health check fallback greeting"""
     return {"status": "Online", "gateway": "Banagar Associates API Service Ready"}
-
-# update password by admin
 
 
 class PasswordUpdatePayload(BaseModel):
@@ -467,15 +454,11 @@ class PasswordUpdatePayload(BaseModel):
 
 @app.put("/api/admin/update-password", status_code=200)
 def change_admin_password_runtime(payload: PasswordUpdatePayload, current_admin: str = Depends(auth.get_current_admin)):
-    # 1. Generate salt and compute secure bcrypt crypt hash sequence
     salt = bcrypt.gensalt(rounds=12)
     new_hash = bcrypt.hashpw(payload.new_password.encode('utf-8'), salt).decode('utf-8')
     
-    # 2. Programmatically alter the runtime ecosystem configuration memory mapping
     os.environ["ADMIN_PASSWORD_HASH"] = new_hash
     
-    # 💡 Dev Note: To save this permanently to your file system storage so it survives server reboots,
-    # we patch your local physical root environment config file right here:
     env_path = "../.env" if os.path.exists("../.env") else ".env"
     if os.path.exists(env_path):
         with open(env_path, "r") as file:
@@ -489,4 +472,3 @@ def change_admin_password_runtime(payload: PasswordUpdatePayload, current_admin:
                     file.write(line)
                     
     return {"status": "success", "detail": "Administrative security credentials synchronized successfully."}
-
