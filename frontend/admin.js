@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 await ApiService.adminLogin(email, password);
 
-               showModernPopup("Authentication verified! Redirecting to secure control board...");
+                showModernPopup("Authentication verified! Redirecting to secure control board...");
                 window.location.href = "admin.html";
 
             } catch (err) {
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Strict Security Gateway Guard
         if (!localStorage.getItem("admin_token")) {
            showModernPopup("Access Denied: Invalid Security Session Token Context.");
-            window.location.href = "adminlogin.html"; // Ensure this points to your login page
+            window.location.href = "adminlogin.html"; 
             return;
         }
 
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const saveBtn = document.getElementById("btn-save-profile");
 
                 if (newPassword.trim().length < 6) {
-                   showModernPopup("Security Exception: New password must be at least 6 characters long.");
+                    showModernPopup("Security Exception: New password must be at least 6 characters long.");
                     return;
                 }
 
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     await ApiService.updateAdminPassword({ new_password: newPassword });
 
-                   showModernPopup("Security context altered successfully! Please use your new password next time you login.");
+                    showModernPopup("Security context altered successfully! Please use your new password next time you login.");
                     document.getElementById("profile-password").value = ""; 
                     
                     const modalEl = document.getElementById('profileModal');
@@ -112,9 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     showCancelButton: true,
                     confirmButtonText: 'Yes, Logout',
                     cancelButtonText: 'Stay',
-                    background: '#141923', // Matches your UI theme
+                    background: '#141923', 
                     color: '#ffffff',
-                    confirmButtonColor: '#dc3545', // Danger red for logout
+                    confirmButtonColor: '#dc3545', 
                     cancelButtonColor: '#6c757d'
                 });
 
@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         }
+
         // Bind multi-part asset file gallery upload form submission hook
         const galleryForm = document.getElementById("gallery-upload-form");
         if (galleryForm) {
@@ -186,7 +187,7 @@ function initializeAdminProfileCard() {
 }
 
 // =========================================================================
-// 3. CORE ANALYTICAL Snapshots & LIVE MYSQL DATA LEDGERS
+// 3. CORE ANALYTICAL SNAPSHOTS & LIVE MYSQL DATA LEDGERS
 // =========================================================================
 async function loadDashboardAnalytics() {
     try {
@@ -221,13 +222,11 @@ async function loadMasterBookingsTable() {
 
         // Centralized row generation logic
         const generateRowHtml = (b) => {
-            // 1. Set the badge colors based on new statuses
-            let badgeStyle = "bg-pending"; // Default
+            let badgeStyle = "bg-pending"; 
             if (b.booking_status === "Confirmed") badgeStyle = "bg-confirmed";
-            if (b.booking_status === "Completed") badgeStyle = "bg-success"; // Green for completed
+            if (b.booking_status === "Completed") badgeStyle = "bg-success"; 
             if (b.booking_status === "Cancelled") badgeStyle = "bg-danger";
             
-            // 2. Fallback Total Rent if missing from DB
             let totalRent = b.total_amount;
             if(!totalRent) {
                 if(b.venue_type === 'Banagar Lawns') totalRent = 150000;
@@ -235,7 +234,6 @@ async function loadMasterBookingsTable() {
                 else totalRent = 300000;
             }
 
-            // 3. Smart Money Logic: Shows ₹0, 20%, or 100% depending on admin button clicks
             let amountPaidDisplay = "₹0";
             if (b.booking_status === "Confirmed") {
                 amountPaidDisplay = `₹${Number(b.advance_paid || 25000).toLocaleString('en-IN')}`;
@@ -244,10 +242,8 @@ async function loadMasterBookingsTable() {
             }
             let quoteDisplay = Number(totalRent).toLocaleString('en-IN');
 
-            // 4. Return the 10 clean HTML columns
             return `
                 <tr>
-                    
                     <td class="text-info">#${b.id}</td>
                     <td class="text-white"><strong>${b.customer_name}</strong></td>
                     <td>${b.venue_type}</td>
@@ -255,14 +251,11 @@ async function loadMasterBookingsTable() {
                     <td class="text-muted fs-8">${new Date(b.event_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
                     <td>${b.phone}</td>
                     <td>${b.guest_count || '0'}</td>
-                    
                     <td>
                         <span class="text-gold fw-bold d-block">${amountPaidDisplay} Paid</span>
                         <small class="text-muted">Total: ₹${quoteDisplay}</small>
                     </td>
-                    
                     <td><span class="status-badge ${badgeStyle}">${b.booking_status.toUpperCase()}</span></td>
-                    
                     <td>
                         <div class="action-icon-group justify-content-end">
                             <button class="btn-icon confirm" title="Confirm (Advance Paid)" onclick="updateBookingStatus('${b.id}', 'Confirmed')"><i class="bi bi-check-lg"></i></button>
@@ -273,7 +266,6 @@ async function loadMasterBookingsTable() {
                 </tr>`;
         };
 
-        // RENDER MASTER LEDGER
         if (masterTableBody) {
             masterTableBody.innerHTML = "";
             if (bookings.length === 0) {
@@ -283,7 +275,6 @@ async function loadMasterBookingsTable() {
             }
         }
 
-        // RENDER RECENT BOOKINGS
         if (recentTableBody) {
             recentTableBody.innerHTML = "";
             const recentBookings = bookings.slice(-5).reverse(); 
@@ -303,6 +294,7 @@ async function loadMasterBookingsTable() {
         if (masterTableBody) masterTableBody.innerHTML = `<tr><td colspan="10" class="text-center text-danger py-4">Failed to connect to the backend database. (${err.message})</td></tr>`;
     }
 }
+
 async function loadCustomerQueriesTable() {
     const tableBody = document.getElementById("admin-queries-rows");
     if (!tableBody) return;
@@ -340,7 +332,7 @@ async function loadCustomerQueriesTable() {
 }
 
 // =========================================================================
-// 4. BACKEND-CONNECTED REAL-TIME AVAILABILITY CALENDAR ENGINE
+// 4. UPGRADED: REAL-TIME PARALLEL AVAILABILITY CALENDAR GRID ENGINE (PRODUCTION)
 // =========================================================================
 async function loadDashboardCalendar() {
     const calendarGrid = document.getElementById("dynamic-calendar");
@@ -348,7 +340,14 @@ async function loadDashboardCalendar() {
     if (!calendarGrid || !monthYearLabel) return;
 
     try {
-        const blockedDates = await ApiService.getBookedDates(); 
+        // 🔒 CACHING MANAGEMENT VIA GLOBAL ENVIRONMENT MEMORY STRINGS
+        if (!window.cachedCalendarBookings) {
+            const response = await fetch("https://banagar-associates-crm.onrender.com/api/public/booked-dates");
+            if (!response.ok) throw new Error("API tracking stream rejected connectivity.");
+            window.cachedCalendarBookings = await response.json();
+        }
+        
+        const blockedRecords = window.cachedCalendarBookings;
         calendarGrid.innerHTML = "";
 
         const year = currentCalendarDate.getFullYear();
@@ -371,17 +370,34 @@ async function loadDashboardCalendar() {
 
         for (let day = 1; day <= totalDaysInMonth; day++) {
             const dateStringKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const isBlocked = blockedDates.includes(dateStringKey);
+            
+            const activeBookingsOnDate = blockedRecords.filter(item => item.date === dateStringKey);
+            const isBlocked = activeBookingsOnDate.length > 0;
 
             let cellClass = "calendar-day-cell text-center p-2 text-white position-relative border border-secondary border-opacity-10";
+            let indicatorDots = "";
+
             if (isBlocked) {
-                cellClass += " bg-danger bg-opacity-25 text-danger border-danger fw-bold cursor-pointer";
+                cellClass += " bg-danger bg-opacity-15 text-danger fw-medium cursor-pointer";
+                
+                activeBookingsOnDate.forEach(b => {
+                    const rawVenueName = b.venue_type || b.venue_package || b.venue || "";
+                    const targetVenueStr = String(rawVenueName).toLowerCase();
+                    
+                    if (targetVenueStr.trim() !== "") {
+                        const shortName = targetVenueStr.includes("lawn") ? "Lawn" : "Hall";
+                        const dotColor = shortName === "Lawn" ? "bg-warning" : "bg-info";
+                        indicatorDots += `<span class="badge ${dotColor} text-dark fs-9 px-1 d-block scale-90 mb-1" style="font-size: 10px; font-weight: 600;">${shortName}</span>`;
+                    }
+                });
             }
 
             const cellHtml = `
                 <div class="${cellClass}" ${isBlocked ? `onclick="showCalendarBookingDetails('${dateStringKey}')"` : ''}>
-                    <span>${day}</span>
-                    ${isBlocked ? `<span class="position-absolute bottom-0 start-50 translate-middle-x mb-1 bg-danger rounded-circle" style="width: 5px; height: 5px;"></span>` : ''}
+                    <span class="d-block mb-1">${day}</span>
+                    <div class="venue-indicator-container d-flex flex-column align-items-center w-100">
+                        ${indicatorDots}
+                    </div>
                 </div>`;
                 
             calendarGrid.insertAdjacentHTML("beforeend", cellHtml);
@@ -391,31 +407,94 @@ async function loadDashboardCalendar() {
     }
 }
 
-window.showCalendarBookingDetails = async function(dateString) {
-    try {
-        const booking = await ApiService.getBookingDetailsByDate(dateString);
-        document.getElementById("modal-name").innerText = booking.customer_name;
-        document.getElementById("modal-phone").innerText = booking.phone;
-        document.getElementById("modal-email").innerText = booking.email;
-        document.getElementById("modal-date").innerText = booking.event_date;
-        document.getElementById("modal-venue").innerText = booking.venue_type;
-        document.getElementById("modal-status").innerText = booking.booking_status.toUpperCase();
-        
-        const bModal = new bootstrap.Modal(document.getElementById('bookingModal'));
-        bModal.show();
-    } catch (err) {
-        showModernPopup(`Failed to fetch allocation log profile metadata: ${err.message}`, '', 'error');
-    }
-};
-
+// ⚡ EXPLICIT GLOBAL BINDING: Must be placed completely outside other functions!
 window.changeMonth = function(direction) {
     currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
     loadDashboardCalendar(); 
 };
 
-// =========================================================================
-// 5. PRODUCTION ASSET PIPELINE (DASHBOARD GALLERY MODULE LOGIC)
-// =========================================================================
+// --- DYNAMIC CARD MATRIX BUILDER INTERCEPTOR (MULTIPLE CARD COMPILATION) ---
+window.showCalendarBookingDetails = async function(dateString) {
+    try {
+        const myToken = localStorage.getItem('admin_token'); 
+        const response = await fetch(`https://banagar-associates-crm.onrender.com/api/admin/bookings/date/${dateString}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${myToken}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Gateway failed to retrieve data arrays.");
+        const dayBookings = await response.json();
+        
+        if (!dayBookings || dayBookings.length === 0) return;
+        
+        const modalBody = document.querySelector('#bookingModal .modal-body');
+        if (!modalBody) return;
+
+        modalBody.innerHTML = "";
+
+        const colClass = dayBookings.length > 1 ? "col-md-6 border-start border-secondary border-opacity-10 first-card-clean" : "col-12";
+        let cardsHtml = `<div class="row g-4">`;
+
+        dayBookings.forEach((booking) => {
+            let statusBadgeColor = "bg-warning text-dark"; 
+            if (booking.booking_status === "Confirmed") statusBadgeColor = "bg-primary text-white";
+            if (booking.booking_status === "Completed") statusBadgeColor = "bg-success text-white";
+            if (booking.booking_status === "Cancelled") statusBadgeColor = "bg-danger text-white";
+
+            const venueCleanName = booking.venue_type;
+            const shortBadgeName = venueCleanName.toLowerCase().includes("lawn") ? "Lawn Space" : "Marriage Hall";
+            const microBadgeColor = shortBadgeName === "Lawn Space" ? "bg-warning text-dark" : "bg-info text-dark";
+
+            cardsHtml += `
+                <div class="${colClass} p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge ${microBadgeColor} fw-semibold px-2 py-1" style="font-size: 11px;">${shortBadgeName}</span>
+                        <span class="text-info small fw-mono">#${booking.id}</span>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px; letter-spacing: 0.05em;">CLIENT NAME</label>
+                        <strong class="text-white fs-6">${booking.customer_name}</strong>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">PHONE NUMBER</label>
+                        <span class="text-white">${booking.phone}</span>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EMAIL ADDRESS</label>
+                        <span class="text-light-muted fs-7 break-all">${booking.email || 'Not Provided'}</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EVENT DATE & TYPE</label>
+                        <span class="text-white fs-7">${booking.event_date} — <span class="text-gold">${booking.event_type || 'General'}</span></span>
+                    </div>
+                    
+                    <div class="d-flex gap-2 mt-3 pt-2 border-top border-secondary border-opacity-10">
+                        <span class="badge ${statusBadgeColor} rounded-1 px-3 py-1 fs-8 uppercase">${booking.booking_status}</span>
+                        <span class="badge bg-dark border border-secondary border-opacity-20 text-muted px-2 py-1 fs-8">${booking.guest_count || 0} Guests</span>
+                    </div>
+                </div>`;
+        });
+
+        cardsHtml += `</div>`;
+        modalBody.innerHTML = cardsHtml;
+        
+        const firstCardFix = modalBody.querySelector('.first-card-clean');
+        if (firstCardFix) firstCardFix.classList.remove('border-start');
+
+        const bModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        bModal.show();
+    } catch (err) {
+        showModernPopup(`Failed to build live allocation overlay template panels: ${err.message}`, '', 'error');
+    }
+};
+
 // =========================================================================
 // 5. PRODUCTION ASSET PIPELINE (DASHBOARD GALLERY MODULE LOGIC)
 // =========================================================================
@@ -433,7 +512,7 @@ async function loadAdminGalleryManager() {
         }
 
         assets.forEach(item => {
-            // ✨ SMART URL RESOLVER: Natively handles both Cloudinary hotlinks and local fallback paths
+            // ✨ SMART PRODUCTION URL RESOLVER: Points directly to your production Render pipeline references
             const fileUrl = item.media_url.startsWith("http") 
                 ? item.media_url 
                 : `https://banagar-associates-crm.onrender.com${item.media_url}`;
@@ -524,7 +603,6 @@ window.purgeGalleryMediaItem = async function(id) {
 // 6. GLOBAL RUNTIME STATE SYNCHRONIZERS (SECURE)
 // =========================================================================
 window.updateBookingStatus = async function(bookingId, newStatus) {
-    // 1. Replace default confirm() with modern modal
     const result = await Swal.fire({
         title: 'Update Status',
         text: `Are you sure you want to mark Booking #${bookingId} as ${newStatus}?`,
@@ -532,27 +610,25 @@ window.updateBookingStatus = async function(bookingId, newStatus) {
         showCancelButton: true,
         confirmButtonText: 'Yes, update',
         cancelButtonText: 'Cancel',
-        background: '#141923', // Your dark theme background
+        background: '#141923', 
         color: '#ffffff',
         confirmButtonColor: '#0d6efd',
         cancelButtonColor: '#6c757d'
     });
 
-    // 2. Only proceed if user clicked "Yes"
     if (result.isConfirmed) {
         try {
             await ApiService.updateBookingStatus(bookingId, { booking_status: newStatus });
-            
-            // Success notification using your Toast system
             showToast(`Booking #${bookingId} updated to ${newStatus}`, "success");
             
-            // Refresh dashboard
+            // Wipe data memory cache to trigger calendar re-fetch on status update shifts
+            window.cachedCalendarBookings = null;
+
             loadMasterBookingsTable(); 
             loadDashboardAnalytics();
             loadDashboardCalendar();
             
         } catch (error) {
-            // Error handling using your modern popup
             Swal.fire({
                 title: 'Error',
                 text: `Failed to update database: ${error.message}`,
@@ -568,22 +644,15 @@ window.updateBookingStatus = async function(bookingId, newStatus) {
 window.toggleQueryStatus = async function(queryId) {
     try {
         await ApiService.toggleQueryContactStatus(queryId);
-        
-        // 1. Success feedback that matches your UI theme
         showToast("Lead status successfully updated", "success");
-        
-        // 2. Refresh the table so the new status appears
         loadCustomerQueriesTable(); 
-        
     } catch (err) {
-        // 3. Error feedback that matches your UI theme
         console.error("Failed to toggle message state:", err);
         showModernPopup("Error", "Could not update lead status. Please try again.", "error");
     }
 };
 
 function exportBookingsToCSV() {
-    // 1. Get the dates from the inputs inside your dropdown
     const startDate = document.getElementById("export-start").value;
     const endDate = document.getElementById("export-end").value;
 
@@ -592,7 +661,6 @@ function exportBookingsToCSV() {
         return;
     }
 
-    // 2. Filter logic: If dates are provided, filter; otherwise, export all
     let filteredData = window.globalBookings;
     if (startDate && endDate) {
         filteredData = window.globalBookings.filter(b => {
@@ -605,11 +673,10 @@ function exportBookingsToCSV() {
         return;
     }
 
-    // 3. Prepare CSV Content
     const headers = ["ID", "Client", "Email", "Phone", "Venue", "Event Type", "Date", "Amount Paid", "Total", "Status"];
     const csvRows = filteredData.map(b => [
         b.id,
-        `"${b.customer_name}"`, // Added quotes to handle names with spaces/commas
+        `"${b.customer_name}"`, 
         b.email,
         b.phone,
         b.venue_type,
@@ -622,7 +689,6 @@ function exportBookingsToCSV() {
 
     const csvString = [headers.join(","), ...csvRows.map(r => r.join(","))].join("\n");
 
-    // 4. Trigger Download
     const blob = new Blob([csvString], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -633,23 +699,22 @@ function exportBookingsToCSV() {
     showToast(`Exported ${filteredData.length} bookings successfully!`, "success");
 }
 
-
 function showModernPopup(title, text, icon = 'success') {
     return Swal.fire({
         title: title,
         text: text,
         icon: icon,
         confirmButtonText: 'OK',
-        background: '#141923', // Your dark theme background
-        color: '#ffffff',      // White text
+        background: '#141923', 
+        color: '#ffffff',      
         backdrop: 'rgba(0,0,0,0.6)',
-        confirmButtonColor: '#0d6efd' // Bootstrap Primary blue
+        confirmButtonColor: '#0d6efd' 
     });
 }
 
 function showToast(message, type = "success") {
     const container = document.getElementById("toast-container");
-    if (!container) return; // Guard clause
+    if (!container) return; 
     
     const toast = document.createElement("div");
     toast.className = `toast-card ${type === 'success' ? 'toast-success' : 'toast-error'}`;
@@ -663,17 +728,12 @@ function showToast(message, type = "success") {
     }, 3000);
 }
 
-// completed bookings
-
 async function loadCompletedBookingsTable() {
     const tableBody = document.getElementById("completed-bookings-rows");
     if (!tableBody) return;
 
     try {
-        // Grab your explicit security token context from storage
         const myToken = localStorage.getItem('admin_token'); 
-        
-        // 1. Direct call explicitly pointing to your live Render server pipeline
         const response = await fetch("https://banagar-associates-crm.onrender.com/api/admin/bookings", {
             method: 'GET',
             headers: {
@@ -684,8 +744,6 @@ async function loadCompletedBookingsTable() {
 
         if (!response.ok) throw new Error("Unauthorized security context execution.");
         const allBookings = await response.json();
-
-        // 2. Filter data array down to only 'Completed' records
         const completedBookings = allBookings.filter(b => b.booking_status === "Completed");
 
         tableBody.innerHTML = ""; 
@@ -695,7 +753,6 @@ async function loadCompletedBookingsTable() {
             return;
         }
 
-        // 3. Render loop using filtered array structure context maps
         completedBookings.forEach(b => {
             const eventDate = b.event_date ? new Date(b.event_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
             const createdDate = b.created_at ? new Date(b.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
@@ -743,9 +800,8 @@ async function loadCompletedBookingsTable() {
     }
 }
 
-// In your admin.js
 async function exportMonthlyBookingsToCSV() {
-    const monthInput = document.getElementById("export-month-completed").value; // Format: "YYYY-MM"
+    const monthInput = document.getElementById("export-month-completed").value; 
     
     if (!monthInput) {
         alert("Please select a month and year first.");
@@ -754,8 +810,6 @@ async function exportMonthlyBookingsToCSV() {
 
     try {
         const myToken = localStorage.getItem('admin_token'); 
-        
-        //  FIXED: Pointing to absolute Render backend route
         const response = await fetch(`https://banagar-associates-crm.onrender.com/api/admin/bookings`, {
             method: 'GET',
             headers: {
@@ -820,7 +874,7 @@ async function exportMonthlyBookingsToCSV() {
 }
 
 async function calculateSelectedMonthRevenue() {
-    const monthInput = document.getElementById("export-month").value; // Format: "YYYY-MM"
+    const monthInput = document.getElementById("export-month").value; 
     const badge = document.getElementById("monthly-revenue-badge");
     const totalDisplay = document.getElementById("selected-month-total");
 
@@ -831,8 +885,6 @@ async function calculateSelectedMonthRevenue() {
 
     try {
         const myToken = localStorage.getItem('admin_token'); 
-        
-        //  FIXED: Pointing to absolute Render backend route
         const response = await fetch(`https://banagar-associates-crm.onrender.com/api/admin/bookings`, {
             method: 'GET',
             headers: {
@@ -844,21 +896,18 @@ async function calculateSelectedMonthRevenue() {
         if (!response.ok) throw new Error("Failed to load records");
         const allBookings = await response.json();
 
-        // Filter: Only look at 'Completed' statuses for the selected Year-Month
         const targetMonthBookings = allBookings.filter(b => 
             b.event_date && 
             b.event_date.startsWith(monthInput) && 
             b.booking_status === "Completed"
         );
 
-        // Sum up the total revenue
         const totalRevenue = targetMonthBookings.reduce((sum, current) => {
             return sum + (parseFloat(current.total_amount) || 0);
         }, 0);
 
-        // Render to the user with slick formatting
         totalDisplay.innerText = `₹${totalRevenue.toLocaleString('en-IN')}`;
-        badge.classList.remove("d-none"); // Make it visible
+        badge.classList.remove("d-none"); 
 
     } catch (error) {
         console.error("Error calculating month-wise metrics:", error);
@@ -867,37 +916,28 @@ async function calculateSelectedMonthRevenue() {
     }
 }
 
-
 function filterMasterBookingsTable() {
-    // 1. Get the typed search term and trim it clean
     const searchKeyword = document.getElementById("table-search-input").value.toLowerCase().trim();
-    
-    // 2. Select all dataset rows sitting inside the table body
     const tableRows = document.querySelectorAll("#admin-bookings-rows tr");
     
     if (!tableRows || tableRows.length === 0) return;
 
     tableRows.forEach(row => {
-        // Skip placeholder information entries safely
         if (row.cells.length < 6) return;
 
-        // 3. Extract targets and sanitize strings cleanly
-        // Using replace(/[^0-9]/g, '') converts '#42' into just '42' for flawless ID parsing
         const bookingId   = row.cells[0].textContent.toLowerCase().replace(/[^0-9]/g, ''); 
         const clientName  = row.cells[1].textContent.toLowerCase().trim(); 
         const phoneNumber = row.cells[5].textContent.toLowerCase().trim(); 
 
-        // Also clean up your keyword if looking for numeric ID matches
         const cleanKeyword = searchKeyword.replace('#', '');
 
-        // 4. Matrix conditions matching evaluation loop
         if (bookingId.includes(cleanKeyword) || 
             clientName.includes(searchKeyword) || 
             phoneNumber.includes(searchKeyword)) {
             
-            row.style.display = ""; // Keep matching row visible
+            row.style.display = ""; 
         } else {
-            row.style.display = "none"; // Hide non-matching rows smoothly
+            row.style.display = "none"; 
         }
     });
 }
