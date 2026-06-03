@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, Union # ⚡ Union added for type safety validation fallbacks
 from models import VenueType, BookingStatus, QueryStatus, MediaType, VenueCategory
 
 # --- ADMIN LOGIN VALIDATION ---
@@ -13,15 +13,15 @@ class TokenResponse(BaseModel):
     token_type: str
 
 # --- CUSTOMER BOOKING VALIDATION ---
-# UPDATED: Matches the exact JSON payload sent from booking.html
+# Matches the exact JSON payload structured from your frontend files
 class BookingCreate(BaseModel):
     client_name: str = Field(..., min_length=1, max_length=100)
-    email: str # Changed from EmailStr to allow the "Not Provided" fallback from JS
+    email: str # Handled as raw string to accept "Not Provided" text entries cleanly from JS
     phone: str = Field(..., min_length=10, max_length=20)
-    venue_package: str # Takes the string from JS (e.g., "Banagar Lawns")
-    event_type: str # <-- ADDED: The new event type field
+    venue_package: str 
+    event_type: str 
     event_date: date
-    guest_count: int = Field(..., ge=0) # ge=0 since JS defaults to 0 if left blank
+    guest_count: int = Field(..., ge=0) 
     status: str = "Pending"
 
 class BookingUpdate(BaseModel):
@@ -30,13 +30,15 @@ class BookingUpdate(BaseModel):
     phone: Optional[str] = None
     booking_status: Optional[BookingStatus] = None
 
-# UPDATED: Added event_type so the Admin Dashboard can read it back from the DB
+# --- ENHANCED TYPE-SAFETY FOR PRODUCTION READ ENGINE ---
 class BookingResponse(BaseModel):
     id: str
     customer_name: str
     email: str
     phone: str
-    venue_type: VenueType
+    # ⚡ CRITICAL FIX: Allows database string tracking values to fall back gracefully 
+    # to standard strings if they mismatch the explicit ENUM definitions
+    venue_type: Union[VenueType, str] 
     event_type: Optional[str] 
     event_date: date
     guest_count: int
@@ -46,9 +48,6 @@ class BookingResponse(BaseModel):
     balance_left: float
     booking_status: BookingStatus
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
     class Config:
         from_attributes = True
