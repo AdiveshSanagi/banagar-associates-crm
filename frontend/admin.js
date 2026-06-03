@@ -385,8 +385,18 @@ async function loadDashboardCalendar() {
                     const targetVenueStr = String(rawVenueName).toLowerCase();
                     
                     if (targetVenueStr.trim() !== "") {
-                        const shortName = targetVenueStr.includes("lawn") ? "Lawn" : "Hall";
-                        const dotColor = shortName === "Lawn" ? "bg-warning" : "bg-info";
+                        // ✨ FIXED: Added explicit "combo" filter branch mapping
+                        let shortName = "Hall";
+                        let dotColor = "bg-info"; // Blue for Hall
+                
+                        if (targetVenueStr.includes("combo")) {
+                            shortName = "Combo";
+                            dotColor = "bg-success text-white"; // Green for Combo
+                        } else if (targetVenueStr.includes("lawn")) {
+                            shortName = "Lawn";
+                            dotColor = "bg-warning"; // Yellow for Lawn
+                        }
+                
                         indicatorDots += `<span class="badge ${dotColor} text-dark fs-9 px-1 d-block scale-90 mb-1" style="font-size: 10px; font-weight: 600;">${shortName}</span>`;
                     }
                 });
@@ -439,49 +449,58 @@ window.showCalendarBookingDetails = async function(dateString) {
         let cardsHtml = `<div class="row g-4">`;
 
         dayBookings.forEach((booking) => {
-            let statusBadgeColor = "bg-warning text-dark"; 
-            if (booking.booking_status === "Confirmed") statusBadgeColor = "bg-primary text-white";
-            if (booking.booking_status === "Completed") statusBadgeColor = "bg-success text-white";
-            if (booking.booking_status === "Cancelled") statusBadgeColor = "bg-danger text-white";
-
-            const venueCleanName = booking.venue_type;
-            const shortBadgeName = venueCleanName.toLowerCase().includes("lawn") ? "Lawn Space" : "Marriage Hall";
-            const microBadgeColor = shortBadgeName === "Lawn Space" ? "bg-warning text-dark" : "bg-info text-dark";
-
-            cardsHtml += `
-                <div class="${colClass} p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge ${microBadgeColor} fw-semibold px-2 py-1" style="font-size: 11px;">${shortBadgeName}</span>
-                        <span class="text-info small fw-mono">#${booking.id}</span>
-                    </div>
-                    
-                    <div class="mb-2">
-                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px; letter-spacing: 0.05em;">CLIENT NAME</label>
-                        <strong class="text-white fs-6">${booking.customer_name}</strong>
-                    </div>
-                    
-                    <div class="mb-2">
-                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">PHONE NUMBER</label>
-                        <span class="text-white">${booking.phone}</span>
-                    </div>
-                    
-                    <div class="mb-2">
-                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EMAIL ADDRESS</label>
-                        <span class="text-light-muted fs-7 break-all">${booking.email || 'Not Provided'}</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EVENT DATE & TYPE</label>
-                        <span class="text-white fs-7">${booking.event_date} — <span class="text-gold">${booking.event_type || 'General'}</span></span>
-                    </div>
-                    
-                    <div class="d-flex gap-2 mt-3 pt-2 border-top border-secondary border-opacity-10">
-                        <span class="badge ${statusBadgeColor} rounded-1 px-3 py-1 fs-8 uppercase">${booking.booking_status}</span>
-                        <span class="badge bg-dark border border-secondary border-opacity-20 text-muted px-2 py-1 fs-8">${booking.guest_count || 0} Guests</span>
-                    </div>
-                </div>`;
-        });
-
+        let statusBadgeColor = "bg-warning text-dark"; 
+        if (booking.booking_status === "Confirmed") statusBadgeColor = "bg-primary text-white";
+        if (booking.booking_status === "Completed") statusBadgeColor = "bg-success text-white";
+        if (booking.booking_status === "Cancelled") statusBadgeColor = "bg-danger text-white";
+    
+        const venueCleanName = String(booking.venue_type || "").toLowerCase();
+        
+        // ✨ FIXED: Prevent Combo entries from accidentally falling back into standard slots
+        let shortBadgeName = "Marriage Hall";
+        let microBadgeColor = "bg-info text-dark";
+    
+        if (venueCleanName.includes("combo")) {
+            shortBadgeName = "Full Combo";
+            microBadgeColor = "bg-success text-white";
+        } else if (venueCleanName.includes("lawn")) {
+            shortBadgeName = "Lawn Space";
+            microBadgeColor = "bg-warning text-dark";
+        }
+    
+        cardsHtml += `
+            <div class="${colClass} p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge ${microBadgeColor} fw-semibold px-2 py-1" style="font-size: 11px;">${shortBadgeName}</span>
+                    <span class="text-info small fw-mono">#${booking.id}</span>
+                </div>
+                
+                <div class="mb-2">
+                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px; letter-spacing: 0.05em;">CLIENT NAME</label>
+                    <strong class="text-white fs-6">${booking.customer_name}</strong>
+                </div>
+                
+                <div class="mb-2">
+                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">PHONE NUMBER</label>
+                    <span class="text-white">${booking.phone}</span>
+                </div>
+                
+                <div class="mb-2">
+                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EMAIL ADDRESS</label>
+                    <span class="text-light-muted fs-7 break-all">${booking.email || 'Not Provided'}</span>
+                </div>
+    
+                <div class="mb-3">
+                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EVENT DATE & TYPE</label>
+                    <span class="text-white fs-7">${booking.event_date} — <span class="text-gold">${booking.event_type || 'General'}</span></span>
+                </div>
+                
+                <div class="d-flex gap-2 mt-3 pt-2 border-top border-secondary border-opacity-10">
+                    <span class="badge ${statusBadgeColor} rounded-1 px-3 py-1 fs-8 uppercase">${booking.booking_status}</span>
+                    <span class="badge bg-dark border border-secondary border-opacity-20 text-muted px-2 py-1 fs-8">${booking.guest_count || 0} Guests</span>
+                </div>
+            </div>`;
+    });
         cardsHtml += `</div>`;
         modalBody.innerHTML = cardsHtml;
         
