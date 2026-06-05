@@ -963,3 +963,35 @@ function filterMasterBookingsTable() {
         }
     });
 }
+
+window.filterEnquiriesTable = function() {
+    const input = document.getElementById('enquiry-search-input');
+    const filter = input.value.toLowerCase().trim();
+    const tableBody = document.getElementById('admin-queries-rows');
+    const rows = tableBody.getElementsByTagName('tr');
+
+    // Iterate across all enquiry rows
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        
+        // Skip check if the row is a custom loader template or empty notice
+        if (row.cells.length < 6) continue;
+
+        const nameText = row.cells[1] ? row.cells[1].textContent.toLowerCase() : '';
+        const phoneText = row.cells[2] ? row.cells[2].textContent.toLowerCase() : '';
+        const emailText = row.cells[3] ? row.cells[3].textContent.toLowerCase() : '';
+        const messageText = row.cells[5] ? row.cells[5].textContent.toLowerCase() : '';
+
+        // Check if search keyword exists in any of the columns
+        if (
+            nameText.includes(filter) || 
+            phoneText.includes(filter) || 
+            emailText.includes(filter) || 
+            messageText.includes(filter)
+        ) {
+            row.style.display = ""; // Show matching row
+        } else {
+            row.style.display = "none"; // Hide row
+        }
+    }
+};
