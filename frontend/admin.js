@@ -811,10 +811,8 @@ async function loadCompletedBookingsTable() {
                             <span class="text-muted">Bal:</span> <span class="text-danger">₹${b.balance_left?.toLocaleString('en-IN') || '0'}</span>
                         </div>
                     </td>
-                    <td>
-                        <span class="badge ${b.payment_status === 'Paid' ? 'bg-success' : 'bg-warning'} bg-opacity-10 border ${b.payment_status === 'Paid' ? 'border-success text-success' : 'border-warning text-warning'} border-opacity-25 px-2 py-1 fs-8">
-                            ${b.payment_status || 'Pending'}
-                        </span>
+
+                    
                     </td>
                     <td>
                         <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-1 tracking-wide fs-8">
