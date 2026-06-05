@@ -10,26 +10,28 @@
     <link rel="stylesheet" href="./admin.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* CSS Optimization to assist layout structure with explicit handles */
+        /* Modern Layout Alignment Engine */
         .view-panel {
             display: none;
         }
         .view-panel.active-view {
             display: flex !important;
         }
+        
+        /* Premium Minimal Scrollbar handles strictly for Table Views */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(59, 130, 246, 0.4);
         }
         .color-dark-cal {
             color-scheme: dark;
@@ -63,6 +65,9 @@
 
     <main class="admin-main-content">
 
+        <!-- =========================================================================
+             MODULE 1: DASHBOARD ANALYTICS OVERVIEW PANEL
+             ========================================================================= -->
         <section id="view-overview" class="view-panel active-view flex-column">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 text-white fw-light mb-0">Admin Overview</h2>
@@ -128,6 +133,9 @@
             </div>
         </section>
 
+        <!-- =========================================================================
+             MODULE 2: MASTER BOOKING LEDGER (LOCKED SCROLL CORES)
+             ========================================================================= -->
         <section id="view-bookings" class="view-panel" 
                  style="display: none; 
                         flex-direction: column; 
@@ -202,6 +210,9 @@
             </div>
         </section>
 
+        <!-- =========================================================================
+             MODULE 3: SYSTEM ENQUIRIES DESK
+             ========================================================================= -->
         <section id="view-enquiries" class="view-panel flex-column">
             <h2 class="h4 text-white fw-light mb-4">Contact Enquiries Desk</h2>
             <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: calc(100vh - 160px); overflow-y: auto;">
@@ -218,6 +229,9 @@
             </div>
         </section>
 
+        <!-- =========================================================================
+             MODULE 4: AVAILABILITY CALENDAR ENGINE
+             ========================================================================= -->
         <section id="view-calendar" class="view-panel flex-column">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 text-white fw-light mb-0">Availability Calendar</h2>
@@ -228,11 +242,13 @@
                 </div>
             </div>
 
-            <div class="calendar-grid custom-scrollbar" id="dynamic-calendar" style="overflow-y: auto; max-height: calc(100vh - 180px);">
-                </div>
+            <div class="calendar-grid custom-scrollbar" id="dynamic-calendar" style="overflow-y: auto; max-height: calc(100vh - 180px);"></div>
             <p class="text-muted fs-8 mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Colored badges inside cells show ongoing parallel events. Click on any reserved date cell to open inspection cards.</p>
         </section>
 
+        <!-- =========================================================================
+             MODULE 5: ORIGINAL MANAGEMENT GALLERY ENGINE (UNMODIFIED LAYOUT)
+             ========================================================================= -->
         <section id="view-gallery" class="view-panel">
             <h2 class="h4 text-white fw-light mb-4">Gallery Management</h2>
             
@@ -286,15 +302,17 @@
                 </div>
             </div>
 
-            <div class="row g-4" id="admin-gallery-display-grid">
-                </div>
+            <div class="row g-4" id="admin-gallery-display-grid"></div>
         </section>
 
+        <!-- =========================================================================
+             MODULE 6: COMPLETED TRANSACTIONS REGISTRY
+             ========================================================================= -->
         <section id="view-completed" class="view-panel" 
-                 style="display: none; 
-                        flex-direction: column; 
-                        height: calc(100vh - 50px); 
-                        overflow: hidden; 
+                 style="display: none; \
+                        flex-direction: column; \
+                        height: calc(100vh - 50px); \
+                        overflow: hidden; \
                         position: relative;">
                         
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-10 pb-3 flex-wrap gap-3 no-print" style="flex: 0 0 auto;">
@@ -365,6 +383,9 @@
 
     </main>
 
+    <!-- =========================================================================
+         GLOBAL SYSTEM MODAL CONTAINERS
+         ========================================================================= -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="background: #111827; border: 1px solid rgba(255,255,255,0.05);">
