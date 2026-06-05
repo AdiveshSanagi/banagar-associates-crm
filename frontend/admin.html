@@ -219,13 +219,51 @@
         <!-- =========================================================================
              MODULE 3: SYSTEM ENQUIRIES DESK
              ========================================================================= -->
-        <section id="view-enquiries" class="view-panel">
-            <h2 class="h4 text-white fw-light mb-4">Contact Enquiries Desk</h2>
-            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: 500px; overflow-y: auto;">
-                <table class="table-dark-custom w-100">
+        <section id="view-enquiries" class="view-panel panel-flex-layout"
+         style="display: none; 
+                height: calc(100vh - 50px); 
+                overflow: hidden; 
+                position: relative;">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 no-print" style="flex: 0 0 auto;">
+                <h2 class="h4 text-white fw-light mb-0">Contact Enquiries Desk</h2>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="position-relative" style="width: 240px; height: 31px;">
+                        <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center" 
+                            style="pointer-events: none; z-index: 5; color: #6c757d !important; font-size: 0.75rem;">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        
+                        <input type="text" id="enquiry-search-input" 
+                            class="form-control ps-5 search-focus-glow" 
+                            placeholder="Search name, phone, message..." 
+                            style="background-color: #ffffff !important; 
+                                    color: #0d121c !important; 
+                                    border: 1px solid #dee2e6; 
+                                    font-weight: 500;
+                                    font-size: 0.75rem !important; /* Matches fs-7 dropdown typography scales */
+                                    height: 100%;
+                                    padding-top: 2px !important;
+                                    padding-bottom: 2px !important;
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                                    border-radius: 4px !important; /* Standard Bootstrap border radius index matching buttons */
+                                    outline: none;
+                                    transition: all 0.2s ease-in-out;" 
+                            onkeyup="filterEnquiriesTable()">
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="flex: 1 1 auto; overflow-y: auto; border-radius: 4px;">
+                <table class="table-dark-custom w-100 mb-0">
                     <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                         <tr>
-                            <th>Received</th><th>Name</th><th>Phone</th><th>Email</th><th>Target Date</th><th>Message Snippet</th><th class="text-end pe-3">Actions</th>
+                            <th>Received</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Target Date</th>
+                            <th>Message Snippet</th>
+                            <th class="text-end pe-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="admin-queries-rows">
@@ -233,7 +271,7 @@
                     </tbody>
                 </table>
             </div>
-        </section>
+</section>
 
         <!-- =========================================================================
              MODULE 4: AVAILABILITY CALENDAR ENGINE
