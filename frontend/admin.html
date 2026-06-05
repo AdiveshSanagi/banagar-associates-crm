@@ -10,12 +10,18 @@
     <link rel="stylesheet" href="./admin.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Modern Layout Alignment Engine */
+        /* Modern Multi-Panel Switcher Engine */
         .view-panel {
             display: none;
         }
+        /* ⚡ FIXED LAYOUT CONFLICT: Changed from flex to standard block level deployment by default */
         .view-panel.active-view {
+            display: block !important;
+        }
+        /* Explicit layout override strictly for columns that need internal table scrollbars */
+        .view-panel.panel-flex-layout.active-view {
             display: flex !important;
+            flex-direction: column;
         }
         
         /* Premium Minimal Scrollbar handles strictly for Table Views */
@@ -68,7 +74,7 @@
         <!-- =========================================================================
              MODULE 1: DASHBOARD ANALYTICS OVERVIEW PANEL
              ========================================================================= -->
-        <section id="view-overview" class="view-panel active-view flex-column">
+        <section id="view-overview" class="view-panel active-view">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 text-white fw-light mb-0">Admin Overview</h2>
                 <span class="text-muted fs-8">Last Updated: Just now</span>
@@ -119,7 +125,7 @@
             </div>
             
             <h5 class="h6 text-white mb-3">Recent Booking Actions</h5>
-            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: calc(100vh - 280px); overflow-y: auto;">
+            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
                 <table class="table-dark-custom w-100">
                     <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                         <tr>
@@ -136,9 +142,9 @@
         <!-- =========================================================================
              MODULE 2: MASTER BOOKING LEDGER (LOCKED SCROLL CORES)
              ========================================================================= -->
-        <section id="view-bookings" class="view-panel" 
+        <!-- ⚡ FIXED: Added .panel-flex-layout class to explicitly tell CSS to apply layout styles to this screen -->
+        <section id="view-bookings" class="view-panel panel-flex-layout" 
                  style="display: none; 
-                        flex-direction: column; 
                         height: calc(100vh - 50px); 
                         overflow: hidden; 
                         position: relative;">
@@ -213,9 +219,9 @@
         <!-- =========================================================================
              MODULE 3: SYSTEM ENQUIRIES DESK
              ========================================================================= -->
-        <section id="view-enquiries" class="view-panel flex-column">
+        <section id="view-enquiries" class="view-panel">
             <h2 class="h4 text-white fw-light mb-4">Contact Enquiries Desk</h2>
-            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: calc(100vh - 160px); overflow-y: auto;">
+            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: 500px; overflow-y: auto;">
                 <table class="table-dark-custom w-100">
                     <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                         <tr>
@@ -232,7 +238,7 @@
         <!-- =========================================================================
              MODULE 4: AVAILABILITY CALENDAR ENGINE
              ========================================================================= -->
-        <section id="view-calendar" class="view-panel flex-column">
+        <section id="view-calendar" class="view-panel">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 text-white fw-light mb-0">Availability Calendar</h2>
                 <div class="d-flex gap-3 align-items-center">
@@ -242,12 +248,12 @@
                 </div>
             </div>
 
-            <div class="calendar-grid custom-scrollbar" id="dynamic-calendar" style="overflow-y: auto; max-height: calc(100vh - 180px);"></div>
+            <div class="calendar-grid" id="dynamic-calendar"></div>
             <p class="text-muted fs-8 mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Colored badges inside cells show ongoing parallel events. Click on any reserved date cell to open inspection cards.</p>
         </section>
 
         <!-- =========================================================================
-             MODULE 5: ORIGINAL MANAGEMENT GALLERY ENGINE (UNMODIFIED LAYOUT)
+             MODULE 5: GALLERY ENGINE (RESTORED ORIGINAL BLOCK STRUCTURE)
              ========================================================================= -->
         <section id="view-gallery" class="view-panel">
             <h2 class="h4 text-white fw-light mb-4">Gallery Management</h2>
@@ -308,11 +314,11 @@
         <!-- =========================================================================
              MODULE 6: COMPLETED TRANSACTIONS REGISTRY
              ========================================================================= -->
-        <section id="view-completed" class="view-panel" 
-                 style="display: none; \
-                        flex-direction: column; \
-                        height: calc(100vh - 50px); \
-                        overflow: hidden; \
+        <!-- ⚡ FIXED: Added .panel-flex-layout class to freeze control tray layout rules smoothly -->
+        <section id="view-completed" class="view-panel panel-flex-layout" 
+                 style="display: none; 
+                        height: calc(100vh - 50px); 
+                        overflow: hidden; 
                         position: relative;">
                         
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-10 pb-3 flex-wrap gap-3 no-print" style="flex: 0 0 auto;">
