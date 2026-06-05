@@ -780,7 +780,7 @@ async function loadCompletedBookingsTable() {
         tableBody.innerHTML = ""; 
 
         if (completedBookings.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-5"><i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>No completed bookings on record yet.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-5"><i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>No completed bookings on record yet.</td></tr>`;
             return;
         }
 
