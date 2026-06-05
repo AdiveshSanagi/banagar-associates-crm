@@ -107,7 +107,6 @@ def get_booked_dates(db: Session = Depends(get_db)):
         models.Booking.booking_status != models.BookingStatus.cancelled
     ).all()
     
-    # ⚡ FIXED: Production dictionary serialization output format matches local layout tracking needs
     return [
         {
             "date": b.event_date.strftime("%Y-%m-%d"),
@@ -118,7 +117,7 @@ def get_booked_dates(db: Session = Depends(get_db)):
 
 @app.post("/api/public/bookings", response_model=schemas.BookingResponse)
 def create_booking(payload: schemas.BookingCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    """Handles the Step 4 & 5 User Booking Request with Parallel Venue Cross-Lock Logic"""
+    """Handles User Booking Requests with Decoupled Property Matrix Lock Logic"""
     
     # 1. Pull all non-cancelled reservations sitting on that target day
     active_day_bookings = db.query(models.Booking).filter(
@@ -126,26 +125,28 @@ def create_booking(payload: schemas.BookingCreate, background_tasks: BackgroundT
         models.Booking.booking_status != models.BookingStatus.cancelled
     ).all()
     
-    # 2. Enforce conditional matrix lock rules to support multi-venue parallel date entries
+    # 2. Execute Decoupled Cross-Lock Rule System
     has_conflict = False
     for booking in active_day_bookings:
         existing_venue = str(booking.venue_type).strip()
         requested_venue = str(payload.venue_package).strip()
 
-        if (
-            existing_venue == requested_venue or 
-            requested_venue == "Combo" or 
-            existing_venue == "Combo" or 
-            ("Marriage Hall" in requested_venue and "Marriage Hall" in existing_venue) or 
-            ("Lawns" in requested_venue and "Lawns" in existing_venue)
-        ):
+        # Rule A: Direct identical duplicates on the same package space are always blocked
+        if existing_venue == requested_venue:
             has_conflict = True
             break
             
+        # Rule B: Compound B Conflict Checker (Marriage Hall <-> Full Combo Mutual Block)
+        # If neither the request nor the existing row involves the Separate Lawn, they belong to Compound B
+        if "Separate Lawn" not in requested_venue and "Separate Lawn" not in existing_venue:
+            if "Combo" in requested_venue or "Combo" in existing_venue:
+                has_conflict = True
+                break
+                
     if has_conflict:
         raise HTTPException(status_code=400, detail="The selected venue space is already reserved on this date.")
 
-    # 3. Dynamic Price Calculator Matrix Rules
+    # 3. Dynamic Price Calculator Matrix
     total_price = 150000.00
     if "Marriage Hall" in payload.venue_package:
         total_price = 200000.00
@@ -175,10 +176,7 @@ def create_booking(payload: schemas.BookingCreate, background_tasks: BackgroundT
         db.add(booking_db)
         db.commit()
         db.refresh(booking_db)
-        
-        # 🔥 TRIGGER NEW REQUEST NOTIFICATION
         background_tasks.add_task(notification.process_booking_notifications, "NEW_REQUEST", booking_db)
-        
         return booking_db
     except Exception as e:
         db.rollback()
@@ -252,12 +250,11 @@ def get_dashboard_statistics(db: Session = Depends(get_db), current_admin: str =
 
 @app.get("/api/admin/bookings/recent", response_model=List[schemas.BookingResponse])
 def get_recent_bookings(db: Session = Depends(get_db), current_admin: str = Depends(auth.get_current_admin)):
-    """Returns only current month bookings to fill your recent overview panel"""
-    now = datetime.now()
-    return db.query(models.Booking).filter(
-        extract('month', models.Booking.created_at) == now.month,
-        extract('year', models.Booking.created_at) == now.year
-    ).order_by(models.Booking.created_at.desc()).all()
+    """⚡ UPDATED: Returns the absolute last/most recently booked 10 rows for the overview panel"""
+    return db.query(models.Booking)\
+             .order_by(models.Booking.created_at.desc())\
+             .limit(10)\
+             .all()
 
 
 @app.get("/api/admin/bookings", response_model=List[schemas.BookingResponse])
