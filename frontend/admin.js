@@ -277,7 +277,8 @@ async function loadMasterBookingsTable() {
 
         if (recentTableBody) {
             recentTableBody.innerHTML = "";
-            const recentBookings = bookings.slice(-5).reverse(); 
+            // Pulls the last 10 rows out of the data arrays context cleanly
+            const recentBookings = bookings.slice(-10).reverse(); 
             if (recentBookings.length === 0) {
                 recentTableBody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No recent booking activity.</td></tr>`;
             } else {
@@ -381,25 +382,24 @@ async function loadDashboardCalendar() {
                 cellClass += " bg-danger bg-opacity-15 text-danger fw-medium cursor-pointer";
                 
                 activeBookingsOnDate.forEach(b => {
-                    const rawVenueName = b.venue_type || b.venue_package || b.venue || "";
-                    const targetVenueStr = String(rawVenueName).toLowerCase();
-                    
-                    if (targetVenueStr.trim() !== "") {
-                        // ✨ FIXED: Added explicit "combo" filter branch mapping
-                        let shortName = "Hall";
-                        let dotColor = "bg-info"; // Blue for Hall
+                const rawVenueName = b.venue_type || b.venue_package || b.venue || "";
+                const targetVenueStr = String(rawVenueName).toLowerCase();
                 
-                        if (targetVenueStr.includes("combo")) {
-                            shortName = "Combo";
-                            dotColor = "bg-success text-white"; // Green for Combo
-                        } else if (targetVenueStr.includes("lawn")) {
-                            shortName = "Lawn";
-                            dotColor = "bg-warning"; // Yellow for Lawn
-                        }
-                
-                        indicatorDots += `<span class="badge ${dotColor} text-dark fs-9 px-1 d-block scale-90 mb-1" style="font-size: 10px; font-weight: 600;">${shortName}</span>`;
+                if (targetVenueStr.trim() !== "") {
+                    let shortName = "Hall";
+                    let dotColor = "bg-info"; // Blue for Hall
+            
+                    if (targetVenueStr.includes("combo")) {
+                        shortName = "Combo";
+                        dotColor = "bg-success text-white"; // Green for Combo
+                    } else if (targetVenueStr.includes("separate") || targetVenueStr.includes("lawn")) {
+                        shortName = "Lawn (A)";
+                        dotColor = "bg-warning"; // Yellow for Separate Lawn
                     }
-                });
+            
+                    indicatorDots += `<span class="badge ${dotColor} text-dark fs-9 px-1 d-block scale-90 mb-1" style="font-size: 10px; font-weight: 600;">${shortName}</span>`;
+                }
+            });
             }
 
             const cellHtml = `
@@ -456,15 +456,14 @@ window.showCalendarBookingDetails = async function(dateString) {
     
         const venueCleanName = String(booking.venue_type || "").toLowerCase();
         
-        // ✨ FIXED: Prevent Combo entries from accidentally falling back into standard slots
         let shortBadgeName = "Marriage Hall";
         let microBadgeColor = "bg-info text-dark";
     
         if (venueCleanName.includes("combo")) {
-            shortBadgeName = "Full Combo";
+            shortBadgeName = "Full Combo (Comp B)";
             microBadgeColor = "bg-success text-white";
-        } else if (venueCleanName.includes("lawn")) {
-            shortBadgeName = "Lawn Space";
+        } else if (venueCleanName.includes("separate") || venueCleanName.includes("lawn")) {
+            shortBadgeName = "Separate Lawn (Comp A)";
             microBadgeColor = "bg-warning text-dark";
         }
     
