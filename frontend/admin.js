@@ -276,15 +276,24 @@ async function loadMasterBookingsTable() {
         }
 
         if (recentTableBody) {
-            recentTableBody.innerHTML = "";
-            // Pulls the last 10 rows out of the data arrays context cleanly
-            const recentBookings = bookings.slice(-10).reverse(); 
-            if (recentBookings.length === 0) {
-                recentTableBody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No recent booking activity.</td></tr>`;
-            } else {
-                recentBookings.forEach(b => { recentTableBody.insertAdjacentHTML("beforeend", generateRowHtml(b)); });
-            }
-        }
+    recentTableBody.innerHTML = "";
+    
+    // ⚡ RECENT ORDER FIX: Sort strictly by highest/newest ID first
+    const sortedRecentBookings = [...bookings].sort((a, b) => {
+        const idA = parseInt(a.id.replace("BA_", "")) || 0;
+        const idB = parseInt(b.id.replace("BA_", "")) || 0;
+        return idB - idA; // Newest sequential database entries float to the top
+    });
+
+    // Isolate the top 10 most recent chronological entries
+    const recentSubset = sortedRecentBookings.slice(0, 10); 
+    
+    if (recentSubset.length === 0) {
+        recentTableBody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No recent booking activity.</td></tr>`;
+    } else {
+        recentSubset.forEach(b => { recentTableBody.insertAdjacentHTML("beforeend", generateRowHtml(b)); });
+    }
+}
 
         if (typeof loadDashboardCalendar === 'function') {
             loadDashboardCalendar();
