@@ -807,7 +807,7 @@ async function loadCompletedBookingsTable() {
                     <td>
                         <div class="fs-8">
                             <span class="text-muted">Total:</span> <strong class="text-white">₹${b.total_amount?.toLocaleString('en-IN') || '0'}</strong><br>
-                            <span class="text-muted">Adv:</span> <span class="text-warning">₹${b.advance_paid?.toLocaleString('en-IN') || '0'}</span><br>
+                            <span class="text-muted">Paid:</span> <span class="text-warning">₹${b.advance_paid?.toLocaleString('en-IN') || '0'}</span><br>
                             <span class="text-muted">Bal:</span> <span class="text-danger">₹${b.balance_left?.toLocaleString('en-IN') || '0'}</span>
                         </div>
                     </td>
