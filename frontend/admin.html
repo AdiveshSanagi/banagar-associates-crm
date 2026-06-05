@@ -104,16 +104,14 @@
             </div>
         </section>
 
-    <section id="view-bookings" class="view-panel" style="position: relative;">
-    <div class="sticky-top no-print" 
-         style="position: sticky; 
-                top: 0; 
-                background-color: #0a0c10; /* Matches your main body deep-base background color */
-                z-index: 10; 
-                padding-top: 15px; 
-                padding-bottom: 20px; 
-                margin-top: -15px;">
-                
+    <section id="view-bookings" class="view-panel" 
+         style="display: flex; 
+                flex-direction: column; 
+                height: calc(100vh - 110px); /* Adjusts perfectly below your main admin navbar */
+                overflow: hidden; /* 🚫 KILLS THE GLOBAL SCROLL */
+                position: relative;">
+    
+    <div class="no-print" style="flex: 0 0 auto; padding-bottom: 20px;">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 w-100">
             <h2 class="h4 text-white fw-light mb-0">Master Booking Ledger</h2>
             
@@ -159,9 +157,14 @@
         </div>
     </div>
     
-    <div class="table-responsive table-wrapper shadow-sm" style="max-height: calc(100vh - 220px); overflow-y: auto;">
-        <table class="table-dark-custom w-100">
-            <thead class="sticky-top" style="background-color: #0d121c; z-index: 5; position: sticky; top: 0;">
+    <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" 
+         style="flex: 1 1 auto; 
+                overflow-y: auto; /* 🔄 ONLY THE TABLE SECTOR SCROLLS INDEPENDENTLY */
+                background-color: #0d121c; 
+                border: 1px solid rgba(255, 255, 255, 0.05);">
+                
+        <table class="table-dark-custom w-100 mb-0">
+            <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                 <tr>
                     <th>ID</th>
                     <th>Client</th>
