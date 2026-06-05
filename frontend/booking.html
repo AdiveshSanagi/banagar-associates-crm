@@ -307,11 +307,11 @@
                     <h3 class="h5 text-white text-center font-serif fw-normal mb-5">Select Your Venue</h3>
                     <div class="row g-4 justify-content-center">
                         <div class="col-md-6 col-lg-4">
-                            <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Banagar Lawns', '150K')">
+                            <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Separate Lawn', '150K')">
                                 <div class="img-frame"><img src="../assets/images/lawn thumb.jpeg" alt="Lawns"></div>
                                 <div class="card-body px-0 pt-3 pb-1">
-                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Banagar Lawns</h4>
-                                    <p class="text-light-muted fs-8 mb-2">For Outdoor Parties and Functions</p>
+                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Separate Lawn (Compound A)</h4>
+                                    <p class="text-light-muted fs-8 mb-2">Completely Independent Standalone Outdoor Property</p>
                                     <span class="text-gold fw-normal fs-7">₹150K</span>
                                 </div>
                             </div>
@@ -320,8 +320,8 @@
                             <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Banagar Marriage Hall', '200K')">
                                 <div class="img-frame"><img src="../assets/images/royal mandap.jpeg" alt="Hall"></div>
                                 <div class="card-body px-0 pt-3 pb-1">
-                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Banagar Marriage Hall</h4>
-                                    <p class="text-light-muted fs-8 mb-2">For Indoor Parties, Weddings and Celebrations</p>
+                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Banagar Marriage Hall (Compound B)</h4>
+                                    <p class="text-light-muted fs-8 mb-2">Premium Indoor Convention Hall Space</p>
                                     <span class="text-gold fw-normal fs-7">₹200K</span>
                                 </div>
                             </div>
@@ -330,8 +330,8 @@
                             <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Combo', '300K')">
                                 <div class="img-frame"><img src="../assets/images/lawn&mrg.png" alt="Combo"></div>
                                 <div class="card-body px-0 pt-3 pb-1">
-                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Hall + Lawn Combo</h4>
-                                    <p class="text-light-muted fs-8 mb-2">For Combined Indoor and Outdoor Events</p>
+                                    <h4 class="h6 text-white font-serif mb-1 fw-normal">Full Venue Combo (Compound B)</h4>
+                                    <p class="text-light-muted fs-8 mb-2">Includes Both Marriage Hall & Embedded Lawn Space</p>
                                     <span class="text-gold fw-normal fs-7">₹300K</span>
                                 </div>
                             </div>
@@ -586,40 +586,47 @@
             const nextBtn = document.getElementById('btn-booking-next');
             
             if (dateAdvanceTimer) clearTimeout(dateAdvanceTimer);
-
+        
             if (!dateVal || !selectedVenueName) {
                 notice.classList.add('d-none');
                 nextBtn.classList.add('disabled');
                 return;
             }
-
+        
             const currentSelection = selectedVenueName.trim().toLowerCase();
-
-            // 🔍 FIXED: Replaced .includes string comparison with dynamic object property loop check
+        
+            // ⚡ DECOUPLED MATRIX CONFLICT MATRIX CHECKER
             const hasConflict = unavailableBookings.some(booking => {
                 if (booking.date !== dateVal) return false;
                 const existingVenue = String(booking.venue_type || "").trim().toLowerCase();
-                return (
-                    existingVenue === currentSelection || 
-                    currentSelection === "combo" || 
-                    existingVenue === "combo" || 
-                    (currentSelection.includes("hall") && existingVenue.includes("hall")) || 
-                    (currentSelection.includes("lawn") && existingVenue.includes("lawn"))
-                );
+                
+                // 1. Direct duplicates are instantly blocked
+                if (existingVenue === currentSelection) return true;
+                
+                // 2. Separate Property Rule: If either involves separate lawn, bypass cross-locks completely
+                if (currentSelection.includes("separate") || existingVenue.includes("separate")) {
+                    return false; 
+                }
+                
+                // 3. Main Property Rule: A combination conflict happens if either item is a combo
+                if (currentSelection.includes("combo") || existingVenue.includes("combo")) {
+                    return true;
+                }
+                
+                return false;
             });
-
+        
             if (hasConflict) {
                 notice.classList.remove('d-none', 'text-success');
                 notice.classList.add('text-danger');
-                notice.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i> Already booked for ${selectedVenueName} or Combo.`;
+                notice.innerHTML = `<i class="bi bi-x-circle-fill me-1"></i> Already booked for ${selectedVenueName}.`;
                 nextBtn.classList.add('disabled');
             } else {
                 notice.classList.remove('d-none', 'text-danger');
                 notice.classList.add('text-success');
                 notice.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> This date is available for ${selectedVenueName}!`;
                 nextBtn.classList.remove('disabled');
-
-                // ⚡ AUTO NEXT ENGINE FOR STEP 2
+        
                 dateAdvanceTimer = setTimeout(() => {
                     if (currentStep === 2) { 
                         navigateStep(1);
@@ -627,7 +634,6 @@
                 }, 2000);
             }
         }
-
         // 4. CENTRAL STEPPER CONTROLLER WITH API GATEWAY TRANSMISSION PIPELINE
         async function navigateStep(direction) {
             const nextBtn = document.getElementById('btn-booking-next');
