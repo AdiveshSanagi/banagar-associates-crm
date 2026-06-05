@@ -107,16 +107,15 @@
     <section id="view-bookings" class="view-panel" 
          style="display: flex; 
                 flex-direction: column; 
-                height: calc(100vh - 110px); /* Adjusts perfectly below your main admin navbar */
-                overflow: hidden; /* 🚫 KILLS THE GLOBAL SCROLL */
+                height: calc(100vh - 110px); /* Pins viewport to stay within screen constraints below navbar */
+                overflow: hidden; /* 🚫 REMOVES THE GLOBAL SCROLL */
                 position: relative;">
-    
-    <div class="no-print" style="flex: 0 0 auto; padding-bottom: 20px;">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 w-100">
-            <h2 class="h4 text-white fw-light mb-0">Master Booking Ledger</h2>
-            
-            <div class="d-flex align-items-center gap-3">
-                <div class="position-relative" style="width: 240px; height: 31px;">
+                
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 no-print" style="flex: 0 0 auto;">
+                <h2 class="h4 text-white fw-light mb-0">Master Booking Ledger</h2>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="position-relative" style="width: 240px; height: 31px;">
                     <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center" 
                         style="pointer-events: none; z-index: 5; color: #6c757d !important; font-size: 0.75rem;">
                         <i class="bi bi-search"></i>
@@ -129,42 +128,36 @@
                                 color: #0d121c !important; 
                                 border: 1px solid #dee2e6; 
                                 font-weight: 500;
-                                font-size: 0.75rem !important;
+                                font-size: 0.75rem !important; /* Matches fs-7 dropdown typography scales */
                                 height: 100%;
                                 padding-top: 2px !important;
                                 padding-bottom: 2px !important;
                                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-                                border-radius: 4px !important;
+                                border-radius: 4px !important; /* Standard Bootstrap border radius index matching buttons */
                                 outline: none;
                                 transition: all 0.2s ease-in-out;" 
                         onkeyup="filterMasterBookingsTable()">
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-download"></i> Export CSV
-                    </button>
-                    <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
-                        <h6 class="text-white mb-2">Select Date Range</h6>
-                        <input type="date" id="export-start" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
-                        <input type="date" id="export-end" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-sm btn-success" onclick="exportBookingsToCSV()">Export Data</button>
+                    <div class="dropdown">
+                        <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-download"></i> Export CSV
+                        </button>
+                        <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
+                            <h6 class="text-white mb-2">Select Date Range</h6>
+                            <input type="date" id="export-start" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
+                            <input type="date" id="export-end" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-success" onclick="exportBookingsToCSV()">Export Data</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
     
-    <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" 
-         style="flex: 1 1 auto; 
-                overflow-y: auto; /* 🔄 ONLY THE TABLE SECTOR SCROLLS INDEPENDENTLY */
-                background-color: #0d121c; 
-                border: 1px solid rgba(255, 255, 255, 0.05);">
-                
-        <table class="table-dark-custom w-100 mb-0">
-            <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
+    <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="flex: 1 1 auto; overflow-y: auto;">
+        <table class="table-dark-custom" style="width: 100%; margin-bottom: 0;">
+            <thead class="sticky-top" style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                 <tr>
                     <th>ID</th>
                     <th>Client</th>
