@@ -233,13 +233,13 @@
             <p class="text-muted fs-8 mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Colored badges inside cells show ongoing parallel events. Click on any reserved date cell to open inspection cards.</p>
         </section>
 
-        <section id="view-gallery" class="view-panel flex-column" style="overflow-y: auto; max-height: calc(100vh - 60px);">
+        <section id="view-gallery" class="view-panel">
             <h2 class="h4 text-white fw-light mb-4">Gallery Management</h2>
             
             <form id="gallery-upload-form" enctype="multipart/form-data">
-                <div class="row mb-5 g-4">
+                <div class="row mb-5">
                     <div class="col-md-4">
-                        <div class="upload-zone h-100 d-flex flex-column justify-content-center py-4" style="cursor: pointer;" onclick="document.getElementById('gallery-file-input').click()">
+                        <div class="upload-zone h-100 d-flex flex-column justify-content-center" style="cursor: pointer;" onclick="document.getElementById('gallery-file-input').click()">
                             <i class="bi bi-cloud-arrow-up display-4 text-primary mb-2"></i>
                             <h6 class="text-white" id="upload-zone-text">Click / Drag to Choose Media</h6>
                             <span class="fs-8 text-muted">Supports JPG, PNG, MP4</span>
@@ -247,7 +247,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <div class="stat-card p-4">
+                        <div class="stat-card">
                             <h6 class="text-white mb-3">Asset Details</h6>
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -286,7 +286,7 @@
                 </div>
             </div>
 
-            <div class="row g-4 mb-4" id="admin-gallery-display-grid">
+            <div class="row g-4" id="admin-gallery-display-grid">
                 </div>
         </section>
 
