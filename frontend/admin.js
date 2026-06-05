@@ -469,34 +469,38 @@ window.showCalendarBookingDetails = async function(dateString) {
     
         cardsHtml += `
             <div class="${colClass} p-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="badge ${microBadgeColor} fw-semibold px-2 py-1" style="font-size: 11px;">${shortBadgeName}</span>
-                    <span class="text-info small fw-mono">#${booking.id}</span>
-                </div>
-                
-                <div class="mb-2">
-                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px; letter-spacing: 0.05em;">CLIENT NAME</label>
-                    <strong class="text-white fs-6">${booking.customer_name}</strong>
-                </div>
-                
-                <div class="mb-2">
-                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">PHONE NUMBER</label>
-                    <span class="text-white">${booking.phone}</span>
-                </div>
-                
-                <div class="mb-2">
-                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EMAIL ADDRESS</label>
-                    <span class="text-light-muted fs-7 break-all">${booking.email || 'Not Provided'}</span>
-                </div>
-    
-                <div class="mb-3">
-                    <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 10px;">EVENT DATE & TYPE</label>
-                    <span class="text-white fs-7">${booking.event_date} — <span class="text-gold">${booking.event_type || 'General'}</span></span>
-                </div>
-                
-                <div class="d-flex gap-2 mt-3 pt-2 border-top border-secondary border-opacity-10">
-                    <span class="badge ${statusBadgeColor} rounded-1 px-3 py-1 fs-8 uppercase">${booking.booking_status}</span>
-                    <span class="badge bg-dark border border-secondary border-opacity-20 text-muted px-2 py-1 fs-8">${booking.guest_count || 0} Guests</span>
+                <div class="p-3 rounded" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <span class="badge ${microBadgeColor} fw-semibold px-2 py-1 text-truncate" style="font-size: 10px; max-width: 140px;">${shortBadgeName}</span>
+                        <span class="text-info small fw-mono text-end" style="font-size: 11px;">#${booking.id}</span>
+                    </div>
+                    
+                    <div class="mb-2 text-wrap" style="word-break: break-word;">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 9px; letter-spacing: 0.05em;">CLIENT NAME</label>
+                        <strong class="text-white d-block" style="font-size: 0.95rem;">${booking.customer_name}</strong>
+                    </div>
+                    
+                    <div class="mb-2 text-wrap" style="word-break: break-word;">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 9px;">PHONE NUMBER</label>
+                        <span class="text-white d-block" style="font-size: 0.85rem;">${booking.phone}</span>
+                    </div>
+                    
+                    <div class="mb-2 text-wrap" style="word-break: break-word;">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 9px;">EMAIL ADDRESS</label>
+                        <span class="text-light-muted d-block" style="font-size: 0.8rem; opacity: 0.8;">${booking.email || 'Not Provided'}</span>
+                    </div>
+
+                    <div class="mb-3 text-wrap" style="word-break: break-word;">
+                        <label class="text-muted d-block uppercase tracking-wider mb-0" style="font-size: 9px;">EVENT DATE & TYPE</label>
+                        <span class="text-white d-block" style="font-size: 0.8rem;">
+                            ${booking.event_date} — <span class="text-gold fw-medium">${booking.event_type || 'General'}</span>
+                        </span>
+                    </div>
+                    
+                    <div class="d-flex flex-wrap gap-2 mt-3 pt-2 border-top border-secondary border-opacity-10">
+                        <span class="badge ${statusBadgeColor} rounded-1 px-2 py-1 fs-8 uppercase" style="font-size: 10px;">${booking.booking_status}</span>
+                        <span class="badge bg-dark border border-secondary border-opacity-20 text-muted px-2 py-1 fs-8" style="font-size: 10px;">${booking.guest_count || 0} Guests</span>
+                    </div>
                 </div>
             </div>`;
     });
