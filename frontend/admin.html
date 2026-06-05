@@ -104,54 +104,64 @@
             </div>
         </section>
 
-    <section id="view-bookings" class="view-panel">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 no-print">
-        <h2 class="h4 text-white fw-light mb-0">Master Booking Ledger</h2>
-        
-        <div class="d-flex align-items-center gap-3">
-            <div class="position-relative" style="width: 240px; height: 31px;">
-                <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center" 
-                    style="pointer-events: none; z-index: 5; color: #6c757d !important; font-size: 0.75rem;">
-                    <i class="bi bi-search"></i>
-                </span>
+    <section id="view-bookings" class="view-panel" style="position: relative;">
+    <div class="sticky-top no-print" 
+         style="position: sticky; 
+                top: 0; 
+                background-color: #0a0c10; /* Matches your main body deep-base background color */
+                z-index: 10; 
+                padding-top: 15px; 
+                padding-bottom: 20px; 
+                margin-top: -15px;">
                 
-                <input type="text" id="table-search-input" 
-                    class="form-control ps-5 search-focus-glow" 
-                    placeholder="Search ID, name, phone..." 
-                    style="background-color: #ffffff !important; 
-                            color: #0d121c !important; 
-                            border: 1px solid #dee2e6; 
-                            font-weight: 500;
-                            font-size: 0.75rem !important;
-                            height: 100%;
-                            padding-top: 2px !important;
-                            padding-bottom: 2px !important;
-                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-                            border-radius: 4px !important;
-                            outline: none;
-                            transition: all 0.2s ease-in-out;" 
-                    onkeyup="filterMasterBookingsTable()">
-            </div>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 w-100">
+            <h2 class="h4 text-white fw-light mb-0">Master Booking Ledger</h2>
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="position-relative" style="width: 240px; height: 31px;">
+                    <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center" 
+                        style="pointer-events: none; z-index: 5; color: #6c757d !important; font-size: 0.75rem;">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    
+                    <input type="text" id="table-search-input" 
+                        class="form-control ps-5 search-focus-glow" 
+                        placeholder="Search ID, name, phone..." 
+                        style="background-color: #ffffff !important; 
+                                color: #0d121c !important; 
+                                border: 1px solid #dee2e6; 
+                                font-weight: 500;
+                                font-size: 0.75rem !important;
+                                height: 100%;
+                                padding-top: 2px !important;
+                                padding-bottom: 2px !important;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                                border-radius: 4px !important;
+                                outline: none;
+                                transition: all 0.2s ease-in-out;" 
+                        onkeyup="filterMasterBookingsTable()">
+                </div>
 
-            <div class="dropdown">
-                <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-download"></i> Export CSV
-                </button>
-                <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
-                    <h6 class="text-white mb-2">Select Date Range</h6>
-                    <input type="date" id="export-start" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
-                    <input type="date" id="export-end" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-sm btn-success" onclick="exportBookingsToCSV()">Export Data</button>
+                <div class="dropdown">
+                    <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-download"></i> Export CSV
+                    </button>
+                    <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
+                        <h6 class="text-white mb-2">Select Date Range</h6>
+                        <input type="date" id="export-start" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
+                        <input type="date" id="export-end" class="form-control form-control-sm bg-dark text-white mb-2 color-dark-cal">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-sm btn-success" onclick="exportBookingsToCSV()">Export Data</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="table-responsive table-wrapper shadow-sm" style="max-height: 600px; overflow-y: auto;">
-        <table class="table-dark-custom">
-            <thead class="sticky-top" style="background-color: #0d121c; z-index: 3; position: sticky; top: 0;">
+    <div class="table-responsive table-wrapper shadow-sm" style="max-height: calc(100vh - 220px); overflow-y: auto;">
+        <table class="table-dark-custom w-100">
+            <thead class="sticky-top" style="background-color: #0d121c; z-index: 5; position: sticky; top: 0;">
                 <tr>
                     <th>ID</th>
                     <th>Client</th>
