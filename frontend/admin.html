@@ -9,6 +9,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./admin.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* CSS Optimization to assist layout structure with explicit handles */
+        .view-panel {
+            display: none;
+        }
+        .view-panel.active-view {
+            display: flex !important;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .color-dark-cal {
+            color-scheme: dark;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,7 +42,8 @@
         <div class="admin-brand">
             <div class="brand-logo-frame">
                 <img src="../assets/images/logo-01.png" alt="Banagar Associates Logo" class="admin-logo-img">
-            </div></div>
+            </div>
+        </div>
         
         <div class="nav-menu">
             <span class="px-4 text-muted fs-8 tracking-widest text-uppercase mb-2 d-block">Modules</span>
@@ -33,19 +60,16 @@
             <a id="btn-secure-logout" class="admin-nav-link text-danger" style="cursor: pointer;"><i class="bi bi-box-arrow-left"></i> Secure Logout</a>
         </div>
     </aside>
-    
 
     <main class="admin-main-content">
 
-       <section id="view-overview" class="view-panel active-view">
+        <section id="view-overview" class="view-panel active-view flex-column">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 text-white fw-light mb-0">Admin Overview</h2>
                 <span class="text-muted fs-8">Last Updated: Just now</span>
             </div>
 
-            <!-- stat cards go here -->
-                        <div class="row mb-4 g-3">
-                
+            <div class="row mb-4 g-3">
                 <div class="col-md-4 col-lg-2">
                     <div class="card bg-dark text-white h-100 p-3 border border-secondary border-opacity-25 shadow-sm rounded-3">
                         <h6 class="text-muted fs-7 text-uppercase mb-2">Total Bookings</h6>
@@ -84,60 +108,60 @@
                 <div class="col-md-4 col-lg-2">
                     <div class="card bg-dark text-white h-100 p-3 border border-secondary border-opacity-25 shadow-sm rounded-3">
                         <h6 class="text-muted fs-7 text-uppercase mb-2">Revenue (INR)</h6>
-                        <h3 id="stat-total-revenue" class="text-warning mb-0 fw-bold  fs-6">₹---</h3>
+                        <h3 id="stat-total-revenue" class="text-warning mb-0 fw-bold fs-6">₹---</h3>
                     </div>
                 </div>
-
             </div>
             
             <h5 class="h6 text-white mb-3">Recent Booking Actions</h5>
-            <div class="table-responsive table-wrapper shadow-sm">
-                <table class="table-dark-custom">
-                    <thead>
+            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: calc(100vh - 280px); overflow-y: auto;">
+                <table class="table-dark-custom w-100">
+                    <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                         <tr>
-                            <th>ID</th><th>Client Name</th><th>Venue</th><th>Event Type</th><th>Date</th><th>Phone</th><th>Guest Count</th><th>Amount Paid</th><th>Status</th><th class="text-end">Actions</th>
+                            <th>ID</th><th>Client Name</th><th>Venue</th><th>Event Type</th><th>Date</th><th>Phone</th><th>Guest Count</th><th>Amount Paid</th><th>Status</th><th class="text-end pe-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="admin-recent-bookings-rows">
-                        </tbody>
+                        <tr><td colspan="10" class="text-center text-muted py-4">Loading operational snapshots...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </section>
 
-    <section id="view-bookings" class="view-panel" 
-         style="display: flex; 
-                flex-direction: column; 
-                height: calc(100vh - 110px); /* Pins viewport to stay within screen constraints below navbar */
-                overflow: hidden; /* 🚫 REMOVES THE GLOBAL SCROLL */
-                position: relative;">
-                
+        <section id="view-bookings" class="view-panel" 
+                 style="display: none; 
+                        flex-direction: column; 
+                        height: calc(100vh - 50px); 
+                        overflow: hidden; 
+                        position: relative;">
+                        
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 no-print" style="flex: 0 0 auto;">
                 <h2 class="h4 text-white fw-light mb-0">Master Booking Ledger</h2>
                 
                 <div class="d-flex align-items-center gap-3">
                     <div class="position-relative" style="width: 240px; height: 31px;">
-                    <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center" 
-                        style="pointer-events: none; z-index: 5; color: #6c757d !important; font-size: 0.75rem;">
-                        <i class="bi bi-search"></i>
-                    </span>
-                    
-                    <input type="text" id="table-search-input" 
-                        class="form-control ps-5 search-focus-glow" 
-                        placeholder="Search ID, name, phone..." 
-                        style="background-color: #ffffff !important; 
-                                color: #0d121c !important; 
-                                border: 1px solid #dee2e6; 
-                                font-weight: 500;
-                                font-size: 0.75rem !important; /* Matches fs-7 dropdown typography scales */
-                                height: 100%;
-                                padding-top: 2px !important;
-                                padding-bottom: 2px !important;
-                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-                                border-radius: 4px !important; /* Standard Bootstrap border radius index matching buttons */
-                                outline: none;
-                                transition: all 0.2s ease-in-out;" 
-                        onkeyup="filterMasterBookingsTable()">
-                </div>
+                        <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted d-flex align-items-center" 
+                            style="pointer-events: none; z-index: 5; color: #6c757d !important; font-size: 0.75rem;">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        
+                        <input type="text" id="table-search-input" 
+                            class="form-control ps-5 search-focus-glow" 
+                            placeholder="Search ID, name, phone..." 
+                            style="background-color: #ffffff !important; 
+                                    color: #0d121c !important; 
+                                    border: 1px solid #dee2e6; 
+                                    font-weight: 500;
+                                    font-size: 0.75rem !important; 
+                                    height: 100%;
+                                    padding-top: 2px !important;
+                                    padding-bottom: 2px !important;
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                                    border-radius: 4px !important; 
+                                    outline: none;
+                                    transition: all 0.2s ease-in-out;" 
+                            onkeyup="filterMasterBookingsTable()">
+                    </div>
 
                     <div class="dropdown">
                         <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -155,44 +179,46 @@
                 </div>
             </div>
     
-    <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="flex: 1 1 auto; overflow-y: auto;">
-        <table class="table-dark-custom" style="width: 100%; margin-bottom: 0;">
-            <thead class="sticky-top" style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
-                <tr>
-                    <th>ID</th>
-                    <th>Client</th>
-                    <th>Venue</th>
-                    <th>Event Type</th>
-                    <th>Date <i class="bi bi-arrow-down-short"></i></th>
-                    <th>Phone No</th>
-                    <th>Guest Count</th>
-                    <th>Amount Paid</th>
-                    <th>Status</th>
-                    <th class="text-end pe-3">Action</th>
-                </tr>
-            </thead>
-            <tbody id="admin-bookings-rows">
-                </tbody>
-        </table>
-    </div>
-</section>
-
-        <section id="view-enquiries" class="view-panel">
-            <h2 class="h4 text-white fw-light mb-4">Contact Enquiries Desk</h2>
-            <div class="table-responsive table-wrapper shadow-sm">
-                <table class="table-dark-custom">
-                    <thead>
+            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="flex: 1 1 auto; overflow-y: auto; border-radius: 4px;">
+                <table class="table-dark-custom w-100 mb-0">
+                    <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                         <tr>
-                            <th>Received</th><th>Name</th><th>Phone</th><th>Email</th><th>Target Date</th><th>Message Snippet</th><th class="text-end">Actions</th>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Venue</th>
+                            <th>Event Type</th>
+                            <th>Date <i class="bi bi-arrow-down-short"></i></th>
+                            <th>Phone No</th>
+                            <th>Guest Count</th>
+                            <th>Amount Paid</th>
+                            <th>Status</th>
+                            <th class="text-end pe-3">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-queries-rows">
-                        </tbody>
+                    <tbody id="admin-bookings-rows">
+                        <tr><td colspan="10" class="text-center text-muted py-5">Syncing database entries...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </section>
 
-        <section id="view-calendar" class="view-panel">
+        <section id="view-enquiries" class="view-panel flex-column">
+            <h2 class="h4 text-white fw-light mb-4">Contact Enquiries Desk</h2>
+            <div class="table-responsive table-wrapper shadow-sm custom-scrollbar" style="max-height: calc(100vh - 160px); overflow-y: auto;">
+                <table class="table-dark-custom w-100">
+                    <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
+                        <tr>
+                            <th>Received</th><th>Name</th><th>Phone</th><th>Email</th><th>Target Date</th><th>Message Snippet</th><th class="text-end pe-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-queries-rows">
+                        <tr><td colspan="7" class="text-center text-muted py-5">Loading consumer leads...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="view-calendar" class="view-panel flex-column">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h4 text-white fw-light mb-0">Availability Calendar</h2>
                 <div class="d-flex gap-3 align-items-center">
@@ -202,45 +228,18 @@
                 </div>
             </div>
 
-            <div class="calendar-grid" id="dynamic-calendar">
+            <div class="calendar-grid custom-scrollbar" id="dynamic-calendar" style="overflow-y: auto; max-height: calc(100vh - 180px);">
                 </div>
-            <p class="text-muted fs-8 mt-3"><i class="bi bi-info-circle me-1"></i> Red dates indicate confirmed reservations. Click on a red box to view details.</p>
+            <p class="text-muted fs-8 mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Colored badges inside cells show ongoing parallel events. Click on any reserved date cell to open inspection cards.</p>
         </section>
 
-        <section id="view-enquiries" class="view-panel">
-            <h2 class="h4 text-white fw-light mb-4">Contact Enquiries Desk</h2>
-            <div class="table-responsive table-wrapper shadow-sm">
-                <table class="table-dark-custom">
-                    <thead>
-                        <tr>
-                            <th>Received</th><th>Name</th><th>Phone</th><th>Email</th><th>Target Date</th><th>Messages Snippet</th><th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-muted fs-8">2 hrs ago</td><td class="text-white">Arjun Patil</td><td>+91 9000011111</td><td>arjun@email.com</td><td>Dec 12, 2026</td>
-                            <td class="text-truncate" style="max-width: 150px;">Do you provide vegetarian catering?</td>
-                            <td><span class="status-badge bg-new">NEW</span></td>
-                            <td>
-                                <div class="action-icon-group">
-                                    <a href="tel:+919000011111" class="btn-icon edit" title="Call"><i class="bi bi-telephone"></i></a>
-                                    <a href="https://wa.me/919000011111" class="btn-icon confirm" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
-                                    <button class="btn-icon cancel" title="Mark Resolved"><i class="bi bi-check-all"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="view-gallery" class="view-panel">
+        <section id="view-gallery" class="view-panel flex-column" style="overflow-y: auto; max-height: calc(100vh - 60px);">
             <h2 class="h4 text-white fw-light mb-4">Gallery Management</h2>
             
             <form id="gallery-upload-form" enctype="multipart/form-data">
-                <div class="row mb-5">
+                <div class="row mb-5 g-4">
                     <div class="col-md-4">
-                        <div class="upload-zone h-100 d-flex flex-column justify-content-center" style="cursor: pointer;" onclick="document.getElementById('gallery-file-input').click()">
+                        <div class="upload-zone h-100 d-flex flex-column justify-content-center py-4" style="cursor: pointer;" onclick="document.getElementById('gallery-file-input').click()">
                             <i class="bi bi-cloud-arrow-up display-4 text-primary mb-2"></i>
                             <h6 class="text-white" id="upload-zone-text">Click / Drag to Choose Media</h6>
                             <span class="fs-8 text-muted">Supports JPG, PNG, MP4</span>
@@ -248,7 +247,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <div class="stat-card">
+                        <div class="stat-card p-4">
                             <h6 class="text-white mb-3">Asset Details</h6>
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -287,61 +286,61 @@
                 </div>
             </div>
 
-            <div class="row g-4" id="admin-gallery-display-grid">
+            <div class="row g-4 mb-4" id="admin-gallery-display-grid">
                 </div>
         </section>
 
-        <!-- completed bookings -->
-
-    <section id="view-completed" class="view-panel">
-            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-10 pb-3">
+        <section id="view-completed" class="view-panel" 
+                 style="display: none; 
+                        flex-direction: column; 
+                        height: calc(100vh - 50px); 
+                        overflow: hidden; 
+                        position: relative;">
+                        
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-10 pb-3 flex-wrap gap-3 no-print" style="flex: 0 0 auto;">
                 <h2 class="h4 text-white font-serif mb-0"><i class="bi bi-journal-check text-success me-2"></i>Completed Bookings History</h2>
 
-                <div class="dropdown">
-    <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        <i class="bi bi-download"></i> Export Completed Data
-    </button>
-    <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
-        <h6 class="text-white mb-2">Select Month & Year</h6>
-        <input type="month" id="export-month-completed" class="form-control form-control-sm bg-dark text-white mb-3">
-        
-        <div class="d-grid gap-2">
-            <button class="btn btn-sm btn-success" onclick="exportMonthlyBookingsToCSV()">Generate CSV</button>
-        </div>
-    </div>
-</div>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="dropdown">
+                        <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-download"></i> Export Completed Data
+                        </button>
+                        <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
+                            <h6 class="text-white mb-2">Select Month & Year</h6>
+                            <input type="month" id="export-month-completed" class="form-control form-control-sm bg-dark text-white mb-3 color-dark-cal">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-success" onclick="exportMonthlyBookingsToCSV()">Generate CSV</button>
+                            </div>
+                        </div>
+                    </div>
 
-<div class="dropdown">
-    <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        <i class=""></i> Estimate Revenue
-    </button>
-    <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
-        <h6 class="text-white mb-2">Happy to Here , Click OK</h6>
-        
-        <!-- Added onchange event to calculate revenue in real time -->
-        <input type="month" id="export-month" class="form-control form-control-sm bg-dark text-white mb-2" onchange="calculateSelectedMonthRevenue()">
-        
-        <!-- 👇 Live Dynamic Revenue Display Panel 👇 -->
-        <div id="monthly-revenue-badge" class="p-2 mb-3 rounded bg-secondary bg-opacity-10 text-center d-none" style="border: 1px dashed rgba(255,255,255,0.1);">
-            <span class="text-muted fs-8 text-uppercase d-block">Estimated Revenue</span>
-            <strong id="selected-month-total" class="text-warning fs-5">₹0</strong>
-        </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary fs-7 px-3 py-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-calculator"></i> Estimate Revenue
+                        </button>
+                        <div class="dropdown-menu p-3 bg-dark border-secondary" style="min-width: 250px;">
+                            <h6 class="text-white mb-2">Select Target Month</h6>
+                            
+                            <input type="month" id="export-month" class="form-control form-control-sm bg-dark text-white mb-3 color-dark-cal" onchange="calculateSelectedMonthRevenue()">
+                            
+                            <div id="monthly-revenue-badge" class="p-2 mb-3 rounded bg-secondary bg-opacity-10 text-center d-none" style="border: 1px dashed rgba(255,255,255,0.1);">
+                                <span class="text-muted fs-9 text-uppercase d-block mb-1" style="font-size: 9px; letter-spacing: 0.05em;">Calculated Metric</span>
+                                <strong id="selected-month-total" class="text-warning fs-5">₹0</strong>
+                            </div>
 
-        <div class="d-grid gap-2">
-            <button class="btn btn-sm btn-success" onclick="exportMonthlyBookingsToCSV()">Done</button>
-        </div>
-    </div>
-</div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-success" type="button" onclick="bootstrap.Dropdown.getInstance(this.closest('.dropdown').querySelector('.dropdown-toggle')).hide();">Done</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
-
-            
-
-            <div class="card bg-dark-card border-secondary border-opacity-10 mb-5">
+            <div class="card bg-dark-card border-secondary border-opacity-10 custom-scrollbar" style="flex: 1 1 auto; overflow-y: auto; background-color: #0d121c; border-radius: 4px;">
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-dark table-hover mb-0 align-middle text-nowrap">
-                            <thead>
+                        <table class="table table-dark table-hover mb-0 align-middle text-nowrap w-100">
+                            <thead style="position: sticky; top: 0; background-color: #0d121c; z-index: 5;">
                                 <tr class="text-uppercase fs-8 text-muted tracking-wide border-bottom border-secondary border-opacity-10">
                                     <th class="ps-4 py-3">ID</th>
                                     <th class="py-3">Customer Info</th>
@@ -356,7 +355,7 @@
                                 </tr>
                             </thead>
                             <tbody id="completed-bookings-rows">
-                                <tr><td colspan="10" class="text-center text-muted py-5">Loading history...</td></tr>
+                                <tr><td colspan="10" class="text-center text-muted py-5">Compiling closed booking manifests...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -364,36 +363,24 @@
             </div>
         </section>
 
-
     </main>
 
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title font-serif text-white">Booking Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: #111827; border: 1px solid rgba(255,255,255,0.05);">
+                <div class="modal-header border-secondary border-opacity-10">
+                    <h5 class="modal-title font-serif text-white">Calendar Allocations Overview</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-6"><span class="text-muted fs-8 d-block">Client Name</span><span class="text-white" id="modal-name"></span></div>
-                        <div class="col-6"><span class="text-muted fs-8 d-block">Phone Number</span><span class="text-white" id="modal-phone"></span></div>
-                        <div class="col-6"><span class="text-muted fs-8 d-block">Email</span><span class="text-white" id="modal-email"></span></div>
-                        <div class="col-6"><span class="text-muted fs-8 d-block">Event Date</span><span class="text-gold" id="modal-date"></span></div>
-                        <div class="col-12"><span class="text-muted fs-8 d-block">Venue Selected</span><span class="text-primary" id="modal-venue"></span></div>
-                        <div class="col-12"><span class="text-muted fs-8 d-block">Status</span><span class="status-badge bg-confirmed mt-1 d-inline-block" id="modal-status"></span></div>
-                    </div>
+                <div class="modal-body custom-scrollbar" style="max-height: 70vh; overflow-y: auto;">
+                    <div class="row g-3" id="modal-cards-container-node"></div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-secondary border-opacity-10">
                     <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Close</button>
-                    
                 </div>
             </div>
         </div>
     </div>
-
-    
-    <!-- admin profile modal -->
 
     <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -444,10 +431,6 @@
             </div>
         </div>
     </div>
-    <a id="theme-toggle-btn" class="admin-nav-link" onclick="toggleTheme()" style="cursor: pointer;"><i id="theme-icon" class="bi bi-sun"></i> <span id="theme-text">Light Mode</span></a>
-    </aside>
-
-    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../api-integration.js"></script>
