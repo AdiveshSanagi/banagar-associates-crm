@@ -95,9 +95,8 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    /* ⚡ ADD THIS FOR PREMIUM UI/UX BLENDING: */
-    transition: background-image 1s ease-in-out; 
-    animation: automaticHeroCarousel 20s infinite ease-in-out; /* Bumped to 20s so 5 images have enough viewing time! */
+    transition: background-image 1s ease-in-out; /* ⚡ Crucial for blending crossfades */
+    animation: automaticHeroCarousel 20s infinite ease-in-out;
     position: relative;
 }
 
@@ -120,30 +119,12 @@ body {
     max-width: 680px;
 }
 @keyframes automaticHeroCarousel {
-    /* 🖼️ IMAGE 1: home.png */
-    0%, 15% {
-        background-image: url("./assets/images/home.png");
-    }
-    /* Crossfade Window to Image 2 */
-    20%, 35% {
-        background-image: url("./assets/images/lawntour.jpeg");
-    }
-    /* Crossfade Window to Image 3 */
-    40%, 55% {
-        background-image: url("./assets/images/lawn&mrg.png");
-    }
-    /* Crossfade Window to Image 4 */
-    60%, 75% {
-        background-image: url("./assets/images/sec2.jpeg");
-    }
-    /* Crossfade Window to Image 5 */
-    80%, 95% {
-        background-image: url("./assets/images/mangmt\ exe.jpeg"); /* Handles your escaped space cleanly */
-    }
-    /* Perfectly loop back to the start image */
-    100% {
-        background-image: url("./assets/images/home.png");
-    }
+    0%, 15% { background-image: url("./assets/images/home.png"); }
+    20%, 35% { background-image: url("./assets/images/lawntour.jpeg"); }
+    40%, 55% { background-image: url("./assets/images/lawn&mrg.png"); }
+    60%, 75% { background-image: url("./assets/images/sec2.jpeg"); }
+    80%, 95% { background-image: url("./assets/images/mangmt-exe.jpeg"); }
+    100% { background-image: url("./assets/images/home.png"); }
 }
 
 /* #venues{
