@@ -13,7 +13,7 @@
     <style>
         /* Modern Full-Bleed Layered Hero Frame Engine */
         .detail-hero-frame {
-            min-height: 85vh; 
+            min-height: 100vh; 
             position: relative;
             overflow: hidden;
             background-color: #0a0c10;
@@ -132,7 +132,7 @@
                 <div class="col-lg-7">
                     <span id="dynamic-badge" class="text-gold tracking-widest text-uppercase small d-block mb-2">-</span>
                     <h1 id="dynamic-title" class="display-4 text-white font-serif fw-light mb-4" style="line-height: 1.2;">-</h1>
-                    <p id="dynamic-desc" class="text-light-muted fs-7 fw-light lh-lg mb-4" style="max-width: 620px;">-</p>
+                    <p id="dynamic-desc" class="text-light-white fs-7 fw-light lh-lg mb-4" style="max-width: 620px;">-</p>
                     
                     <h4 class="h6 text-white text-uppercase tracking-wide mb-3 mt-5">Included Provisions</h4>
                     <div id="dynamic-tags" class="d-flex flex-wrap gap-2">
@@ -141,10 +141,10 @@
 
                 <div class="col-lg-5">
                     <div class="p-4 premium-pricing-glass rounded-0 text-center shadow">
-                        <span class="fs-9 text-uppercase tracking-wider text-muted d-block mb-1" style="font-size: 0.7rem;">Package Starts From</span>
+                        <span class="fs-9 text-uppercase tracking-wider text-white d-block mb-1" style="font-size: 0.7rem;">Package Starts From</span>
                         <h3 id="dynamic-price" class="h2 font-serif text-gold mb-3">-</h3>
                         <hr class="border-secondary border-opacity-20 my-3">
-                        <p class="text-muted fw-light lh-base mb-4" style="font-size: 0.75rem;">Pricing quotes vary based on season and custom configurations.</p>
+                        <p class="text-white fw-light lh-base mb-4" style="font-size: 0.75rem;">Pricing quotes vary based on season and custom configurations.</p>
                         <a href="booking.html" class="btn btn-primary w-100 py-2.5 rounded-0 fw-semibold tracking-wide fs-8" id="card-booking-btn">RESERVE DATE</a>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
         <div class="container py-3">
             <div class="mb-4">
                 <h3 class="h4 font-serif text-white mb-2">Space Showcase & Setup Gallery</h3>
-                <p class="text-muted fs-8 mb-0">Visual references loaded dynamically from database categorization parameters.</p>
+                <p class="text-white fs-8 mb-0">Visual references loaded dynamically from database categorization parameters.</p>
             </div>
             
             <div class="row g-3" id="dynamic-gallery-row">
@@ -301,7 +301,7 @@
             if (!isServerOnline) {
                 galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server connection offline. Failed to stream cloud database gallery data.</div>`;
             } else if (databaseImages.length === 0) {
-                galleryWrapper.innerHTML = `<div class="col-12 text-muted fs-8 fw-light italic ps-3">No showcase images uploaded by admin for this category yet.</div>`;
+                galleryWrapper.innerHTML = `<div class="col-12 text-white fs-8 fw-light italic ps-3">No showcase images uploaded by admin for this category yet.</div>`;
             } else {
                 databaseImages.forEach(imageSourceUrl => {
                     const columnBlock = document.createElement('div');
