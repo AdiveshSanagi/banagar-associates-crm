@@ -251,13 +251,27 @@
                     isServerOnline = true;
                     const allAssets = await response.json();
                     
-                    let targetCategoryName = "Lawns";
-                    if (activeKey === 'hall') targetCategoryName = "Banagar Marriage Hall";
-                    if (activeKey === 'combo') targetCategoryName = "Combo";
+                    // Setup localized low-case variants to prevent typo blocking drops
+                    const normalizedKey = activeKey.toLowerCase().trim();
 
-                    const filteredAssets = allAssets.filter(item => 
-                        item.venue_category === targetCategoryName && item.media_type === "image"
-                    );
+                    // 🎯 ADVANCED FLEXIBLE STRING MATCHING ENGINE
+                    const filteredAssets = allAssets.filter(item => {
+                        if (!item.venue_category) return false;
+                        
+                        const dbCategory = item.venue_category.toLowerCase().trim();
+                        
+                        // Smart condition checks: matches exact phrases OR string fragments
+                        if (normalizedKey === 'lawn') {
+                            return dbCategory === 'lawns' || dbCategory === 'lawn' || dbCategory.includes('lawn');
+                        }
+                        if (normalizedKey === 'hall') {
+                            return dbCategory === 'banagar marriage hall' || dbCategory === 'hall' || dbCategory.includes('hall');
+                        }
+                        if (normalizedKey === 'combo') {
+                            return dbCategory === 'combo' || dbCategory.includes('combo');
+                        }
+                        return false;
+                    });
 
                     databaseImages = filteredAssets.map(item => {
                         let processedUrl = "";
@@ -267,12 +281,12 @@
                             const cleanPath = item.media_url.startsWith('/') ? item.media_url.substring(1) : item.media_url;
                             processedUrl = `${BACKEND_URL}/${cleanPath}`;
                         }
-                        // Forces HTTPS conversion securely to comply with strict hosting domain policies
+                        // Forces secure web protocols safely when served over GitHub/Vercel SSL channels
                         return window.location.protocol === "https:" ? processedUrl.replace("http://", "https://") : processedUrl;
                     });
                 }
             } catch (err) {
-                console.error("Database endpoint connection lost:", err);
+                console.error("Database connection fault:", err);
             }
 
             // Carousel Generation Loop
@@ -285,7 +299,7 @@
                 const isActive = index === 0 ? 'active' : '';
                 const carouselItem = document.createElement('div');
                 carouselItem.className = `carousel-item h-100 ${isActive}`;
-                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue View Setup">`;
+                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue Setup">`;
                 carouselInner.appendChild(carouselItem);
             });
 
@@ -299,12 +313,12 @@
                 tagsWrapper.appendChild(spanNode);
             });
 
-            // Space Showcase Gallery Grid Generation (STRICT LIVE DATABASE MATCHING)
+            // Space Showcase Gallery Grid Generation
             const galleryWrapper = document.getElementById('dynamic-gallery-row');
             galleryWrapper.innerHTML = "";
 
             if (!isServerOnline) {
-                galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server connection offline. Failed to stream cloud database gallery data.</div>`;
+                galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server offline. Failed to establish connection pipeline.</div>`;
             } else if (databaseImages.length === 0) {
                 galleryWrapper.innerHTML = `<div class="col-12 text-muted fs-8 fw-light italic ps-3">No showcase images uploaded by admin for this category yet.</div>`;
             } else {
