@@ -92,15 +92,22 @@ body {
 /* Hero Section */
 .hero-section {
     min-height: 105vh;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    transition: background-image 1s ease-in-out; /* ⚡ Crucial for blending crossfades */
-    animation: automaticHeroCarousel 20s infinite ease-in-out;
     position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #0d121c;
+    
+    /* Smooth blending layer transition when the background layout shifts */
+    transition: background-image 1.2s ease-in-out;
+    will-change: background-image;
+    
+    /* ⏱️ Total 30-second loop timeline (Allocates 6 seconds per image file) */
+    animation: strictHeroCarousel 30s infinite ease-in-out;
 }
 
-/* Hero Section Base Rules */
+/* Hero Section Base Typography Rules */
 .main-heading {
     font-family: 'Playfair Display', serif;
     font-weight: 300;
@@ -110,23 +117,44 @@ body {
 .hero-overlay-center {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle, rgba(27, 32, 42, 0.4) 0%, rgba(13, 18, 28, 0.85) 100%);
-    z-index: 1;
+    background: radial-gradient(circle, rgba(27, 32, 42, 0.3) 0%, rgba(13, 18, 28, 0.82) 100%);
+    z-index: 1; /* Renders above images but behind text overlays */
 }
 
-/* Helper to clean width behavior for long text boxes when centered */
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
 .max-w-md {
     max-width: 680px;
 }
-@keyframes automaticHeroCarousel {
-    0%, 15% { background-image: url("./assets/images/home.png"); }
-    20%, 35% { background-image: url("./assets/images/lawntour.jpeg"); }
-    40%, 55% { background-image: url("./assets/images/lawn&mrg.png"); }
-    60%, 75% { background-image: url("./assets/images/sec2.jpeg"); }
-    80%, 95% { background-image: url("./assets/images/mangmt-exe.jpeg"); }
-    100% { background-image: url("./assets/images/home.png"); }
+@keyframes strictHeroCarousel {
+    /* 🖼️ IMAGE 1: home.png */
+    0%, 15% {
+        background-image: url("./assets/images/home.png");
+    }
+    /* Fade Transition into Image 2 */
+    20%, 35% {
+        background-image: url("./assets/images/lawntour.jpeg");
+    }
+    /* Fade Transition into Image 3 (Sanitized Underscore String) */
+    40%, 55% {
+        background-image: url("./assets/images/lawn_mrg.png");
+    }
+    /* Fade Transition into Image 4 */
+    60%, 75% {
+        background-image: url("./assets/images/sec2.jpeg");
+    }
+    /* Fade Transition into Image 5 (Sanitized Underscore String) */
+    80%, 95% {
+        background-image: url("./assets/images/mangmt_exe.jpeg");
+    }
+    /* Loop back smoothly to step 1 position */
+    100% {
+        background-image: url("./assets/images/home.png");
+    }
 }
-
 /* #venues{
     background: url("./assets/images/sec2.jpeg") no-repeat center center/cover;
 } */
