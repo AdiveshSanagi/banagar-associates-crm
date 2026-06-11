@@ -99,7 +99,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="../index.html">
-                <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo" onerror="this.src='assets/images/logo-01.png'"></div>
+                <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo"></div>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -115,7 +115,7 @@
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="tel:+9148020911" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
-                    <a href="booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
+                    <a href="../frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
                 </div>
             </div>
         </div>
@@ -173,18 +173,19 @@
     </footer>
 
     <script>
-        // Dynamically sets the connection bridge based on environment host state
+        // ⚡ ENVIRONMENT SWITCH PIPELINE ENGINE
         const BACKEND_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
             ? "http://localhost:8000"
             : "https://banagar-associates-crm.onrender.com"; 
 
+        // Static Local Directory Vault
         const venueDatabase = {
             lawn: {
                 title: "Banagar Lawns",
                 category: "Outdoor Canvas",
                 price: "₹1.5 Lakhs",
                 desc: "A massive, beautifully manicured open-air lawn perfect for grand receptions, starry evening galas, and monumental traditional milestones. Equipped with dedicated catering zones and premium layout coordinates.",
-                heroImg: "https://images.unsplash.com/photo-1606311199519-bfe0dddc53dd?w=1200&auto=format&fit=crop&q=80",
+                heroImg: "../assets/images/home.png",
                 tags: ["15,000 sq. ft. Space", "Ample Guest Parking", "Ambient Architectural Lighting", "Isolated Heavy Catering Area"]
             },
             hall: {
@@ -192,7 +193,7 @@
                 category: "Premium AC Indoor Banquet",
                 price: "₹2.0 Lakhs",
                 desc: "An elite, air-conditioned indoor banquet layout integrated cleanly with striking modern crystal chandeliers, acoustics setups, and staging matrices optimized for traditional values.",
-                heroImg: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&auto=format&fit=crop&q=80",
+                heroImg: "../assets/images/sec2.jpeg",
                 tags: ["Premium Climate Control", "Integrated High-End Acoustics", "Luxury Bridal Groom Suites", "Fail-Safe Generator Backup"]
             },
             combo: {
@@ -200,7 +201,7 @@
                 category: "Full Estate Complete Access",
                 price: "₹3.0 Lakhs",
                 desc: "Get exclusive complete structural access to both the premium indoor venue and expansive lawns. This configuration balances arrival pathways seamlessly, isolating formal ritual spots from the main catering grids.",
-                heroImg: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=1200&q=80",
+                heroImg: "../assets/images/lawn&mrg.png",
                 tags: ["Max Spatial Boundary Capacity", "Dual Operational Staging", "Complete VIP Escort Entry", "Dedicated Valet Traffic Flow"]
             }
         };
@@ -211,7 +212,7 @@
             const activeDataset = venueDatabase[activeKey];
             if (!activeDataset) return;
 
-            // Render Text Content Layout Fields
+            // Injections
             document.getElementById('dynamic-badge').textContent = `// ${activeDataset.category}`;
             document.getElementById('dynamic-title').textContent = activeDataset.title;
             document.getElementById('dynamic-desc').textContent = activeDataset.desc;
@@ -242,15 +243,15 @@
                             const cleanPath = item.media_url.startsWith('/') ? item.media_url.substring(1) : item.media_url;
                             processedUrl = `${BACKEND_URL}/${cleanPath}`;
                         }
-                        // Force HTTPS processing rule layer to clear Mixed Content browser shields
-                        return processedUrl.replace("http://", "https://");
+                        // Automatically forces secure SSL strings when loaded on production servers
+                        return window.location.protocol === "https:" ? processedUrl.replace("http://", "https://") : processedUrl;
                     });
                 }
             } catch (err) {
-                console.error("Cloud database communication failure:", err);
+                console.error("Database connection failure:", err);
             }
 
-            // Build Foreground Image Carousel Engine
+            // Carousel Generation
             const carouselInner = document.getElementById('dynamic-carousel-inner');
             carouselInner.innerHTML = "";
             const carouselImages = databaseImages.length > 0 ? databaseImages : [activeDataset.heroImg];
@@ -260,11 +261,11 @@
                 const isActive = index === 0 ? 'active' : '';
                 const carouselItem = document.createElement('div');
                 carouselItem.className = `carousel-item h-100 ${isActive}`;
-                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue Showcase Layout">`;
+                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue View Layout">`;
                 carouselInner.appendChild(carouselItem);
             });
 
-            // Build Feature Badges
+            // Feature Badges Tags Generation
             const tagsWrapper = document.getElementById('dynamic-tags');
             tagsWrapper.innerHTML = "";
             activeDataset.tags.forEach(tagString => {
@@ -274,7 +275,7 @@
                 tagsWrapper.appendChild(spanNode);
             });
 
-            // Build Main Showcase Grid Loops (STRICT DATASYNC EMPTY-STATE POLICY)
+            // Showcase Gallery Grid Generation (STRICT LIVE DB SYNC POLICY)
             const galleryWrapper = document.getElementById('dynamic-gallery-row');
             galleryWrapper.innerHTML = "";
 
@@ -288,7 +289,7 @@
                     columnBlock.className = "col-sm-6 col-md-4";
                     columnBlock.innerHTML = `
                         <div class="gallery-thumb-card rounded-0">
-                            <img src="${imageSourceUrl}" alt="Live Dynamic Space Showcase" onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600'">
+                            <img src="${imageSourceUrl}" alt="Live Dynamic Space Showcase" onerror="this.src='../assets/images/home.png'">
                         </div>
                     `;
                     galleryWrapper.appendChild(columnBlock);
