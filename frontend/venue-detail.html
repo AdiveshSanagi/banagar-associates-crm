@@ -7,7 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300&family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../index.css">
+    
+    <link rel="stylesheet" href="index.css" onerror="this.href='../index.css'">
 
     <style>
         /* Modern Full-Bleed Layered Hero Frame Engine */
@@ -98,24 +99,26 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="../index.html">
-                <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo"></div>
+            <a class="navbar-brand d-flex align-items-center" href="index.html" id="nav-brand-link">
+                <div class="brand-logo me-2">
+                    <img src="assets/images/logo-01.png" alt="Banagar Associates Logo" id="nav-logo-img">
+                </div>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
-                    <li class="nav-item"><a class="nav-link" href="../index.html">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.html#venues">VENUES</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.html#gallery">GALLERY</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.html#trust">WHY TRUST US</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.html#contact">CONTACT</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../index.html#about">ABOUT US</a></li>
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3" id="navigation-links-box">
+                    <li class="nav-item"><a class="nav-link" href="index.html#home">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#venues">VENUES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#gallery">GALLERY</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#trust">WHY TRUST US</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">CONTACT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#about">ABOUT US</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="tel:+9148020911" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
-                    <a href="../frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
+                    <a href="frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0" id="nav-booking-btn">BOOK NOW</a>
                 </div>
             </div>
         </div>
@@ -147,7 +150,7 @@
                         <h3 id="dynamic-price" class="h2 font-serif text-gold mb-3">-</h3>
                         <hr class="border-secondary border-opacity-20 my-3">
                         <p class="text-muted fw-light lh-base mb-4" style="font-size: 0.75rem;">Pricing quotes vary based on season and custom configurations.</p>
-                        <a href="booking.html" class="btn btn-primary w-100 py-2.5 rounded-0 fw-semibold tracking-wide fs-8" style="font-size: 0.78rem;">RESERVE DATE</a>
+                        <a href="booking.html" class="btn btn-primary w-100 py-2.5 rounded-0 fw-semibold tracking-wide fs-8" id="card-booking-btn">RESERVE DATE</a>
                     </div>
                 </div>
             </div>
@@ -173,19 +176,40 @@
     </footer>
 
     <script>
-        // ⚡ ENVIRONMENT SWITCH PIPELINE ENGINE
+        // Environment Check: Toggles automatically between local machine port and remote live Render endpoint
         const BACKEND_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
             ? "http://localhost:8000"
             : "https://banagar-associates-crm.onrender.com"; 
 
-        // Static Local Directory Vault
+        // Environment Path Resolver: Adjusts relative file structures safely if hosted inside subdirectories
+        const baseDirPrefix = window.location.pathname.includes('/frontend/') || window.location.pathname.includes('/pages/') ? '../' : './';
+
+        // Fix Navigation Links dynamically based on execution home directories
+        document.getElementById('nav-logo-img').src = `${baseDirPrefix}assets/images/logo-01.png`;
+        document.getElementById('nav-brand-link').href = `${baseDirPrefix}index.html`;
+        document.getElementById('nav-booking-btn').href = `${baseDirPrefix}frontend/booking.html`;
+        document.getElementById('card-booking-btn').href = `${baseDirPrefix}frontend/booking.html`;
+        
+        const navContainer = document.getElementById('navigation-links-box');
+        if(navContainer) {
+            navContainer.innerHTML = `
+                <li class="nav-item"><a class="nav-link" href="${baseDirPrefix}index.html#home">HOME</a></li>
+                <li class="nav-item"><a class="nav-link" href="${baseDirPrefix}index.html#venues">VENUES</a></li>
+                <li class="nav-item"><a class="nav-link" href="${baseDirPrefix}index.html#gallery">GALLERY</a></li>
+                <li class="nav-item"><a class="nav-link" href="${baseDirPrefix}index.html#trust">WHY TRUST US</a></li>
+                <li class="nav-item"><a class="nav-link" href="${baseDirPrefix}index.html#contact">CONTACT</a></li>
+                <li class="nav-item"><a class="nav-link" href="${baseDirPrefix}index.html#about">ABOUT US</a></li>
+            `;
+        }
+
+        // Vault Setup (Safe asset fallbacks mapped dynamically using prefix pointers)
         const venueDatabase = {
             lawn: {
                 title: "Banagar Lawns",
                 category: "Outdoor Canvas",
                 price: "₹1.5 Lakhs",
                 desc: "A massive, beautifully manicured open-air lawn perfect for grand receptions, starry evening galas, and monumental traditional milestones. Equipped with dedicated catering zones and premium layout coordinates.",
-                heroImg: "../assets/images/home.png",
+                heroImg: `${baseDirPrefix}assets/images/home.png`,
                 tags: ["15,000 sq. ft. Space", "Ample Guest Parking", "Ambient Architectural Lighting", "Isolated Heavy Catering Area"]
             },
             hall: {
@@ -193,7 +217,7 @@
                 category: "Premium AC Indoor Banquet",
                 price: "₹2.0 Lakhs",
                 desc: "An elite, air-conditioned indoor banquet layout integrated cleanly with striking modern crystal chandeliers, acoustics setups, and staging matrices optimized for traditional values.",
-                heroImg: "../assets/images/sec2.jpeg",
+                heroImg: `${baseDirPrefix}assets/images/sec2.jpeg`,
                 tags: ["Premium Climate Control", "Integrated High-End Acoustics", "Luxury Bridal Groom Suites", "Fail-Safe Generator Backup"]
             },
             combo: {
@@ -201,7 +225,7 @@
                 category: "Full Estate Complete Access",
                 price: "₹3.0 Lakhs",
                 desc: "Get exclusive complete structural access to both the premium indoor venue and expansive lawns. This configuration balances arrival pathways seamlessly, isolating formal ritual spots from the main catering grids.",
-                heroImg: "../assets/images/lawn&mrg.png",
+                heroImg: `${baseDirPrefix}assets/images/lawn&mrg.png`,
                 tags: ["Max Spatial Boundary Capacity", "Dual Operational Staging", "Complete VIP Escort Entry", "Dedicated Valet Traffic Flow"]
             }
         };
@@ -243,15 +267,15 @@
                             const cleanPath = item.media_url.startsWith('/') ? item.media_url.substring(1) : item.media_url;
                             processedUrl = `${BACKEND_URL}/${cleanPath}`;
                         }
-                        // Automatically forces secure SSL strings when loaded on production servers
+                        // Forces HTTPS conversion securely to comply with strict hosting domain policies
                         return window.location.protocol === "https:" ? processedUrl.replace("http://", "https://") : processedUrl;
                     });
                 }
             } catch (err) {
-                console.error("Database connection failure:", err);
+                console.error("Database endpoint connection lost:", err);
             }
 
-            // Carousel Generation
+            // Carousel Generation Loop
             const carouselInner = document.getElementById('dynamic-carousel-inner');
             carouselInner.innerHTML = "";
             const carouselImages = databaseImages.length > 0 ? databaseImages : [activeDataset.heroImg];
@@ -261,11 +285,11 @@
                 const isActive = index === 0 ? 'active' : '';
                 const carouselItem = document.createElement('div');
                 carouselItem.className = `carousel-item h-100 ${isActive}`;
-                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue View Layout">`;
+                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue View Setup">`;
                 carouselInner.appendChild(carouselItem);
             });
 
-            // Feature Badges Tags Generation
+            // Tag Badges Generation Loop
             const tagsWrapper = document.getElementById('dynamic-tags');
             tagsWrapper.innerHTML = "";
             activeDataset.tags.forEach(tagString => {
@@ -275,12 +299,12 @@
                 tagsWrapper.appendChild(spanNode);
             });
 
-            // Showcase Gallery Grid Generation (STRICT LIVE DB SYNC POLICY)
+            // Space Showcase Gallery Grid Generation (STRICT LIVE DATABASE MATCHING)
             const galleryWrapper = document.getElementById('dynamic-gallery-row');
             galleryWrapper.innerHTML = "";
 
             if (!isServerOnline) {
-                galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server offline. Failed to establish connection pipeline.</div>`;
+                galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server connection offline. Failed to stream cloud database gallery data.</div>`;
             } else if (databaseImages.length === 0) {
                 galleryWrapper.innerHTML = `<div class="col-12 text-muted fs-8 fw-light italic ps-3">No showcase images uploaded by admin for this category yet.</div>`;
             } else {
@@ -289,7 +313,7 @@
                     columnBlock.className = "col-sm-6 col-md-4";
                     columnBlock.innerHTML = `
                         <div class="gallery-thumb-card rounded-0">
-                            <img src="${imageSourceUrl}" alt="Live Dynamic Space Showcase" onerror="this.src='../assets/images/home.png'">
+                            <img src="${imageSourceUrl}" alt="Live Admin Uploaded Event Showcase" onerror="this.src='${activeDataset.heroImg}'">
                         </div>
                     `;
                     galleryWrapper.appendChild(columnBlock);
