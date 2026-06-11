@@ -34,12 +34,12 @@
             object-fit: cover; 
         }
 
-        /* Cinematic Contrast Gradient Overlay */
+        /* Cinematic Contrast Gradient Overlay - Text Shield Cover */
         .detail-hero-overlay {
             position: absolute; 
             inset: 0;
-            background: linear-gradient(to right, rgba(10, 12, 16, 0.92) 30%, rgba(10, 12, 16, 0.6) 70%, rgba(10, 12, 16, 0.85) 100%),
-                        linear-gradient(to top, #0a0c10 0%, transparent 40%);
+            background: linear-gradient(to right, rgba(10, 12, 16, 0.95) 0%, rgba(10, 12, 16, 0.85) 30%, rgba(10, 12, 16, 0.0) 55%),
+                        linear-gradient(to top, #0a0c10 0%, transparent 20%);
             z-index: 2;
         }
 
@@ -77,15 +77,15 @@
             transform: scale(1.05); 
         }
 
-        /* ⚡ ULTIMATE COMPACT GLASSY CARD UI/UX */
+        /* ⚡ 30% OPACITY COMPACT GLASSY CARD UI/UX */
         .premium-pricing-glass {
-            background: rgba(10, 12, 16, 0.3) !important; /* Lowers background tint to block only 30% */
-            backdrop-filter: blur(8px) saturate(140%); /* Softened blur so images show through cleanly */
+            background: rgba(10, 12, 16, 0.3) !important; 
+            backdrop-filter: blur(8px) saturate(140%); 
             -webkit-backdrop-filter: blur(8px) saturate(140%);
-            border: 1px solid rgba(255, 255, 255, 0.12) !important; /* Sleek structural border highlight */
-            max-width: 380px;
-            margin: 0 auto;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); /* Stronger drop shadow for text pop */
+            border: 1px solid rgba(255, 255, 255, 0.12) !important; 
+            max-width: 380px; 
+            margin: 0 auto; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); 
         }
         
         @media (max-width: 991.98px) {
@@ -114,7 +114,7 @@
                     <li class="nav-item"><a class="nav-link" href="../index.html#about">ABOUT US</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
-                    <a href="tel:+911234567890" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
+                    <a href="tel:+9148020911" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
                     <a href="../frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0">BOOK NOW</a>
                 </div>
             </div>
@@ -176,18 +176,21 @@
     </footer>
 
     <script>
+        // ⚡ PRODUCTION CLOUD CONFIGURATION SETUP
+        const LIVE_BACKEND_URL = "https://banagar-associates-crm.onrender.com"; 
+
+        // Static Backup Vault (Stores metadata descriptions and feature tags)
         const venueDatabase = {
             lawn: {
                 title: "Banagar Lawns",
                 category: "Outdoor Canvas",
                 price: "₹1.5 Lakhs",
                 desc: "A massive, beautifully manicured open-air lawn perfect for grand receptions, starry evening galas, and monumental traditional milestones. Equipped with dedicated catering zones and premium layout coordinates.",
-                heroImg: "https://images.unsplash.com/photo-1606311199519-bfe0dddc53dd?w=600&auto=format&fit=crop&q=60",
+                heroImg: "../assets/images/home.png",
                 tags: ["15,000 sq. ft. Space", "Ample Guest Parking", "Ambient Architectural Lighting", "Isolated Heavy Catering Area"],
                 images: [
-                    "https://media.istockphoto.com/id/2196024674/photo/summer-winter-candle-light-dinner-party-theme-with-fine-dinning-arrangements-fairy-lights-and.webp?a=1&b=1&s=612x612&w=0&k=20&c=I6mA5FPeoCboMIgtL9SSjdbL4uFEUdXIksZF9bQRJn0=",
-                    "https://images.unsplash.com/photo-1756267237174-e393e4de3be1?q=80&w=1169&auto=format&fit=crop",
-                    "https://images.unsplash.com/photo-1614935320321-a536944b1713?q=80&w=1170&auto=format&fit=crop"
+                    "../assets/images/lawntour.jpeg",
+                    "../assets/images/lawn&mrg.png"
                 ]
             },
             hall: {
@@ -195,12 +198,11 @@
                 category: "Premium AC Indoor Banquet",
                 price: "₹2.0 Lakhs",
                 desc: "An elite, air-conditioned indoor banquet layout integrated cleanly with striking modern crystal chandeliers, acoustics setups, and staging matrices optimized for traditional values.",
-                heroImg: "https://media.istockphoto.com/id/2269761419/photo/indian-wedding-reception-setup-with-white-backdrop-and-floral-decorations-in-new-delhi-india.webp?a=1&b=1&s=612x612&w=0&k=20&c=8qynDIv6M1gv9gHOzRVSGaz0zP6q7q3tnXtszgAr1pk=",
+                heroImg: "../assets/images/sec2.jpeg",
                 tags: ["Premium Climate Control", "Integrated High-End Acoustics", "Luxury Bridal Groom Suites", "Fail-Safe Generator Backup"],
                 images: [
-                    "https://media.istockphoto.com/id/2269760673/photo/indian-wedding-reception-setup-with-white-backdrop-and-floral-decorations-in-new-delhi-india.webp?a=1&b=1&s=612x612&w=0&k=20&c=qqcsxrUx7MDDWkAa73BXgdUml5nsnKDzEqEdxzadr0k=",
-                    "https://media.istockphoto.com/id/154903860/photo/wedding-ballroom-hall.webp?a=1&b=1&s=612x612&w=0&k=20&c=SaLf0vXNLgbnwqF2F-SRkVoFd5mBBHVR8i-ma9x347k=",
-                    "https://media.istockphoto.com/id/2269761419/photo/indian-wedding-reception-setup-with-white-backdrop-and-floral-decorations-in-new-delhi-india.webp?a=1&b=1&s=612x612&w=0&k=20&c=8qynDIv6M1gv9gHOzRVSGaz0zP6q7q3tnXtszgAr1pk="
+                    "../assets/images/sec2.jpeg",
+                    "../assets/images/mangmt-exe.jpeg"
                 ]
             },
             combo: {
@@ -208,54 +210,98 @@
                 category: "Full Estate Complete Access",
                 price: "₹3.0 Lakhs",
                 desc: "Get exclusive complete structural access to both the premium indoor venue and expansive lawns. This configuration balances arrival pathways seamlessly, isolating formal ritual spots from the main catering grids.",
-                heroImg: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=1200&q=80",
+                heroImg: "../assets/images/lawn&mrg.png",
                 tags: ["Max Spatial Boundary Capacity", "Dual Operational Staging", "Complete VIP Escort Entry", "Dedicated Valet Traffic Flow"],
                 images: [
-                    "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80"
+                    "../assets/images/lawn&mrg.png",
+                    "../assets/images/lawntour.jpeg"
                 ]
             }
         };
 
-        document.addEventListener("DOMContentLoaded", function () {
+        // Execution Controller Syncing UI Layouts with Live Render Data Streams
+        document.addEventListener("DOMContentLoaded", async function () {
             const urlParameters = new URLSearchParams(window.location.search);
             const activeKey = urlParameters.get('space') || 'lawn';
             const activeDataset = venueDatabase[activeKey];
+            if (!activeDataset) return;
 
-            if (activeDataset) {
-                document.getElementById('dynamic-badge').textContent = `// ${activeDataset.category}`;
-                document.getElementById('dynamic-title').textContent = activeDataset.title;
-                document.getElementById('dynamic-desc').textContent = activeDataset.desc;
-                document.getElementById('dynamic-price').textContent = activeDataset.price;
+            // Text Element Field Injections
+            document.getElementById('dynamic-badge').textContent = `// ${activeDataset.category}`;
+            document.getElementById('dynamic-title').textContent = activeDataset.title;
+            document.getElementById('dynamic-desc').textContent = activeDataset.desc;
+            document.getElementById('dynamic-price').textContent = activeDataset.price;
 
-                const carouselInner = document.getElementById('dynamic-carousel-inner');
-                const allImages = [activeDataset.heroImg, ...activeDataset.images];
-                const uniqueImages = [...new Set(allImages)];
+            let databaseImages = [];
+            
+            // Query Production Database API
+            try {
+                const response = await fetch(`${LIVE_BACKEND_URL}/api/public/gallery`); 
+                if (response.ok) {
+                    const allAssets = await response.json();
+                    
+                    // Aligns frontend string lookups exactly with your production database values
+                    let targetCategoryName = "Lawns"; 
+                    if (activeKey === 'hall') targetCategoryName = "Banagar Marriage Hall"; 
+                    if (activeKey === 'combo') targetCategoryName = "Combo";
 
-                uniqueImages.forEach((imgUrl, index) => {
-                    const isActive = index === 0 ? 'active' : '';
-                    const carouselItem = document.createElement('div');
-                    carouselItem.className = `carousel-item h-100 ${isActive}`;
-                    carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue View ${index + 1}">`;
-                    carouselInner.appendChild(carouselItem);
-                });
+                    // Filter matching admin categorization rules
+                    const filteredAssets = allAssets.filter(item => 
+                        item.venue_category === targetCategoryName && item.media_type === "image"
+                    );
 
-                const tagsWrapper = document.getElementById('dynamic-tags');
-                activeDataset.tags.forEach(tagString => {
-                    const spanNode = document.createElement('span');
-                    spanNode.className = "badge badge-capsule";
-                    spanNode.textContent = tagString;
-                    tagsWrapper.appendChild(spanNode);
-                });
+                    // Map relative upload path strings to clean production absolute server URLs
+                    databaseImages = filteredAssets.map(item => {
+                        if (item.media_url.startsWith("http")) {
+                            return item.media_url;
+                        } else {
+                            const cleanPath = item.media_url.startsWith('/') ? item.media_url.substring(1) : item.media_url;
+                            return `${LIVE_BACKEND_URL}/${cleanPath}`;
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Production server API pipeline unreachable. Reverting to static fallbacks:", err);
+            }
 
-                const galleryWrapper = document.getElementById('dynamic-gallery-row');
-                activeDataset.images.forEach(imageSourceUrl => {
+            // Background Hero Slides Generator
+            const carouselInner = document.getElementById('dynamic-carousel-inner');
+            carouselInner.innerHTML = "";
+            
+            const carouselImages = databaseImages.length > 0 ? databaseImages : [activeDataset.heroImg];
+            const uniqueCarouselImages = [...new Set(carouselImages)];
+
+            uniqueCarouselImages.forEach((imgUrl, index) => {
+                const isActive = index === 0 ? 'active' : '';
+                const carouselItem = document.createElement('div');
+                carouselItem.className = `carousel-item h-100 ${isActive}`;
+                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue View Visual Reference">`;
+                carouselInner.appendChild(carouselItem);
+            });
+
+            // Provision Tags Generation Loop
+            const tagsWrapper = document.getElementById('dynamic-tags');
+            tagsWrapper.innerHTML = "";
+            activeDataset.tags.forEach(tagString => {
+                const spanNode = document.createElement('span');
+                spanNode.className = "badge badge-capsule";
+                spanNode.textContent = tagString;
+                tagsWrapper.appendChild(spanNode);
+            });
+
+            // Space Showcase Gallery Grid (Renders ONLY current category uploads)
+            const galleryWrapper = document.getElementById('dynamic-gallery-row');
+            galleryWrapper.innerHTML = "";
+
+            if (databaseImages.length === 0) {
+                galleryWrapper.innerHTML = `<div class="col-12 text-white fs-8 fw-light italic ps-3">No showcase images uploaded by admin for this category yet.</div>`;
+            } else {
+                databaseImages.forEach(imageSourceUrl => {
                     const columnBlock = document.createElement('div');
                     columnBlock.className = "col-sm-6 col-md-4";
                     columnBlock.innerHTML = `
                         <div class="gallery-thumb-card rounded-0">
-                            <img src="${imageSourceUrl}" alt="Showcase Thumbnail">
+                            <img src="${imageSourceUrl}" alt="Admin Uploaded Custom Media Event Display" onerror="this.src='../assets/images/home.png'">
                         </div>
                     `;
                     galleryWrapper.appendChild(columnBlock);
@@ -263,7 +309,6 @@
             }
         });
     </script>
-    <script src="../api-integration.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
