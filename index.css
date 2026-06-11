@@ -92,13 +92,16 @@ body {
 /* Hero Section */
 .hero-section {
     min-height: 105vh;
-    background: url("./assets/images/home.png") no-repeat center center/cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    /* ⚡ ADD THIS FOR PREMIUM UI/UX BLENDING: */
+    transition: background-image 1s ease-in-out; 
+    animation: automaticHeroCarousel 20s infinite ease-in-out; /* Bumped to 20s so 5 images have enough viewing time! */
+    position: relative;
 }
-.hero-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(to right,rgba(96, 97, 97, 0.92) 30%, rgba(92, 96, 104, 0.4) 100%);
-}
+
+/* Hero Section Base Rules */
 .main-heading {
     font-family: 'Playfair Display', serif;
     font-weight: 300;
@@ -108,13 +111,39 @@ body {
 .hero-overlay-center {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle, rgba(27, 32, 42, 0.6) 0%, rgba(31, 38, 50, 0.95) 100%);
+    background: radial-gradient(circle, rgba(27, 32, 42, 0.4) 0%, rgba(13, 18, 28, 0.85) 100%);
     z-index: 1;
 }
 
 /* Helper to clean width behavior for long text boxes when centered */
 .max-w-md {
     max-width: 680px;
+}
+@keyframes automaticHeroCarousel {
+    /* 🖼️ IMAGE 1: home.png */
+    0%, 15% {
+        background-image: url("./assets/images/home.png");
+    }
+    /* Crossfade Window to Image 2 */
+    20%, 35% {
+        background-image: url("./assets/images/lawntour.jpeg");
+    }
+    /* Crossfade Window to Image 3 */
+    40%, 55% {
+        background-image: url("./assets/images/lawn&mrg.png");
+    }
+    /* Crossfade Window to Image 4 */
+    60%, 75% {
+        background-image: url("./assets/images/sec2.jpeg");
+    }
+    /* Crossfade Window to Image 5 */
+    80%, 95% {
+        background-image: url("./assets/images/mangmt\ exe.jpeg"); /* Handles your escaped space cleanly */
+    }
+    /* Perfectly loop back to the start image */
+    100% {
+        background-image: url("./assets/images/home.png");
+    }
 }
 
 /* #venues{
