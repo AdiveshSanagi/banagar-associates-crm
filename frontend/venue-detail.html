@@ -19,20 +19,21 @@
             background-color: #0a0c10;
         }
         
-        .detail-hero-frame .carousel,
-        .detail-hero-frame .carousel-inner,
-        .detail-hero-frame .carousel-item {
+        /* 🎯 STATIC BACKDROP BOX MATRIX */
+        .hero-static-backdrop-container {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
+            background-color: #0a0c10;
         }
-        
-        .detail-hero-frame img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
+
+        .hero-static-backdrop-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
         /* Cinematic Contrast Gradient Overlay - Text Shield Cover */
@@ -109,13 +110,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3" id="navigation-links-box">
-                    <li class="nav-item"><a class="nav-link" href="index.html#home">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#venues">VENUES</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#gallery">GALLERY</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#trust">WHY TRUST US</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#contact">CONTACT</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#about">ABOUT US</a></li>
-                </ul>
+                    </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="tel:+9148020911" class="text-white text-decoration-none fs-6 d-none d-xl-inline"><i class="bi bi-telephone text-primary me-2"></i>CALL US</a>
                     <a href="frontend/booking.html" class="btn btn-primary px-4 py-2 fw-semibold tracking-wide rounded-0" id="nav-booking-btn">BOOK NOW</a>
@@ -125,9 +120,9 @@
     </nav>
 
     <div class="detail-hero-frame d-flex align-items-center position-relative">
-        <div id="venueHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2200" data-bs-pause="false">
-            <div class="carousel-inner h-100" id="dynamic-carousel-inner">
-                </div>
+        
+        <div class="hero-static-backdrop-container">
+            <img id="dynamic-hero-background" src="" alt="Venue Background Showcase Frame">
         </div>
         
         <div class="detail-hero-overlay"></div>
@@ -251,16 +246,13 @@
                     isServerOnline = true;
                     const allAssets = await response.json();
                     
-                    // Setup localized low-case variants to prevent typo blocking drops
                     const normalizedKey = activeKey.toLowerCase().trim();
 
-                    // 🎯 ADVANCED FLEXIBLE STRING MATCHING ENGINE
+                    // ADVANCED FLEXIBLE STRING MATCHING ENGINE
                     const filteredAssets = allAssets.filter(item => {
                         if (!item.venue_category) return false;
-                        
                         const dbCategory = item.venue_category.toLowerCase().trim();
                         
-                        // Smart condition checks: matches exact phrases OR string fragments
                         if (normalizedKey === 'lawn') {
                             return dbCategory === 'lawns' || dbCategory === 'lawn' || dbCategory.includes('lawn');
                         }
@@ -281,7 +273,6 @@
                             const cleanPath = item.media_url.startsWith('/') ? item.media_url.substring(1) : item.media_url;
                             processedUrl = `${BACKEND_URL}/${cleanPath}`;
                         }
-                        // Forces secure web protocols safely when served over GitHub/Vercel SSL channels
                         return window.location.protocol === "https:" ? processedUrl.replace("http://", "https://") : processedUrl;
                     });
                 }
@@ -289,19 +280,9 @@
                 console.error("Database connection fault:", err);
             }
 
-            // Carousel Generation Loop
-            const carouselInner = document.getElementById('dynamic-carousel-inner');
-            carouselInner.innerHTML = "";
-            const carouselImages = databaseImages.length > 0 ? databaseImages : [activeDataset.heroImg];
-            const uniqueCarouselImages = [...new Set(carouselImages)];
-
-            uniqueCarouselImages.forEach((imgUrl, index) => {
-                const isActive = index === 0 ? 'active' : '';
-                const carouselItem = document.createElement('div');
-                carouselItem.className = `carousel-item h-100 ${isActive}`;
-                carouselItem.innerHTML = `<img src="${imgUrl}" class="d-block w-100 h-100" style="object-fit: cover;" alt="Venue Setup">`;
-                carouselInner.appendChild(carouselItem);
-            });
+            // 🎯 3. RENDERS EXACTLY ONE BACKGROUND PICTURE LAYER (Prioritizes Admin Live Upload)
+            const finalHeroImage = databaseImages.length > 0 ? databaseImages[0] : activeDataset.heroImg;
+            document.getElementById('dynamic-hero-background').src = finalHeroImage;
 
             // Tag Badges Generation Loop
             const tagsWrapper = document.getElementById('dynamic-tags');
@@ -313,12 +294,12 @@
                 tagsWrapper.appendChild(spanNode);
             });
 
-            // Space Showcase Gallery Grid Generation
+            // Space Showcase Gallery Grid Generation (STRICT LIVE DATABASE MATCHING)
             const galleryWrapper = document.getElementById('dynamic-gallery-row');
             galleryWrapper.innerHTML = "";
 
             if (!isServerOnline) {
-                galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server offline. Failed to establish connection pipeline.</div>`;
+                galleryWrapper.innerHTML = `<div class="col-12 text-danger fs-8 fw-light italic ps-3">⚠️ Server connection offline. Failed to stream cloud database gallery data.</div>`;
             } else if (databaseImages.length === 0) {
                 galleryWrapper.innerHTML = `<div class="col-12 text-muted fs-8 fw-light italic ps-3">No showcase images uploaded by admin for this category yet.</div>`;
             } else {
