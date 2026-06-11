@@ -12,7 +12,7 @@
     <style>
         /* Modern Full-Bleed Layered Hero Frame Engine */
         .detail-hero-frame {
-            min-height: 85vh; 
+            min-height: 100vh; 
             position: relative;
             overflow: hidden;
             background-color: #0a0c10;
@@ -176,10 +176,9 @@
     </footer>
 
     <script>
-        // ⚡ LIVE PRODUCTION BACKEND ROUTE (Render Target cloud URL)
+        // ⚡ SECURE PRODUCTION CLOUD CONFIGURATION SETUP
         const PRODUCTION_BACKEND_URL = "https://banagar-associates-crm.onrender.com"; 
 
-        // Static Backup Vault (Stores default text structures and tags descriptions)
         const venueDatabase = {
             lawn: {
                 title: "Banagar Lawns",
@@ -213,7 +212,6 @@
             const activeDataset = venueDatabase[activeKey];
             if (!activeDataset) return;
 
-            // Injections for Static Interface Typography Field Blocks
             document.getElementById('dynamic-badge').textContent = `// ${activeDataset.category}`;
             document.getElementById('dynamic-title').textContent = activeDataset.title;
             document.getElementById('dynamic-desc').textContent = activeDataset.desc;
@@ -222,7 +220,6 @@
             let databaseImages = [];
             let isServerOnline = false;
 
-            // Query Production Database API Stream
             try {
                 const response = await fetch(`${PRODUCTION_BACKEND_URL}/api/public/gallery`);
                 if (response.ok) {
@@ -233,26 +230,28 @@
                     if (activeKey === 'hall') targetCategoryName = "Banagar Marriage Hall";
                     if (activeKey === 'combo') targetCategoryName = "Combo";
 
-                    // Filter matching admin categorization rule criteria parameters
                     const filteredAssets = allAssets.filter(item => 
                         item.venue_category === targetCategoryName && item.media_type === "image"
                     );
 
-                    // Map relative paths from backend row objects to full absolute cloud URLs
                     databaseImages = filteredAssets.map(item => {
+                        let finalUrl = "";
                         if (item.media_url.startsWith("http")) {
-                            return item.media_url;
+                            finalUrl = item.media_url;
                         } else {
                             const cleanPath = item.media_url.startsWith('/') ? item.media_url.substring(1) : item.media_url;
-                            return `${PRODUCTION_BACKEND_URL}/${cleanPath}`;
+                            finalUrl = `${PRODUCTION_BACKEND_URL}/${cleanPath}`;
                         }
+                        
+                        // 🎯 REWRITE LAYER: Forces all insecure http:// requests into secure https:// channels
+                        return finalUrl.replace("http://", "https://");
                     });
                 }
             } catch (err) {
                 console.error("Production server pipeline connection lost:", err);
             }
 
-            // Render Background Hero Carousel Slides Grid Loop
+            // Render Background Hero Carousel
             const carouselInner = document.getElementById('dynamic-carousel-inner');
             carouselInner.innerHTML = "";
             
@@ -267,7 +266,7 @@
                 carouselInner.appendChild(carouselItem);
             });
 
-            // Render Facility Feature Tags Loops
+            // Render Tags
             const tagsWrapper = document.getElementById('dynamic-tags');
             tagsWrapper.innerHTML = "";
             activeDataset.tags.forEach(tagString => {
@@ -277,7 +276,7 @@
                 tagsWrapper.appendChild(spanNode);
             });
 
-            // Render Dynamic Space Showcase Gallery Grid (STRICT LIVE PRODUCTION SYNC)
+            // Render Dynamic Space Showcase Gallery Grid
             const galleryWrapper = document.getElementById('dynamic-gallery-row');
             galleryWrapper.innerHTML = "";
 
