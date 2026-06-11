@@ -10,26 +10,55 @@
     <link rel="stylesheet" href="../index.css">
 
     <style>
-        /* Detail Page Structural Tweaks */
+        /* Modern Full-Bleed Layered Hero Frame Engine */
         .detail-hero-frame {
-            height: 450px;
-            overflow: hidden;
+            min-height: 85vh; 
             position: relative;
+            overflow: hidden;
+            background-color: #0a0c10;
         }
+        
+        .detail-hero-frame .carousel,
+        .detail-hero-frame .carousel-inner,
+        .detail-hero-frame .carousel-item {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
         .detail-hero-frame img { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
         }
 
+        /* Cinematic Contrast Gradient Overlay */
         .detail-hero-overlay {
             position: absolute; 
             inset: 0;
-            background: linear-gradient(to top, #0a0c10 0%, rgba(10,12,16,0.3) 50%);
+            background: linear-gradient(to right, rgba(10, 12, 16, 0.92) 30%, rgba(10, 12, 16, 0.6) 70%, rgba(10, 12, 16, 0.85) 100%),
+                        linear-gradient(to top, #0a0c10 0%, transparent 40%);
+            z-index: 2;
         }
+
+        /* Elevates content stacks safely above background graphic layers */
+        .hero-interactive-content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+        }
+
+        /* Premium Minimal Styling Modifications */
         .badge-capsule {
-            background-color: #131b26 !important; color: #8e99a8 !important;
-            font-size: 0.75rem !important; padding: 8px 16px !important; border-radius: 2px !important;
+            background-color: rgba(255, 255, 255, 0.07) !important; 
+            color: #e2e8f0 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            font-size: 0.72rem !important; 
+            padding: 8px 14px !important; 
+            border-radius: 0px !important;
+            letter-spacing: 0.05em;
         }
 
         .gallery-thumb-card {
@@ -47,24 +76,37 @@
         .gallery-thumb-card:hover img { 
             transform: scale(1.05); 
         }
+
+        /* ⚡ ULTIMATE COMPACT GLASSY CARD UI/UX */
+        .premium-pricing-glass {
+            background: rgba(10, 12, 16, 0.3) !important; /* Lowers background tint to block only 30% */
+            backdrop-filter: blur(8px) saturate(140%); /* Softened blur so images show through cleanly */
+            -webkit-backdrop-filter: blur(8px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important; /* Sleek structural border highlight */
+            max-width: 380px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); /* Stronger drop shadow for text pop */
+        }
         
+        @media (max-width: 991.98px) {
+            .detail-hero-frame { height: auto; min-height: 100vh; padding-top: 100px; }
+            .detail-hero-overlay { background: rgba(10, 12, 16, 0.85); }
+        }
     </style>
 </head>
 <body class="bg-dark-deep text-white">
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#home">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html">
                 <div class="brand-logo me-2"><img src="../assets/images/logo-01.png" alt="Banagar Associates Logo"></div>
-                <div class="brand-text">   
-                </div>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
-                    <li class="nav-item"><a class="nav-link active" href="../index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html">HOME</a></li>
                     <li class="nav-item"><a class="nav-link" href="../index.html#venues">VENUES</a></li>
                     <li class="nav-item"><a class="nav-link" href="../index.html#gallery">GALLERY</a></li>
                     <li class="nav-item"><a class="nav-link" href="../index.html#trust">WHY TRUST US</a></li>
@@ -79,42 +121,41 @@
         </div>
     </nav>
 
-    <!-- Auto-Playing Cinematic Carousel -->
-    <div id="venueHeroCarousel" class="carousel slide carousel-fade detail-hero-frame mt-5 pt-3" data-bs-ride="carousel" data-bs-interval="1800" data-bs-pause="false">
-        <div class="carousel-inner h-100" id="dynamic-carousel-inner">
-            <!-- Items injected by JS -->
+    <div class="detail-hero-frame d-flex align-items-center position-relative">
+        
+        <div id="venueHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2200" data-bs-pause="false">
+            <div class="carousel-inner h-100" id="dynamic-carousel-inner">
+                </div>
         </div>
+        
         <div class="detail-hero-overlay"></div>
-    </div>
 
-    <section class="py-5">
-        <div class="container py-2">
-            <div class="row g-5">
+        <div class="container hero-interactive-content pt-5 mt-4">
+            <div class="row g-5 align-items-center">
                 
                 <div class="col-lg-7">
                     <span id="dynamic-badge" class="text-gold tracking-widest text-uppercase small d-block mb-2">-</span>
-                    <h1 id="dynamic-title" class="display-5 text-white font-serif fw-light mb-4">-</h1>
-                    <p id="dynamic-desc" class="text-light-muted fs-7 fw-light lh-lg mb-4">-</p>
+                    <h1 id="dynamic-title" class="display-4 text-white font-serif fw-light mb-4" style="line-height: 1.2;">-</h1>
+                    <p id="dynamic-desc" class="text-light-muted fs-7 fw-light lh-lg mb-4" style="max-width: 620px;">-</p>
                     
                     <h4 class="h6 text-white text-uppercase tracking-wide mb-3 mt-5">Included Provisions</h4>
                     <div id="dynamic-tags" class="d-flex flex-wrap gap-2">
-                        <!-- Tags injected by JS -->
-                    </div>
+                        </div>
                 </div>
 
                 <div class="col-lg-5">
-                    <div class="p-4 p-xl-5 bg-dark-card border border-light border-opacity-5 rounded-0 text-center">
-                        <span class="fs-8 text-uppercase tracking-wider text-muted d-block mb-1">Package Starts From</span>
-                        <h2 id="dynamic-price" class="display-6 font-serif text-gold mb-4">-</h2>
-                        <hr class="border-secondary border-opacity-20 mb-4">
-                        <p class="text-muted fs-8 fw-light lh-base mb-4">Pricing quotes can vary based on custom theme configurations, menu sizes, and season priorities.</p>
-                        <a href="booking.html" class="btn btn-primary w-100 py-3 rounded-0 fw-semibold tracking-wide fs-7">PROCEED TO DATE RESERVATION</a>
+                    <div class="p-4 premium-pricing-glass rounded-0 text-center shadow">
+                        <span class="fs-9 text-uppercase tracking-wider text-muted d-block mb-1" style="font-size: 0.7rem;">Package Starts From</span>
+                        <h3 id="dynamic-price" class="h2 font-serif text-gold mb-3">-</h3>
+                        <hr class="border-secondary border-opacity-20 my-3">
+                        <p class="text-muted fw-light lh-base mb-4" style="font-size: 0.75rem;">Pricing quotes vary based on season and custom configurations.</p>
+                        <a href="booking.html" class="btn btn-primary w-100 py-2.5 rounded-0 fw-semibold tracking-wide fs-8" style="font-size: 0.78rem;">RESERVE DATE</a>
                     </div>
                 </div>
 
             </div>
         </div>
-    </section>
+    </div>
 
     <section class="py-5 bg-dark-mid border-top border-secondary border-opacity-10">
         <div class="container py-3">
@@ -124,31 +165,29 @@
             </div>
             
             <div class="row g-3" id="dynamic-gallery-row">
-                <!-- Gallery items injected by JS -->
-            </div>
+                </div>
         </div>
     </section>
 
-    <footer class="footer-section pt-5 pb-3">
+    <footer class="footer-section pt-5 pb-3" style="background-color: #0a0c10;">
         <div class="container text-center text-white fs-8">
             <p class="mb-0">© 2026 Banagar Associates. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Data Vault storing specific settings for all properties
         const venueDatabase = {
             lawn: {
                 title: "Banagar Lawns",
                 category: "Outdoor Canvas",
                 price: "₹1.5 Lakhs",
-                desc: "A massive, beautifully manicured opens-air lawn perfect for grand receptions, starry evening galas, and monumental traditional milestones. Equipped with dedicated catering zones and premium layout coordinates.",
-                heroImg: "https://images.unsplash.com/photo-1606311199519-bfe0dddc53dd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM0fHx8ZW58MHx8fHx8",
+                desc: "A massive, beautifully manicured open-air lawn perfect for grand receptions, starry evening galas, and monumental traditional milestones. Equipped with dedicated catering zones and premium layout coordinates.",
+                heroImg: "https://images.unsplash.com/photo-1606311199519-bfe0dddc53dd?w=600&auto=format&fit=crop&q=60",
                 tags: ["15,000 sq. ft. Space", "Ample Guest Parking", "Ambient Architectural Lighting", "Isolated Heavy Catering Area"],
                 images: [
                     "https://media.istockphoto.com/id/2196024674/photo/summer-winter-candle-light-dinner-party-theme-with-fine-dinning-arrangements-fairy-lights-and.webp?a=1&b=1&s=612x612&w=0&k=20&c=I6mA5FPeoCboMIgtL9SSjdbL4uFEUdXIksZF9bQRJn0=",
-                    "https://images.unsplash.com/photo-1756267237174-e393e4de3be1?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    "https://images.unsplash.com/photo-1614935320321-a536944b1713?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    "https://images.unsplash.com/photo-1756267237174-e393e4de3be1?q=80&w=1169&auto=format&fit=crop",
+                    "https://images.unsplash.com/photo-1614935320321-a536944b1713?q=80&w=1170&auto=format&fit=crop"
                 ]
             },
             hall: {
@@ -179,25 +218,20 @@
             }
         };
 
-        // Execution Controller reading parameters on load
         document.addEventListener("DOMContentLoaded", function () {
-            // Read URL string parameters (e.g. ?space=lawn)
             const urlParameters = new URLSearchParams(window.location.search);
-            const activeKey = urlParameters.get('space') || 'lawn'; // Fallback automatically to lawn if empty
-
+            const activeKey = urlParameters.get('space') || 'lawn';
             const activeDataset = venueDatabase[activeKey];
 
             if (activeDataset) {
-                // 1. Dynamic Element Content Injections (Text)
                 document.getElementById('dynamic-badge').textContent = `// ${activeDataset.category}`;
                 document.getElementById('dynamic-title').textContent = activeDataset.title;
                 document.getElementById('dynamic-desc').textContent = activeDataset.desc;
                 document.getElementById('dynamic-price').textContent = activeDataset.price;
 
-                // 2. Generate Auto-Playing Carousel Items
                 const carouselInner = document.getElementById('dynamic-carousel-inner');
                 const allImages = [activeDataset.heroImg, ...activeDataset.images];
-                const uniqueImages = [...new Set(allImages)]; // Remove duplicates
+                const uniqueImages = [...new Set(allImages)];
 
                 uniqueImages.forEach((imgUrl, index) => {
                     const isActive = index === 0 ? 'active' : '';
@@ -207,7 +241,6 @@
                     carouselInner.appendChild(carouselItem);
                 });
 
-                // 3. Generate Tag Capsules Loop
                 const tagsWrapper = document.getElementById('dynamic-tags');
                 activeDataset.tags.forEach(tagString => {
                     const spanNode = document.createElement('span');
@@ -216,7 +249,6 @@
                     tagsWrapper.appendChild(spanNode);
                 });
 
-                // 4. Generate Media Gallery Blocks Automatically
                 const galleryWrapper = document.getElementById('dynamic-gallery-row');
                 activeDataset.images.forEach(imageSourceUrl => {
                     const columnBlock = document.createElement('div');
