@@ -220,7 +220,7 @@
                 category: "Full Estate Complete Access",
                 price: "₹3.0 Lakhs",
                 desc: "Get exclusive complete structural access to both the premium indoor venue and expansive lawns. This configuration balances arrival pathways seamlessly, isolating formal ritual spots from the main catering grids.",
-                heroImg: `${baseDirPrefix}assets/images/lawn&mrg.png`,
+                heroImg: `${baseDirPrefix}assets/images/lawn_mrg.png`,
                 tags: ["Max Spatial Boundary Capacity", "Dual Operational Staging", "Complete VIP Escort Entry", "Dedicated Valet Traffic Flow"]
             }
         };
@@ -280,9 +280,13 @@
                 console.error("Database connection fault:", err);
             }
 
-            // 🎯 3. RENDERS EXACTLY ONE BACKGROUND PICTURE LAYER (Prioritizes Admin Live Upload)
+            // 🎯 FIXED BACKGROUND IMAGE LAYER (Strictly Static - No Animation)
+            // Prioritizes the first live uploaded asset from DB. If empty, falls back cleanly to local asset arrays.
             const finalHeroImage = databaseImages.length > 0 ? databaseImages[0] : activeDataset.heroImg;
-            document.getElementById('dynamic-hero-background').src = finalHeroImage;
+            const bgElement = document.getElementById('dynamic-hero-background');
+            if (bgElement) {
+                bgElement.src = finalHeroImage;
+            }
 
             // Tag Badges Generation Loop
             const tagsWrapper = document.getElementById('dynamic-tags');
