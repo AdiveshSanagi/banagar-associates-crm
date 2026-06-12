@@ -371,8 +371,7 @@ def toggle_query_status(query_id: int, db: Session = Depends(get_db), current_ad
     db.commit()
     db.refresh(item)
     return item
-
-
+    
 @app.post("/api/admin/gallery", response_model=schemas.GalleryResponse)
 def upload_gallery_media(
     file: UploadFile = File(...),
@@ -382,9 +381,10 @@ def upload_gallery_media(
     db: Session = Depends(get_db),
     current_admin: str = Depends(auth.get_current_admin)
 ):
-    """⚡ PRESERVED: Handles image streams directly to cloud buckets safely with zero local disk leakage"""
-    ext = file.filename.split(".")[-1].lower()
-    if ext not in ["jpg", "png", "mp4"]:
+    _, ext_raw = os.path.splitext(file.filename)
+    ext = ext_raw.lower().replace(".", "").strip()
+    
+    if ext not in ["jpg", "jpeg", "png", "webp", "mp4"]:
         raise HTTPException(status_code=400, detail="Secure system restriction: file extension matrix disallowed")
         
     try:
