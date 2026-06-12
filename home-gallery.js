@@ -18,10 +18,10 @@ async function initHomepageGallery() {
         
         const data = await response.json();
         
-        // Save globally for seamless tab filtering later
-        homepageCachedMedia = data;
+        // 🎯 REVERSE ARRAY: Ensures the latest administrative uploads sit at indices 0-7
+        homepageCachedMedia = data.reverse();
         
-        // Display the slice array limited strictly to 8 cards max
+        // Display the slice array limited strictly to 8 newest cards max
         renderHomeGalleryCards(homepageCachedMedia.slice(0, 8));
 
     } catch (err) {
@@ -42,13 +42,14 @@ function renderHomeGalleryCards(items) {
     }
 
     items.forEach(item => {
+        // Safe formatting logic protects path concatenation against missing forward slashes
+        const cleanPath = item.media_url.startsWith("/") ? item.media_url : `/${item.media_url}`;
         const fileUrl = item.media_url.startsWith("http") 
-        ? item.media_url 
-        : `https://banagar-associates-crm.onrender.com${item.media_url}`;
+            ? item.media_url 
+            : `https://banagar-associates-crm.onrender.com${cleanPath}`;
         
-        // Dynamically build content based on file properties
         const mediaTag = item.media_type === "image"
-            ? `<img src="${fileUrl}" alt="${item.description}" class="img-fluid gallery-asset" style="object-fit: cover; height: 100%; width: 100%;">`
+            ? `<img src="${fileUrl}" alt="${item.description || ''}" class="img-fluid gallery-asset" style="object-fit: cover; height: 100%; width: 100%;">`
             : `<video src="${fileUrl}" muted autoplay loop class="w-100" style="object-fit: cover; height: 100%; min-height:220px;"></video>`;
 
         const badgeTag = item.media_type === "image"
@@ -75,16 +76,20 @@ function renderHomeGalleryCards(items) {
     });
 }
 
-// Live client side filter loop for homepage tabs (keeps slice at 8 max)
-window.filterHomeGallery = function(type, btnElement) {
+// Live client side filter loop for homepage tabs (keeps slice at 8 newest max)
+window.filterHomeGallery = function(targetType, btnElement) {
     const buttons = document.querySelectorAll("#homepage-gallery-filter-controls .btn");
     buttons.forEach(b => b.classList.remove("active-g-filter"));
     if (btnElement) btnElement.classList.add("active-g-filter");
 
-    if (type === "all") {
+    if (targetType === "all") {
         renderHomeGalleryCards(homepageCachedMedia.slice(0, 8));
     } else {
-        const filtered = homepageCachedMedia.filter(item => item.media_type === type);
+        // Broadened conditional expression safely scans both media type filters and layout category filters
+        const filtered = homepageCachedMedia.filter(item => 
+            (item.media_type && item.media_type.toLowerCase() === targetType.toLowerCase()) ||
+            (item.venue_category && item.venue_category.toLowerCase() === targetType.toLowerCase())
+        );
         renderHomeGalleryCards(filtered.slice(0, 8));
     }
 };
