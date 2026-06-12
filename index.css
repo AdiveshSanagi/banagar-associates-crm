@@ -100,7 +100,7 @@ body {
     background-color: #0d121c;
     
     /* Buttery smooth background image crossfade transition matrix */
-    transition: background-image 1.2s ease-in-out;
+    transition: background-image 1.0s ease-in-out;
     will-change: background-image;
     
     /* ⏱️ Running a complete 30-second timeline (6 seconds per image loop) */
