@@ -119,7 +119,7 @@ body {
     background-image: 
         url("./assets/images/home.png"),
         url("./assets/images/lawntour.jpeg"),
-        url("./assets/images/lawn_mrg.png"),
+        url("./assets/images/eveng tour.jpeg"),
         url("./assets/images/sec2.jpeg"),
         url("./assets/images/mangmt_exe.jpeg");
 }
@@ -157,7 +157,7 @@ body {
     }
     /* Fade Transition into Image 3 */
     40%, 55% {
-        background-image: url("./assets/images/lawn_mrg.png");
+        background-image: url("./assets/images/eveng tour.jpeg");
     }
     /* Fade Transition into Image 4 */
     60%, 75% {
