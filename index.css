@@ -99,12 +99,29 @@ body {
     background-repeat: no-repeat;
     background-color: #0d121c;
     
-    /* Smooth blending layer transition when the background layout shifts */
+    /* Buttery smooth background image crossfade transition matrix */
     transition: background-image 1.2s ease-in-out;
     will-change: background-image;
     
-    /* ⏱️ Total 30-second loop timeline (Allocates 6 seconds per image file) */
+    /* ⏱️ Running a complete 30-second timeline (6 seconds per image loop) */
     animation: strictHeroCarousel 30s infinite ease-in-out;
+}
+
+/* ⚡ THE HIDDEN PRELOAD ENGINE: Forces the browser to cache all images on load 
+   This stops the 1-second black screen blink completely on hosted servers! */
+.hero-section::after {
+    content: "";
+    position: absolute;
+    width: 0; height: 0;
+    overflow: hidden;
+    z-index: -9999;
+    /* Injects all assets into browser cache memory channels invisibly */
+    background-image: 
+        url("./assets/images/home.png"),
+        url("./assets/images/lawntour.jpeg"),
+        url("./assets/images/lawn_mrg.png"),
+        url("./assets/images/sec2.jpeg"),
+        url("./assets/images/mangmt_exe.jpeg");
 }
 
 /* Hero Section Base Typography Rules */
@@ -118,7 +135,7 @@ body {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: radial-gradient(circle, rgba(27, 32, 42, 0.3) 0%, rgba(13, 18, 28, 0.82) 100%);
-    z-index: 1; /* Renders above images but behind text overlays */
+    z-index: 1; /* Sits over images but behind text contents */
 }
 
 .hero-section .container {
@@ -130,7 +147,7 @@ body {
     max-width: 680px;
 }
 @keyframes strictHeroCarousel {
-    /* 🖼️ IMAGE 1: home.png */
+    /* 🖼️ IMAGE 1 */
     0%, 15% {
         background-image: url("./assets/images/home.png");
     }
@@ -138,7 +155,7 @@ body {
     20%, 35% {
         background-image: url("./assets/images/lawntour.jpeg");
     }
-    /* Fade Transition into Image 3 (Sanitized Underscore String) */
+    /* Fade Transition into Image 3 */
     40%, 55% {
         background-image: url("./assets/images/lawn_mrg.png");
     }
@@ -146,11 +163,11 @@ body {
     60%, 75% {
         background-image: url("./assets/images/sec2.jpeg");
     }
-    /* Fade Transition into Image 5 (Sanitized Underscore String) */
+    /* Fade Transition into Image 5 */
     80%, 95% {
         background-image: url("./assets/images/mangmt_exe.jpeg");
     }
-    /* Loop back smoothly to step 1 position */
+    /* Loop back cleanly */
     100% {
         background-image: url("./assets/images/home.png");
     }
