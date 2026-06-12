@@ -1,5 +1,5 @@
 // =========================================================================
-// BANAGAR ASSOCIATES - HOMEPAGE PORTFOLIO LOGIC (MAX 8 CORES)
+// BANAGAR ASSOCIATES - HOMEPAGE PORTFOLIO LOGIC (UNRESTRICTED VAULT)
 // =========================================================================
 
 let homepageCachedMedia = [];
@@ -13,16 +13,16 @@ async function initHomepageGallery() {
     if (!grid) return;
 
     try {
-       const response = await fetch("https://banagar-associates-crm.onrender.com/api/public/gallery");
+        const response = await fetch("https://banagar-associates-crm.onrender.com/api/public/gallery");
         if (!response.ok) throw new Error("Database file stream failed.");
         
         const data = await response.json();
         
-        // Save globally for seamless tab filtering later
-        homepageCachedMedia = data;
+        // Reverse array chronological sequencing so newest items render first
+        homepageCachedMedia = data.reverse();
         
-        // Display the slice array limited strictly to 8 cards max
-        renderHomeGalleryCards(homepageCachedMedia.slice(0, 8));
+        // Renders the entire payload data collection completely
+        renderHomeGalleryCards(homepageCachedMedia);
 
     } catch (err) {
         console.error("Error reading portfolio array:", err);
@@ -42,13 +42,13 @@ function renderHomeGalleryCards(items) {
     }
 
     items.forEach(item => {
-const fileUrl = item.media_url.startsWith("http") 
-    ? item.media_url 
-    : `https://banagar-associates-crm.onrender.com${item.media_url}`;
+        const cleanPath = item.media_url.startsWith("/") ? item.media_url : `/${item.media_url}`;
+        const fileUrl = item.media_url.startsWith("http") 
+            ? item.media_url 
+            : `https://banagar-associates-crm.onrender.com${cleanPath}`;
         
-        // Dynamically build content based on file properties
         const mediaTag = item.media_type === "image"
-            ? `<img src="${fileUrl}" alt="${item.description}" class="img-fluid gallery-asset" style="object-fit: cover; height: 100%; width: 100%;">`
+            ? `<img src="${fileUrl}" alt="${item.description || ''}" class="img-fluid gallery-asset" style="object-fit: cover; height: 100%; width: 100%;">`
             : `<video src="${fileUrl}" muted autoplay loop class="w-100" style="object-fit: cover; height: 100%; min-height:220px;"></video>`;
 
         const badgeTag = item.media_type === "image"
@@ -56,7 +56,7 @@ const fileUrl = item.media_url.startsWith("http")
             : `<span class="badge bg-primary rounded-0 px-2 py-1 align-self-start"><i class="bi bi-play-circle me-1"></i> VIDEO</span>`;
 
         const cardHtml = `
-            <div class="col-sm-6 col-md-4 col-xl-3">
+            <div class="col-sm-6 col-md-4 col-xl-3 mb-4">
                 <div class="gallery-mini-card position-relative overflow-hidden shadow-sm" style="height: 250px; background:#000;">
                     <div class="w-100 h-100 d-flex align-items-center justify-content-center overflow-hidden">
                         ${mediaTag}
@@ -75,16 +75,19 @@ const fileUrl = item.media_url.startsWith("http")
     });
 }
 
-// Live client side filter loop for homepage tabs (keeps slice at 8 max)
-window.filterHomeGallery = function(type, btnElement) {
+// Live client side filter loop supporting limitless rendering across media types and categories
+window.filterHomeGallery = function(targetType, btnElement) {
     const buttons = document.querySelectorAll("#homepage-gallery-filter-controls .btn");
     buttons.forEach(b => b.classList.remove("active-g-filter"));
     if (btnElement) btnElement.classList.add("active-g-filter");
 
-    if (type === "all") {
-        renderHomeGalleryCards(homepageCachedMedia.slice(0, 8));
+    if (targetType === "all") {
+        renderHomeGalleryCards(homepageCachedMedia);
     } else {
-        const filtered = homepageCachedMedia.filter(item => item.media_type === type);
-        renderHomeGalleryCards(filtered.slice(0, 8));
+        const filtered = homepageCachedMedia.filter(item => 
+            (item.media_type && item.media_type.toLowerCase() === targetType.toLowerCase()) ||
+            (item.venue_category && item.venue_category.toLowerCase() === targetType.toLowerCase())
+        );
+        renderHomeGalleryCards(filtered);
     }
 };
