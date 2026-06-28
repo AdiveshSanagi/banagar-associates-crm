@@ -1,5 +1,5 @@
 # =========================================================================
-# BANAGAR ASSOCIATES - NOTIFICATION ENGINE
+# BANAGAR ASSOCIATES - PRODUCTION NOTIFICATION ENGINE
 # Location: /notification.py
 # =========================================================================
 
@@ -8,179 +8,185 @@ import smtplib
 import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import models
 
-# --- CONFIGURATION (Set these in your .env file) ---
+# --- PRODUCTION INFRASTRUCTURE CONFIGURATION ---
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SMTP_USER = os.getenv("SMTP_USER", "your-email@gmail.com")
-SMTP_PASS = os.getenv("SMTP_PASS", "your-app-password")
-ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@banagar.com")
-ADMIN_PHONE = os.getenv("ADMIN_PHONE", "+919876543210")
+SMTP_USER = os.getenv("SMTP_USER")  # e.g., your corporate account
+SMTP_PASS = os.getenv("SMTP_PASS")  # ⚠️ MUST be a secure 16-character App Password
 
-# SMS Gateway Config (Example using a standard HTTP API like Twilio or Fast2SMS)
-SMS_API_URL = os.getenv("SMS_API_URL", "https://api.sms-gateway.com/send")
-SMS_API_KEY = os.getenv("SMS_API_KEY", "your_sms_api_key_here")
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@banagarassociates.com")
+ADMIN_PHONE = os.getenv("ADMIN_PHONE")  # Standard target format: +91XXXXXXXXXX
+
+# FAST2SMS Integration Layer Configuration
+SMS_API_URL = "https://www.fast2sms.com/dev/bulkV2"
+SMS_API_KEY = os.getenv("FAST2SMS_API_KEY")
+
+# WHATSAPP SANDBOX/CLOUD API METRICS
+WHATSAPP_API_URL = os.getenv("WHATSAPP_API_URL", "https://graph.facebook.com/v18.0/YOUR_PHONE_NUMBER_ID/messages")
+WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 
 def send_email(to_email: str, subject: str, body: str):
-    """Sends an email using standard SMTP."""
+    """Executes atomic SMTP relays with resilient error trapping."""
+    if not SMTP_USER or not SMTP_PASS:
+        print("⚠️ [Notification Engine]: SMTP credentials unmapped. Skipping transactional email execution.")
+        return
+
     try:
         msg = MIMEMultipart()
-        msg['From'] = SMTP_USER
+        msg['From'] = f"Banagar Associates <{SMTP_USER}>"
         msg['To'] = to_email
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'html'))
 
-        # Connect to server and send
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
-        server.login(SMTP_USER, SMTP_PASS)
-        server.send_message(msg)
-        server.quit()
-        print(f"✅ Email successfully sent to {to_email}")
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASS)
+            server.send_message(msg)
+        print(f"✅ Transactional email successfully relayed to: {to_email}")
     except Exception as e:
-        print(f"❌ Failed to send email to {to_email}: {e}")
+        print(f"❌ Critical infrastructure failure during email transmission to {to_email}: {e}")
 
 def send_sms(to_phone: str, message: str):
-    """Sends an SMS via a generic HTTP API Gateway."""
+    """Fires real outbound SMS packages via standardized Fast2SMS API protocols."""
+    if not SMS_API_KEY:
+        print(f"⚠️ [Fast2SMS Engine Simulation Mode]: {to_phone} -> {message}")
+        return
+
     try:
-        # Example payload (modify based on your specific SMS provider's documentation)
+        # Standard format normalization for Indian telecom boundaries
+        clean_number = to_phone.replace("+91", "").replace(" ", "").strip()
+        
         payload = {
-            "sender": "BANAGAR",
-            "route": "4",
-            "country": "91",
-            "numbers": to_phone,
-            "message": message
+            "message": message,
+            "language": "english",
+            "route": "q",  # Fast2SMS Quick Transactional/Inquiry routing
+            "numbers": clean_number
         }
         headers = {
             "authorization": SMS_API_KEY,
             "Content-Type": "application/json"
         }
         
-        # Uncomment the line below to actually fire the SMS once you have an API key!
-        # response = requests.post(SMS_API_URL, json=payload, headers=headers)
-        # print(f"✅ SMS sent to {to_phone}. Response: {response.status_code}")
-        
-        print(f"✅ [SIMULATED SMS to {to_phone}]: {message}")
+        response = requests.post(SMS_API_URL, json=payload, headers=headers, timeout=10)
+        if response.status_code == 200:
+            print(f"✅ Outbound SMS packet acknowledged by gateway for: {clean_number}")
+        else:
+            print(f"⚠️ Gateway rejected SMS transmission code: {response.status_code} - {response.text}")
     except Exception as e:
-        print(f"❌ Failed to send SMS to {to_phone}: {e}")
+        print(f"❌ Failed to coordinate payload handshakes with Fast2SMS servers: {e}")
 
-def process_booking_notifications(event_type: str, booking: models.Booking):
-    """
-    Main router for all booking-related alerts.
-    Formats the messages and triggers the email/SMS functions.
-    """
-    if event_type == "NEW_REQUEST":
+def send_whatsapp(to_phone: str, message_text: str):
+    """Coordinates cloud payload deliveries directly into client WhatsApp devices."""
+    if not WHATSAPP_TOKEN:
+        print(f"💬 [WhatsApp Simulation Mode for {to_phone}]: {message_text}")
+        return
+
+    try:
+        # WhatsApp Cloud interface requires strict country code strings without '+' signs
+        clean_number = to_phone.replace("+", "").replace(" ", "").strip()
         
-        # 1. MESSAGE TO USER
-        user_subject = "Action Required: Banagar Associates Booking Request"
+        headers = {
+            "Authorization": f"Bearer {WHATSAPP_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": clean_number,
+            "type": "text",
+            "text": {"preview_url": True, "body": message_text}
+        }
+        
+        response = requests.post(WHATSAPP_API_URL, json=payload, headers=headers, timeout=10)
+        print(f"✅ WhatsApp dispatch transaction complete. Status: {response.status_code}")
+    except Exception as e:
+        print(f"❌ Critical loop breakage during WhatsApp Cloud dispatch operations: {e}")
+
+def process_booking_notifications(event_type: str, booking):
+    """
+    Evaluates engine triggers and coordinates asynchronous distribution 
+    across all communication vectors (Email, SMS, WhatsApp).
+    """
+    # Safeguard database models string tracking structures cleanly
+    booking_id = getattr(booking, 'id', 'PENDING')
+    advance = int(getattr(booking, 'advance_paid', 0))
+    balance = int(getattr(booking, 'balance_left', 0))
+    date_str = booking.event_date.strftime('%B %d, %Y')
+    date_short = booking.event_date.strftime('%b %d')
+
+    if event_type == "NEW_REQUEST":
+        # 1. VISITOR INBOUND ROUTES
+        user_subject = "Action Required: Banagar Associates Booking Request Received"
         user_body = f"""
         <h3>Hello {booking.customer_name},</h3>
-        <p>We have received your reservation request for <strong>{booking.event_date.strftime('%B %d, %Y')}</strong> at <strong>{booking.venue_type}</strong>.</p>
-        <p>To officially lock this date in our calendar, an advance payment of <strong>Rs. {int(booking.advance_paid):,}</strong> is required.</p>
-        <p>Our manager will contact you shortly to process this payment via UPI or Cash.</p>
-        <br><p>Thank you,<br>Banagar Associates Team</p>
+        <p>We have successfully received your reservation application request for <strong>{date_str}</strong> targeting the <strong>{booking.venue_type}</strong> cluster.</p>
+        <p>To secure this date in our master ledger, a verified advance payment allocation of <strong>Rs. {advance:,}</strong> is requested.</p>
+        <p>Our project management office will contact you immediately via phone to settle this balance clear.</p>
+        <br><p>Regards,<br>Corporate Reservations Desk<br><strong>Banagar Associates</strong></p>
         """
-        user_sms = f"Banagar Associates: Your booking request for {booking.event_date.strftime('%b %d')} is received. Our manager will call you shortly regarding the Rs.{int(booking.advance_paid)} advance payment."
+        user_msg = f"Banagar Associates: Your booking application for {date_short} is registered. Our management desk will contact you shortly to process your Rs.{advance:,} deposit allocation."
         
         send_email(booking.email, user_subject, user_body)
-        send_sms(booking.phone, user_sms)
+        send_sms(booking.phone, user_msg)
+        send_whatsapp(booking.phone, user_msg)
 
-        # 2. MESSAGE TO ADMIN
-        admin_subject = f"NEW LEAD: Booking Request from {booking.customer_name}"
+        # 2. MANAGEMENT ESCALATION ROUTES
+        admin_subject = f"🚨 INTERNAL DISPATCH: New Booking Request - {booking.customer_name}"
         admin_body = f"""
-        <h3>New Booking Request Submitted</h3>
+        <h3>Operational Alert: Action Required</h3>
+        <p>A new event scheduling request has been submitted to your pipeline:</p>
         <ul>
-            <li><strong>Client:</strong> {booking.customer_name}</li>
-            <li><strong>Phone:</strong> {booking.phone}</li>
-            <li><strong>Date:</strong> {booking.event_date.strftime('%B %d, %Y')}</li>
-            <li><strong>Venue:</strong> {booking.venue_type}</li>
+            <li><strong>Client Identity:</strong> {booking.customer_name}</li>
+            <li><strong>Communications Contact:</strong> {booking.phone}</li>
+            <li><strong>Target Date:</strong> {date_str}</li>
+            <li><strong>Selected Layout:</strong> {booking.venue_type}</li>
         </ul>
-        <p>Log in to the Admin Dashboard to review and collect the advance payment.</p>
+        <p>Access your admin interface dashboard immediately to process this user deposit.</p>
         """
-        admin_sms = f"NEW LEAD: {booking.customer_name} requested {booking.venue_type} on {booking.event_date.strftime('%b %d')}. Phone: {booking.phone}."
+        admin_msg = f"CRM NOTICE: New request from {booking.customer_name} for {booking.venue_type} on {date_short}. Contact: {booking.phone}."
         
         send_email(ADMIN_EMAIL, admin_subject, admin_body)
-        send_sms(ADMIN_PHONE, admin_sms)
+        send_sms(ADMIN_PHONE, admin_msg)
 
     elif event_type == "CONFIRMED":
-        
-        # 1. MESSAGE TO USER
-        user_subject = "CONFIRMED: Your Event at Banagar Associates"
+        user_subject = "TRANSACTION CONFIRMED: Event Space Locked Successfully"
         user_body = f"""
-        <div style="text-align: center;">
-            <h2 style="color: #28a745;">Payment Received!</h2>
-            <p>Your booking (ID: <strong>{booking.id}</strong>) is officially confirmed.</p>
+        <div style="border: 1px solid #28a745; padding: 20px; border-radius: 4px;">
+            <h2 style="color: #28a745; margin-top:0;">Payment Verification Success</h2>
+            <p>Your event allocation for <strong>{date_str}</strong> at <strong>{booking.venue_type}</strong> is officially locked.</p>
+            <hr style="border: 0; border-top: 1px solid #eee;">
+            <p><strong>Ledger Reference (ID):</strong> {booking_id}</p>
+            <p><strong>Advance Deposited:</strong> Rs. {advance:,}</p>
+            <p><strong>Remaining Account Balance:</strong> Rs. {balance:,}</p>
         </div>
-        <hr>
-        <ul>
-            <li><strong>Date:</strong> {booking.event_date.strftime('%B %d, %Y')}</li>
-            <li><strong>Venue:</strong> {booking.venue_type}</li>
-            <li><strong>Advance Paid:</strong> Rs. {int(booking.advance_paid):,}</li>
-            <li><strong>Balance Due:</strong> Rs. {int(booking.balance_left):,}</li>
-        </ul>
-        <p>We look forward to hosting your event!</p>
         """
-        user_sms = f"Banagar Associates: Payment Received! Your booking {booking.id} for {booking.event_date.strftime('%b %d')} is officially CONFIRMED."
+        user_msg = f"Banagar Associates: Payment verified! Your event reservation (ID: {booking_id}) for {date_short} is officially CONFIRMED. Balance Due: Rs.{balance:,}."
         
         send_email(booking.email, user_subject, user_body)
-        send_sms(booking.phone, user_sms)
-
-        # 2. MESSAGE TO ADMIN
-        admin_subject = f"SUCCESS: Booking {booking.id} Confirmed"
-        admin_body = f"<p>You have successfully marked booking {booking.id} for {booking.customer_name} as CONFIRMED.</p>"
-        admin_sms = f"SUCCESS: Booking {booking.id} for {booking.customer_name} is now CONFIRMED."
-        
-        send_email(ADMIN_EMAIL, admin_subject, admin_body)
-        send_sms(ADMIN_PHONE, admin_sms)
+        send_sms(booking.phone, user_msg)
+        send_whatsapp(booking.phone, user_msg)
 
     elif event_type == "COMPLETED":
-        
-        # 1. MESSAGE TO USER
-        user_subject = "COMPLETED: Full Payment Received for Your Event"
+        user_subject = "FINAL CLOSURE RECEIPT: Account Balance Settled"
         user_body = f"""
-        <div style="text-align: center;">
-            <h2 style="color: #28a745;">Event Fully Paid!</h2>
-            <p>Your booking (ID: <strong>{booking.id}</strong>) is completely finalized.</p>
-        </div>
-        <hr>
-        <p>We have received the final payment for your event on <strong>{booking.event_date.strftime('%B %d, %Y')}</strong> at <strong>{booking.venue_type}</strong>.</p>
-        <p>Thank you for choosing Banagar Associates!</p>
+        <h3>Account Finalization Complete</h3>
+        <p>Dear {booking.customer_name}, we have processed your final financial reconciliation step for the event on <strong>{date_str}</strong>.</p>
+        <p>Your account records have been marked as fully settled. Thank you for choosing Banagar Associates.</p>
         """
-        user_sms = f"Banagar Associates: Final payment received! Your booking {booking.id} for {booking.event_date.strftime('%b %d')} is fully COMPLETED."
+        user_msg = f"Banagar Associates: Final reconciliation processed successfully. Your account folder for booking reference {booking_id} is completely settled and COMPLETED."
         
         send_email(booking.email, user_subject, user_body)
-        send_sms(booking.phone, user_sms)
-
-        # 2. MESSAGE TO ADMIN
-        admin_subject = f"COMPLETED: Booking {booking.id} Fully Paid"
-        admin_body = f"<p>You have successfully marked booking {booking.id} for {booking.customer_name} as COMPLETED (Fully Paid).</p>"
-        admin_sms = f"COMPLETED: Booking {booking.id} for {booking.customer_name} is marked fully paid."
-        
-        send_email(ADMIN_EMAIL, admin_subject, admin_body)
-        send_sms(ADMIN_PHONE, admin_sms)
+        send_sms(booking.phone, user_msg)
 
     elif event_type == "CANCELLED":
-        
-        # 1. MESSAGE TO USER
-        user_subject = "CANCELLED: Banagar Associates Booking Update"
+        user_subject = "CANCELLATION NOTICE: Booking Reference Expired"
         user_body = f"""
-        <div style="text-align: center;">
-            <h2 style="color: #dc3545;">Booking Cancelled</h2>
-            <p>Your booking request (ID: <strong>{booking.id}</strong>) has been cancelled.</p>
-        </div>
-        <hr>
-        <p>If you believe this is an error or would like to request a new date, please contact our desk.</p>
+        <h3 style="color: #dc3545;">Reservation Terminated</h3>
+        <p>Your booking entry (ID: {booking_id}) allocated for <strong>{date_str}</strong> has been cancelled by administrative command.</p>
+        <p>Please contact our operations group immediately for resolution details.</p>
         """
-        user_sms = f"Banagar Associates: Your booking {booking.id} for {booking.event_date.strftime('%b %d')} has been CANCELLED. Contact us for details."
+        user_msg = f"Banagar Associates: Notice of cancellation regarding booking reference {booking_id} for {date_short}. Contact our service center for immediate assistance."
         
         send_email(booking.email, user_subject, user_body)
-        send_sms(booking.phone, user_sms)
-
-        # 2. MESSAGE TO ADMIN
-        admin_subject = f"CANCELLED: Booking {booking.id}"
-        admin_body = f"<p>You have successfully CANCELLED booking {booking.id} for {booking.customer_name}.</p>"
-        admin_sms = f"CANCELLED: Booking {booking.id} for {booking.customer_name} has been cancelled."
-        
-        send_email(ADMIN_EMAIL, admin_subject, admin_body)
-        send_sms(ADMIN_PHONE, admin_sms)
+        send_sms(booking.phone, user_msg)
