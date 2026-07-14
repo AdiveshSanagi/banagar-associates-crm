@@ -251,17 +251,21 @@
             cursor: not-allowed;
             transform: none;
         }
-        .coming-soon-tag{
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--accent-gold);
-            color: #000;
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
+        
+        .coming-soon-tag {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(207, 168, 97, 0.15);
+        color: var(--accent-gold);
+        border: 1px solid rgba(207, 168, 97, 0.3);
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        z-index: 10;
+    }
 
         /* 3. EXTRA SMALL SMARTPHONES (Max-width: 360px) */
         @media (max-width: 360px) {
