@@ -245,6 +245,24 @@
             }
         }
 
+        .booking-venue-card.disabled-venue{
+            opacity: 0.45;
+            pointer-events: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .coming-soon-tag{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-gold);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
         /* 3. EXTRA SMALL SMARTPHONES (Max-width: 360px) */
         @media (max-width: 360px) {
             /* Shortens lines even further so the 5 bubbles remain perfectly aligned without wrapping */
@@ -318,7 +336,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-4">
+                        <!-- 🔒 COMING SOON OPTION: MARRIAGE HALL -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card booking-venue-card disabled-venue h-100 rounded-0 p-3">
+                        <div class="coming-soon-tag">Coming Soon</div>
+                        <div class="img-frame"><img src="../assets/images/royal mandap.jpeg" alt="Hall"></div>
+                        <div class="card-body px-0 pt-3 pb-1">
+                            <h4 class="h6 text-white font-serif mb-1 fw-normal">Banagar Marriage Hall (Compound B)</h4>
+                            <p class="text-light-muted fs-8 mb-2">Premium Indoor Convention Hall Space</p>
+                            <span class="text-gold fw-normal fs-7">₹200K</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 🔒 COMING SOON OPTION: COMBO PACKAGE -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card booking-venue-card disabled-venue h-100 rounded-0 p-3">
+                        <div class="coming-soon-tag">Coming Soon</div>
+                        <div class="img-frame"><img src="../assets/images/lawn_mrg.png" alt="Combo"></div>
+                        <div class="card-body px-0 pt-3 pb-1">
+                            <h4 class="h6 text-white font-serif mb-1 fw-normal">Full Venue Combo (Compound B)</h4>
+                            <p class="text-light-muted fs-8 mb-2">Includes Both Marriage Hall & Embedded Lawn Space</p>
+                            <span class="text-gold fw-normal fs-7">₹300K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                        <!-- uncomment thise  ,once start those two plans -->
+                        
+                        <!-- <div class="col-md-6 col-lg-4">
                             <div class="card booking-venue-card h-100 rounded-0 p-3" onclick="selectVenue(this, 'Banagar Marriage Hall', '200K')">
                                 <div class="img-frame"><img src="../assets/images/royal mandap.jpeg" alt="Hall"></div>
                                 <div class="card-body px-0 pt-3 pb-1">
@@ -339,7 +387,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                        
                 <div class="booking-stage-panel d-none" id="panel-stage-2">
                     <h3 class="h5 text-white text-center font-serif fw-normal mb-5">Select Your Date</h3>
                     <div class="row justify-content-center">
