@@ -4,260 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Banagar Associates</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/terms.css">
-</head>
-  <style>
-     <style>
+    
+    <!-- Premium Apple-Style Legal Typography Stylesheet -->
+    <style>
         :root {
-            --bg-deep-base: #0a0c10;
-            --bg-card-dark: #0d121c;
-            --bg-surface-hover: #121926;
-            --primary-blue: #3b82f6;
-            --accent-gold: #cfa861;
-            --text-slate-muted: #8e99a8;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #515154;
+            --accent-color: #0066cc;
+            --accent-hover: #004499;
+            --border-color: #e5e5ea;
+            --radius: 12px;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-deep-base);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .legal-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .legal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .legal-header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        .effective-date {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .legal-content h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            margin-top: 40px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .legal-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .legal-content p {
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-align: justify;
+        }
+
+        .legal-content ul {
+            margin: 0 0 24px 0;
+            padding-left: 24px;
+        }
+
+        .legal-content ul li {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            list-style-type: disc;
+        }
+
+        code {
+            background-color: #f2f2f7;
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-family: "SF Mono", SFMono-Regular, Consolas, monospace;
+            font-size: 0.9em;
+            color: #bf4080;
+        }
+
+        .consent-box {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f2f2f7;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .legal-footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 32px;
+            text-align: center;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--accent-color);
             color: #ffffff;
-            overflow-x: hidden;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
-        .font-serif { font-family: 'Playfair Display', serif; }
-        .text-gold { color: var(--accent-gold); }
-        .fs-7 { font-size: 0.82rem !important; }
-        .fs-8 { font-size: 0.72rem !important; }
-
-        /* Navbar active pill overrides */
-        .navbar { background-color: #0b0e14 !important; border-bottom: 1px solid rgba(255,255,255,0.03); }
-        .brand-logo-frame { height: 42px; display: flex; align-items: center; }
-        .brand-logo-frame img { height: 100%; width: auto; }
-        .nav-link { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em; color: rgba(255,255,255,0.7) !important; }
-
-        /* 5-Stage Stepper Track UI */
-        .stepper-track-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .step-node {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #4a5568;
-            font-size: 0.78rem;
-            letter-spacing: 0.05em;
-            transition: color 0.3s ease;
-        }
-        .step-bubble {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid #4a5568;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            transition: all 0.3s ease;
-        }
-        .step-line {
-            width: 40px;
-            height: 1px;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Active state classes for stepper */
-        .step-node.active-step { color: #ffffff; }
-
-        .step-node.active-step .step-bubble {
-            border-color: var(--primary-blue);
-            background-color: transparent;
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
-            color: #ffffff;
-        }
-        .step-node.completed-step { color: var(--accent-gold); }
-
-        .step-node.completed-step .step-bubble {
-            border-color: var(--accent-gold);
-            background-color: rgba(207, 168, 97, 0.1);
-            color: var(--accent-gold);
+        .btn-back:hover {
+            background-color: var(--accent-hover);
         }
 
-        /* Interactive Booking Cards System (Step 1) */
-        .booking-venue-card {
-            background-color: var(--bg-card-dark) !important;
-            border: 1px solid rgba(255, 255, 255, 0.04) !important;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .booking-venue-card .img-frame { height: 160px; 
-            overflow: hidden; 
+        .btn-back:active {
+            transform: scale(0.98);
         }
 
-        .booking-venue-card .img-frame img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-        }
-
-        .booking-venue-card:hover {
-            background-color: var(--bg-surface-hover) !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-            transform: translateY(-4px);
-        }
-        /* Selection Highlight state matching blueprint screenshot */
-        .booking-venue-card.selected-venue {
-            border-color: var(--primary-blue) !important;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
-            background-color: #0e1624 !important;
-        }
-
-        /* Minimal form entries */
-        .form-input-line {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            padding: 10px 0;
-            color: #fff;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s ease;
-        }
-        .form-input-line:focus { border-color: var(--primary-blue); }
-        .form-label-caps { font-size: 0.68rem; 
-            letter-spacing: 0.1em; 
-            color: #4a5568; 
-            text-transform: uppercase; 
-        }
-        .color-dark-cal { color-scheme: dark; }
-
-        /* Receipt Box Styles */
-        .receipt-card {
-            background-color: #0d121c;
-            border: 1px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
-        }
-
-        /* Print Media Engine Rules */
-        @media print {
-            body { background: #fff !important; color: #000 !important; }
-            .navbar, .footer-section, .btn, .stepper-track-wrapper, .floating-actions, .no-print { display: none !important; }
-            .receipt-card { border: 1px solid #000; padding: 20px !important; background: #fff !important; color: #000 !important; }
-            .receipt-card * { color: #000 !important; }
-        }
-
-        @media (max-width: 991.98px) {
-            /* Adjusts the 5-Stage track layout scale down slightly */
-            .stepper-track-wrapper {
-                gap: 8px !important;
+        @media (max-width: 768px) {
+            .legal-container {
+                margin: 20px 16px;
+                padding: 24px;
             }
 
-            .step-node {
-                font-size: 0.72rem !important;
-                gap: 6px !important;
+            .legal-header h1 {
+                font-size: 1.8rem;
             }
 
-            .step-bubble {
-                width: 24px !important;
-                height: 24px !important;
-                font-size: 0.7rem !important;
+            .legal-content h2 {
+                font-size: 1.25rem;
             }
 
-            .step-line {
-                width: 25px !important; /* Shortens lines to fit tablets horizontally */
-            }
-        }
-
-        /* 2. SMARTPHONES / PORTRAIT MOBILE VIEWS (Max-width: 767.98px) */
-        @media (max-width: 767.98px) {
-            /* Compresses the tracking header to keep it entirely on one line if possible */
-            .stepper-track-wrapper {
-                gap: 4px !important;
-                padding: 10px 0 !important;
-            }
-
-            /* Hides the text labels on small phones to keep the UI perfectly clean, showing just numbers */
-            .step-node span {
-                display: none !important;
-            }
-
-            .step-line {
-                width: 30px !important;
-                margin: 0 2px !important;
-            }
-
-            /* Adjusts venue cards grid spacing for single-file stacking */
-            .booking-venue-card {
-                max-width: 340px;
-                margin: 0 auto;
-                padding: 12px !important;
-            }
-
-            .booking-venue-card .img-frame {
-                height: 140px; /* Slims image footprint */
-            }
-
-            /* Centers headers across stage panels */
-            .booking-stage-panel h3 {
-                font-size: 1.15rem !important;
-                margin-bottom: 30px !important;
-            }
-
-            /* Form Layout adjustments */
-            .booking-stage-panel .p-4.p-xl-5 {
-                padding: 24px 20px !important;
-            }
-
-            /* Final Printable Confirmation Receipt Component */
-            .receipt-card {
-                padding: 20px 15px !important;
-            }
-
-            .receipt-card h3 {
-                font-size: 1.1rem !important;
-            }
-
-            .receipt-card .row.g-4 {
-                row-gap: 15px !important;
-            }
-
-            /* Persistent Bottom Navigation Button Tray spacing fixes */
-            #booking-navigation-tray .col-md-7 {
-                display: flex;
-                width: 100%;
-                padding: 0 15px;
-                gap: 15px;
-            }
-
-            #booking-navigation-tray .btn {
-                flex: 1; /* Makes buttons equal width for easy thumb-tapping */
-                padding-top: 12px !important;
-                padding-bottom: 12px !important;
-                font-size: 0.75rem !important;
-                letter-spacing: 0.05em !important;
-            }
-        }
-
-        /* 3. EXTRA SMALL SMARTPHONES (Max-width: 360px) */
-        @media (max-width: 360px) {
-            /* Shortens lines even further so the 5 bubbles remain perfectly aligned without wrapping */
-            .step-line {
-                width: 18px !important;
-            }
-            
-            .step-bubble {
-                width: 22px !important;
-                height: 22px !important;
-                font-size: 0.65rem !important;
+            .legal-content p, .legal-content ul li {
+                font-size: 1rem;
             }
         }
     </style>
-  </style>
+</head>
 <body>
 
     <main class="legal-container">
@@ -272,6 +173,7 @@
 
             <h2>1. Information We Collect</h2>
             <p>When you use our website, make an enquiry, or book our marriage hall or lawns, we may collect the following information:</p>
+            
             <h3>Personal Information</h3>
             <ul>
                 <li>Full Name</li>
@@ -282,9 +184,11 @@
                 <li>Event Details (Event Type, Event Date, Number of Guests, Special Requirements)</li>
                 <li>Government ID details (only if required for booking verification)</li>
             </ul>
+
             <h3>Payment Information</h3>
             <p>When you make a payment through our website, your payment is securely processed by our trusted third-party payment gateway providers.</p>
             <p>We do not store your complete debit card, credit card, UPI PIN, net banking credentials, or CVV information on our servers.</p>
+
             <h3>Technical Information</h3>
             <p>We may automatically collect: IP Address, Browser Type, Device Information, Operating System, Website Usage Data, Cookies and Similar Technologies.</p>
 
@@ -331,16 +235,18 @@
 
             <h2>12. Contact Us</h2>
             <p>If you have any questions regarding this Privacy Policy or the handling of your personal information, please contact us.</p>
+            
             <p><strong>Banagar Associates</strong><br>
-            Phone: +91 9148020911<br>
-            Email: admin@banagar.com</p>
+            Phone: +91 98765 43210<br>
+            Email: info@banagar.com</p>
 
-            <div class="consent-box" style="margin-top: 30px; padding: 15px; background: #f9f9f9; border-left: 4px solid #0056b3; font-size: 0.95rem;">
+            <div class="consent-box">
                 <strong>Consent:</strong> By using this website, submitting your information, making an enquiry, or completing a booking, you acknowledge that you have read, understood, and agree to this Privacy Policy and consent to the collection, use, and processing of your personal information as described herein.
             </div>
         </section>
 
         <footer class="legal-footer">
+            <!-- Back to booking link targeted to the root file structure -->
             <a href="booking.html" class="btn-back">Back to Booking</a>
         </footer>
     </main>
